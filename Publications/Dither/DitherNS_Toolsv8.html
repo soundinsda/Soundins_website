@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dither & NS Benchmarker - Soundins</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #EEEEF2;
+    }
+    #header-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: black;
+      z-index: -1;
+    }
+    h1 {
+      font-size: 40px;
+      color: white;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-left: 25px;
+      text-align: center;
+     }
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    #main-row {
+      margin-top: 30px;
+      position: relative;
+      width: 100%;
+      max-width: 1160px;
+    }
+    .source-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      position: absolute;
+      left: 116px;
+      top: 0;
+    }
+    .source-label {
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+      margin-right: 10px;
+      white-space: nowrap;
+      align-self: center;
+    }
+    .vertical-line {
+      width: 2px;
+      height: 50px;
+      background-color: #333;
+      margin-right: 10px;
+    }
+    .toggle-source {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    #rect-24bits {
+      position: absolute;
+      left: 464px;
+      top: 22px;
+      height: 20px;
+    }
+    #rect-main {
+      position: absolute;
+      left: 590px;
+      top: 22px;
+      height: 20px;
+    }
+    #toggle-btn {
+      position: absolute;
+      left: 725px;
+      top: 24px;
+    }
+    table {
+      border-collapse: separate;
+      margin-top: 40px;
+      border-spacing: 0;
+      width: 100%;
+      max-width: 1160px;
+      position: relative;
+      top: 80px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+      vertical-align: top;
+      box-sizing: border-box;
+    }
+    th {
+      font-weight: bold;
+      font-size: 15px;
+      color: #333;
+      position: relative;
+      padding: 5px 10px;
+    }
+    th::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: 2px;
+      background-color: #333;
+    }
+    th:not(:last-child)::after {
+      margin-right: 10px;
+    }
+    .rect {
+      width: 100px;
+      padding: 8px;
+      border-radius: 10px;
+      background-color: blue;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1.2;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+      margin: 5px auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .rect.no-data {
+      visibility: hidden;
+    }
+    .rect:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .rect:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+      transform: scale(0.98);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .rect.green {
+      background-color: green;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .rect.green:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+      transform: scale(0.98);
+    }
+    .progress-container {
+      width: 100px;
+      height: 4px;
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      position: absolute;
+      bottom: -15px;
+      left: 8px;
+    }
+    .rect.no-data .progress-container {
+      visibility: hidden;
+    }
+    .loading-bar {
+      width: 0;
+      height: 100%;
+      background-color: #4caf50;
+      transition: width 0.3s;
+    }
+    #toggle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: green;
+      color: white;
+      font-weight: bold;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+      font-size: 10px;
+    }
+    #toggle-btn:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    #toggle-btn:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: scale(0.95);
+    }
+    #toggle-btn.disabled {
+      background-color: gray;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    #toggle-btn:not(.disabled) {
+      opacity: 1;
+    }
+    #toggle-btn.red {
+      background-color: red;
+    }
+    #pause-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: red;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><rect x="6" y="6" width="12" height="12" /></svg>');
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+    #pause-btn:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    #pause-btn:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: scale(0.95);
+    }
+    #loop-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: black;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>');
+      background-size: 60%;
+      background-repeat: no-repeat;
+      background-position: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+    #loop-btn:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    #loop-btn:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: scale(0.95);
+    }
+    #loop-btn.selected {
+      background-color: green;
+    }
+    .source-btn {
+      width: 80px;
+      height: 20px;
+      background-color: #1a73e8;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+    .source-btn.active {
+      background-color: green;
+    }
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #progress-bar {
+      width: 300px;
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    #progress {
+      height: 100%;
+      background-color: #4caf50;
+      width: 0;
+      transition: width 0.3s;
+    }
+    .loading-text {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: dimEffect 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      color: white;
+      font-size: 20px;
+      white-space: nowrap;
+    }
+    @keyframes dimEffect {
+      0% { opacity: 1; }
+      70% { opacity: 0.0; }
+      100% { opacity: 1; }
+    }
+    #language-toggle {
+      position: absolute;
+      top: 80px;
+      right: 65px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+    #instructions-link {
+       position: absolute;
+      top: 80px;
+      left: 1285px;
+      width: 100px; /* Ancho fijo para definir el campo */
+      text-align: center; /* Centra el texto dentro del elemento */
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+    }
+    #help-toggle {
+      position: absolute;
+      top: 80px;
+      left: 1200px;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #language-toggle:hover,
+    #help-toggle:hover,
+    #instructions-link:hover {
+      color: #00BFFF; /* Celeste */
+    }
+    /* Estilo para los tooltips */
+    #custom-tooltip, #custom-tooltip-top-right {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      border-radius: 15px;
+      white-space: pre-wrap;
+      z-index: 1000;
+      font-size: 11px;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-background"></div>
+  <h1>Dither & NS Benchmark Tool</h1>
+  <div id="language-toggle">English</div>
+  <div id="instructions-link">Read me</div>
+  <div id="help-toggle">Help On</div>
+  <div id="main-row" class="row">
+    <div class="source-group">
+      <span class="source-label">Source</span>
+      <div class="vertical-line"></div>
+      <div class="toggle-source">
+        <div class="rect source-btn active" id="source-Sine">Sine</div>
+        <div class="rect source-btn" id="source-flaute">Instrument</div>
+      </div>
+    </div>
+    <div class="rect" id="rect-24bits">24 bits
+      <div class="progress-container"><div class="loading-bar" id="loading-bar-24bits"></div></div>
+    </div>
+    <div class="rect" id="rect-main">16 bits No Dither
+      <div class="progress-container"><div class="loading-bar" id="loading-bar-main"></div></div>
+    </div>
+    <button id="toggle-btn">997Hz</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">Izotope</th>
+        <th>FabFilter</th>
+        <th colspan="2">Waves</th>
+        <th>Voxengo</th>
+        <th>DMG</th>
+        <th colspan="3">DAW</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-1"></div></div></div></td>
+        <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-2"></div></div></div></td>
+        <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-3"></div></div></div></td>
+        <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-4"></div></div></div></td>
+        <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-5"></div></div></div></td>
+        <td><div class="rect" id="rect-6">Elephant<br>Dither: TPDF<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-6"></div></div></div></td>
+        <td><div class="rect" id="rect-7">Limitless<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-7"></div></div></div></td>
+        <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-8"></div></div></div></td>
+        <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-9"></div></div></div></td>
+        <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-10"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-11">Ozone 11<br>Dither: Low<br>NS: Low
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-11"></div></div></div></td>
+        <td><div class="rect" id="rect-12">Ozone 11<br>Dither: Strong<br>NS: Low
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-12"></div></div></div></td>
+        <td><div class="rect" id="rect-13">Pro L2<br>Dither: On<br>NS: Basic
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-13"></div></div></div></td>
+        <td><div class="rect" id="rect-14">L2<br>Dither: T1<br>NS: Moderate
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-14"></div></div></div></td>
+        <td><div class="rect" id="rect-15">L2<br>Dither: T2<br>NS: Moderate
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-15"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-16">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-16"></div></div></div></td>
+        <td><div class="rect" id="rect-17">Limitless<br>Dither: On<br>NS: 50%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-17"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-18">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-18"></div></div></div></td>
+        <td><div class="rect" id="rect-19">Live<br>Dither: TPDF<br>NS: POWr1
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-19"></div></div></div></td>
+        <td><div class="rect" id="rect-20">ProTools (Dither)<br>Dither: On<br>NS: Type 1
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-20"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-21">Ozone 11<br>Dither: Low<br>NS: Mid
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-21"></div></div></div></td>
+        <td><div class="rect" id="rect-22">Ozone 11<br>Dither: Strong<br>NS: Mid
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-22"></div></div></div></td>
+        <td><div class="rect" id="rect-23">Pro L2<br>Dither: On<br>NS: Optimized
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-23"></div></div></div></td>
+        <td><div class="rect" id="rect-24">L2<br>Dither: T1<br>NS: Normal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-24"></div></div></div></td>
+        <td><div class="rect" id="rect-25">L2<br>Dither: T2<br>NS: Normal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-25"></div></div></div></td>
+        <td><div class="rect" id="rect-26">Elephant<br>Dither: TPDF<br>NS: Equal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-26"></div></div></div></td>
+        <td><div class="rect" id="rect-27">Limitless<br>Dither: On<br>NS: 100%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-27"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-28">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-28"></div></div></div></td>
+        <td><div class="rect" id="rect-29">Live<br>Dither: TPDF<br>NS: POWr2
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-29"></div></div></div></td>
+        <td><div class="rect" id="rect-30">ProTools (Dither)<br>Dither: On<br>NS: Type 2
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-30"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-31"></div></div></div></td>
+        <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-32"></div></div></div></td>
+        <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-33"></div></div></div></td>
+        <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-34"></div></div></div></td>
+        <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-35"></div></div></div></td>
+        <td><div class="rect" id="rect-36">Elephant<br>Dither: TPDF<br>NS: Classic
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-36"></div></div></div></td>
+        <td><div class="rect" id="rect-37">Limitless<br>Dither: On<br>NS: 200%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-37"></div></div></div></td>
+        <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-38"></div></div></div></td>
+        <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-39"></div></div></div></td>
+        <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-40"></div></div></div></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="display: flex; justify-content: center; gap: 10px; margin-top: 100px;">
+    <button id="loop-btn"></button>
+    <button id="pause-btn"></button>
+  </div>
+  <div id="loading-overlay">
+    <div style="position: relative; text-align: center;">
+      <span class="loading-text">Loading Audio Files</span>
+      <div id="progress-bar"><div id="progress"></div></div>
+    </div>
+  </div>
+  <div id="custom-tooltip" style="display: none; position: absolute; background-color: #333; color: white; padding: 10px; border-radius: 15px; white-space: pre-wrap; z-index: 1000; font-size: 11px; opacity: 1;"></div>
+  <div id="custom-tooltip-top-right" style="display: none; position: absolute; background-color: #333; color: white; padding: 10px; border-radius: 15px; white-space: pre-wrap; z-index: 1000; font-size: 11px; opacity: 1;"></div>
+
+  <script>
+    const audioMapping = {
+      "rect-24bits": {
+        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Sine_24bits.wav" },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_24bits.wav" }
+      },
+      "rect-main": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_16bits_NoDither.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_16bits_NoDither_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_16bits_NoDither.wav" }
+      },
+      "rect-1": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low.wav" }
+      },
+      "rect-11": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Low.wav" }
+      },
+      "rect-21": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_High.wav" }
+      },
+      "rect-31": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Max.wav" }
+      },
+      "rect-2": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong.wav" }
+      },
+      "rect-12": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Low.wav" }
+      },
+      "rect-22": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_High.wav" }
+      },
+      "rect-32": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Max.wav" }
+      },
+      "rect-3": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2.wav" }
+      },
+      "rect-13": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Basic.wav" }
+      },
+      "rect-23": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Optimized.wav" }
+      },
+      "rect-33": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Weighted.wav" }
+      },
+      "rect-4": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T1.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1.wav" }
+      },
+      "rect-14": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Moderate.wav" }
+      },
+      "rect-24": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Normal.wav" }
+      },
+      "rect-34": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Ultra.wav" }
+      },
+      "rect-5": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T2.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2.wav" }
+      },
+      "rect-15": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Moderate.wav" }
+      },
+      "rect-25": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Normal.wav" }
+      },
+      "rect-35": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Ultra.wav" }
+      },
+      "rect-6": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_tpdf.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf.wav" }
+      },
+      "rect-26": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Equal.wav" }
+      },
+      "rect-36": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Classic.wav" }
+      },
+      "rect-7": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless.wav" }
+      },
+      "rect-17": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_50%25.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_50%25_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_50%25.wav" }
+      },
+      "rect-27": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_100%25.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_100%25_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_100%25.wav" }
+      },
+      "rect-37": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_200%25.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_200%25_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_200%25.wav" }
+      },
+      "rect-8": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper.wav" }
+      },
+      "rect-38": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper_NS.wav" }
+      },
+      "rect-9": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_tpdf.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live.wav" }
+      },
+      "rect-19": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr1.wav" }
+      },
+      "rect-29": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr2.wav" }
+      },
+      "rect-39": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr3.wav" }
+      },
+      "rect-10": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Maxim.wav" }
+      },
+      "rect-20": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type1.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type1_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type1.wav" }
+      },
+      "rect-30": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type2.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type2_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type2.wav" }
+      },
+      "rect-40": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type3.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type3_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type3.wav" }
+      }
+    };
+
+    let isToggleEnabled = true;
+    let currentActiveRect = null;
+    let currentSource = "Sine";
+    const audioPlayers = {};
+    const totalFiles = Object.values(audioMapping).reduce((sum, sources) => sum + Object.values(sources).reduce((subSum, states) => subSum + Object.keys(states).length, 0), 0);
+    let loadedFiles = 0;
+    let isLoopEnabled = false;
+    let isHelpEnabled = true;
+    let currentLanguage = "English";
+
+    const sourceSine = document.getElementById("source-Sine");
+    const sourceFlaute = document.getElementById("source-flaute");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const progress = document.getElementById("progress");
+    const loopBtn = document.getElementById("loop-btn");
+    const helpToggle = document.getElementById("help-toggle");
+    const instructionsLink = document.getElementById("instructions-link");
+    const languageToggle = document.getElementById("language-toggle");
+
+    const tooltipElements = {
+      "source-Sine": "Sine 997Hz source",
+      "source-flaute": "Instrument source",
+      "rect-24bits": "Source rendered at 24 bit depth",
+      "rect-main": "Source rendered at 16 bits depth\nwith no dither (truncated)",
+      "toggle-btn": "Sine tone cancellation.\nUse this button to remove sine tone",
+      "rect-1": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
+      "rect-11": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
+      "rect-21": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
+      "rect-31": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
+      "rect-2": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
+      "rect-12": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
+      "rect-22": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
+      "rect-32": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
+      "rect-3": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
+      "rect-13": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
+      "rect-23": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
+      "rect-33": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
+      "rect-4": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Off",
+      "rect-14": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
+      "rect-24": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Normal",
+      "rect-34": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
+      "rect-5": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Off",
+      "rect-15": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
+      "rect-25": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Normal",
+      "rect-35": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
+      "rect-6": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
+      "rect-26": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
+      "rect-36": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
+      "rect-7": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: Off",
+      "rect-17": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
+      "rect-27": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
+      "rect-37": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
+      "rect-8": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: Off",
+      "rect-38": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: On",
+      "rect-9": "Signal rendered with\nLive\nDither: On\nNoise Shaping: Off",
+      "rect-19": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr1",
+      "rect-29": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr2",
+      "rect-39": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr3",
+      "rect-10": "Signal rendered with\nProTools Maxim\nDither: On\nNoise Shaping: Off",
+      "rect-20": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
+      "rect-30": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
+      "rect-40": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
+      "pause-btn": "Stop Playback",
+      "loop-btn": "Loop Playback",
+      "instructions-link": "Brief explanation about\nmethodology, usage rights,\nlegal considerations, and\ncredits.",
+      "help-toggle": "Enable/Disable Help\nmessage over buttons"
+    };
+
+    const tooltipElementsEs = {
+      "source-Sine": "Fuente Seno 997Hz",
+      "source-flaute": "Fuente Instrumento",
+      "rect-24bits": "Fuente renderizada a 24 bits de profundidad",
+      "rect-main": "Fuente renderizada a 16 bits de profundidad\nsin dither (truncada)",
+      "toggle-btn": "Cancelación del tono Seno.\nUse este botón para eliminar el tono Seno",
+      "rect-1": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
+      "rect-11": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
+      "rect-21": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
+      "rect-31": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
+      "rect-2": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
+      "rect-12": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
+      "rect-22": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
+      "rect-32": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
+      "rect-3": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
+      "rect-13": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
+      "rect-23": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
+      "rect-33": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
+      "rect-4": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Off",
+      "rect-14": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
+      "rect-24": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Normal",
+      "rect-34": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
+      "rect-5": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Off",
+      "rect-15": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
+      "rect-25": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Normal",
+      "rect-35": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
+      "rect-6": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
+      "rect-26": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
+      "rect-36": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
+      "rect-7": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: Off",
+      "rect-17": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
+      "rect-27": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
+      "rect-37": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
+      "rect-8": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: Off",
+      "rect-38": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: On",
+      "rect-9": "Señal procesada con\nLive\nDither: On\nNoise Shaping: Off",
+      "rect-19": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr1",
+      "rect-29": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr2",
+      "rect-39": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr3",
+      "rect-10": "Señal procesada con\nProTools Maxim\nDither: On\nNoise Shaping: Off",
+      "rect-20": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
+      "rect-30": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
+      "rect-40": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
+      "pause-btn": "Detener reproducción",
+      "loop-btn": "Reproducción en bucle",
+      "instructions-link": "Breve explicación acerca de la\nmetodología, permiso de uso,\nconsideraciones legales y\ncréditos",
+      "help-toggle": "Habilita / Deshabilita mensaje\nde ayuda sobre los botones"
+    };
+
+    const tooltip = document.getElementById("custom-tooltip");
+    const tooltipTopRight = document.getElementById("custom-tooltip-top-right");
+    const topRightElements = ["rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-36", "rect-37", "rect-38", "rect-39", "rect-40", "loop-btn", "pause-btn"];
+
+    let tooltipTimeout;
+
+    function hideAllTooltips() {
+      clearTimeout(tooltipTimeout);
+      tooltip.style.transition = "none";
+      tooltip.style.opacity = "1";
+      tooltip.style.display = "none";
+      tooltipTopRight.style.transition = "none";
+      tooltipTopRight.style.opacity = "1";
+      tooltipTopRight.style.display = "none";
+    }
+
+    function showTooltip(elementId, text, x, y) {
+      hideAllTooltips();
+      const tooltipToUse = topRightElements.includes(elementId) ? tooltipTopRight : tooltip;
+      tooltipToUse.innerText = text;
+      tooltipToUse.style.display = "block";
+      tooltipToUse.style.opacity = "1";
+      if (topRightElements.includes(elementId)) {
+        tooltipToUse.style.left = `${x + 20}px`;
+        tooltipToUse.style.top = `${y - 20 - tooltipToUse.offsetHeight}px`;
+      } else {
+        tooltipToUse.style.left = `${x + 20}px`;
+        tooltipToUse.style.top = `${y + 20}px`;
+      }
+
+      tooltipTimeout = setTimeout(() => {
+        tooltipToUse.style.transition = "opacity 1s ease";
+        tooltipToUse.style.opacity = "0";
+        setTimeout(() => {
+          tooltipToUse.style.display = "none";
+          tooltipToUse.style.transition = "none";
+          tooltipToUse.style.opacity = "1";
+        }, 1000);
+      }, 3000);
+    }
+
+    function setActiveSource(source) {
+      stopAllAudio();
+      currentSource = source;
+      sourceSine.classList.toggle("active", source === "Sine");
+      sourceFlaute.classList.toggle("active", source === "Flaute");
+      updateToggleButtonState();
+      if (currentActiveRect) {
+        playAudio(currentActiveRect);
+      }
+    }
+
+    sourceSine.addEventListener("click", () => setActiveSource("Sine"));
+    sourceFlaute.addEventListener("click", () => setActiveSource("Flaute"));
+
+    async function loadAudio(url) {
+      try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+        return URL.createObjectURL(blob);
+      } catch (error) {
+        console.error(`Error al cargar ${url}:`, error);
+        return null;
+      }
+    }
+
+    async function preloadAllAudio() {
+      const startTime = performance.now();
+      console.log("Iniciando carga de audios...");
+
+      for (const [rectId, sources] of Object.entries(audioMapping)) {
+        if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
+        for (const [source, states] of Object.entries(sources)) {
+          if (!audioPlayers[rectId][source]) audioPlayers[rectId][source] = {};
+          for (const [state, url] of Object.entries(states)) {
+            const audioUrl = await loadAudio(url);
+            if (audioUrl) {
+              audioPlayers[rectId][source][state] = new Audio(audioUrl);
+              loadedFiles++;
+              const progressPercent = (loadedFiles / totalFiles) * 100;
+              progress.style.width = `${progressPercent}%`;
+              console.log(`Cargado ${rectId} - ${source} - ${state}: ${progressPercent.toFixed(2)}%`);
+            }
+          }
+        }
+      }
+
+      const endTime = performance.now();
+      console.log(`Carga completada en ${(endTime - startTime) / 1000} segundos.`);
+      loadingOverlay.style.display = "none";
+      updateAllLoadingBars();
+    }
+
+    function updateLoadingBar(rectId) {
+      const loadingBarId = rectId === "rect-main" ? "loading-bar-main" : `loading-bar-${rectId.split('-')[1]}`;
+      const loadingBar = document.getElementById(loadingBarId);
+      if (loadingBar && audioPlayers[rectId]) {
+        loadingBar.style.width = "100%";
+      }
+    }
+
+    function updateAllLoadingBars() {
+      Object.keys(audioMapping).forEach(rectId => updateLoadingBar(rectId));
+    }
+
+    function playAudio(rectId) {
+      stopAllAudio();
+      const players = audioPlayers[rectId];
+      if (!players || !players[currentSource]) {
+        console.warn(`No hay audio cargado para ${rectId} en la fuente ${currentSource}`);
+        return;
+      }
+
+      const mapping = audioMapping[rectId][currentSource];
+      if (!mapping) {
+        console.warn(`No hay mapeo de audio para ${rectId} en la fuente ${currentSource}`);
+        return;
+      }
+
+      const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
+      const chosenAudio = players[currentSource][stateKey];
+      if (!chosenAudio) {
+        console.warn(`El audio para ${rectId} en la fuente ${currentSource} y estado ${stateKey} no está cargado`);
+        return;
+      }
+
+      try {
+        chosenAudio.currentTime = 0;
+        chosenAudio.loop = isLoopEnabled;
+        chosenAudio.play().then(() => {
+          const rectElem = document.getElementById(rectId);
+          rectElem.classList.add("green");
+          if (!isLoopEnabled) {
+            chosenAudio.onended = () => {
+              rectElem.classList.remove("green");
+              if (currentActiveRect === rectId) currentActiveRect = null;
+            };
+          } else {
+            chosenAudio.onended = null;
+          }
+        }).catch(e => console.error(`Error al reproducir ${rectId} (${currentSource}, ${stateKey}):`, e));
+      } catch (e) {
+        console.error(`Error al reproducir ${rectId} (${currentSource}, ${stateKey}):`, e);
+      }
+    }
+
+    function stopAllAudio() {
+      Object.values(audioPlayers).forEach(sources => {
+        Object.values(sources).forEach(states => {
+          Object.values(states).forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+          });
+        });
+      });
+      if (currentActiveRect) {
+        document.getElementById(currentActiveRect).classList.remove("green");
+      }
+    }
+
+    function updateToggleButtonState() {
+      if (!currentActiveRect || !audioMapping[currentActiveRect] || !audioMapping[currentActiveRect][currentSource]) {
+        toggleBtn.disabled = true;
+        toggleBtn.classList.add("disabled");
+        return;
+      }
+      const mapping = audioMapping[currentActiveRect][currentSource];
+      const hasToggle = mapping["997_no"] && mapping["997_act"];
+      toggleBtn.disabled = !hasToggle;
+      toggleBtn.classList.toggle("disabled", !hasToggle);
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      if (!toggleBtn.disabled) {
+        isToggleEnabled = !isToggleEnabled;
+        toggleBtn.classList.toggle("red", !isToggleEnabled);
+        if (currentActiveRect) {
+          playAudio(currentActiveRect);
+        }
+      }
+    });
+
+    document.getElementById("pause-btn").addEventListener("click", () => {
+      stopAllAudio();
+      currentActiveRect = null;
+    });
+
+    loopBtn.addEventListener("click", () => {
+      isLoopEnabled = !isLoopEnabled;
+      loopBtn.classList.toggle("selected", isLoopEnabled);
+      if (currentActiveRect) {
+        const players = audioPlayers[currentActiveRect];
+        const mapping = audioMapping[currentActiveRect][currentSource];
+        const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
+        const audio = players[currentSource][stateKey];
+        if (audio) {
+          audio.loop = isLoopEnabled;
+          if (!isLoopEnabled) {
+            audio.onended = () => {
+              document.getElementById(currentActiveRect).classList.remove("green");
+              if (currentActiveRect === currentActiveRect) currentActiveRect = null;
+            };
+          } else {
+            audio.onended = null;
+          }
+        }
+      }
+    });
+
+    ["rect-main", "rect-24bits"].forEach(rectId => {
+      const rectElem = document.getElementById(rectId);
+      rectElem.addEventListener("click", () => {
+        stopAllAudio();
+        currentActiveRect = rectId;
+        updateToggleButtonState();
+        playAudio(rectId);
+      });
+    });
+
+    for (let i = 1; i <= 40; i++) {
+      const rectId = `rect-${i}`;
+      const rectElem = document.getElementById(rectId);
+      if (rectElem && !rectElem.classList.contains("no-data")) {
+        rectElem.addEventListener("click", () => {
+          stopAllAudio();
+          currentActiveRect = rectId;
+          updateToggleButtonState();
+          playAudio(rectId);
+        });
+      }
+    }
+
+    languageToggle.addEventListener("click", () => {
+      currentLanguage = currentLanguage === "English" ? "Español" : "English";
+      languageToggle.textContent = currentLanguage;
+      if (currentLanguage === "English") {
+        instructionsLink.textContent = "Read me";
+        document.getElementById("source-Sine").textContent = "Sine";
+        document.getElementById("source-flaute").textContent = "Instrument";
+        document.querySelector(".source-label").textContent = "Source";
+        Object.entries(tooltipElements).forEach(([id, text]) => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.removeEventListener("mouseenter", element.mouseenterHandler);
+            element.removeEventListener("mouseleave", element.mouseleaveHandler);
+            element.mouseenterHandler = (e) => {
+              if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
+                showTooltip(id, text, e.pageX, e.pageY);
+              }
+            };
+            element.mouseleaveHandler = () => hideAllTooltips();
+            element.addEventListener("mouseenter", element.mouseenterHandler);
+            element.addEventListener("mouseleave", element.mouseleaveHandler);
+          }
+        });
+      } else {
+        instructionsLink.textContent = "  Léeme";
+        document.getElementById("source-Sine").textContent = "Seno";
+        document.getElementById("source-flaute").textContent = "Instrumento";
+        document.querySelector(".source-label").textContent = "Fuente";
+        Object.entries(tooltipElementsEs).forEach(([id, text]) => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.removeEventListener("mouseenter", element.mouseenterHandler);
+            element.removeEventListener("mouseleave", element.mouseleaveHandler);
+            element.mouseenterHandler = (e) => {
+              if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
+                showTooltip(id, text, e.pageX, e.pageY);
+              }
+            };
+            element.mouseleaveHandler = () => hideAllTooltips();
+            element.addEventListener("mouseenter", element.mouseenterHandler);
+            element.addEventListener("mouseleave", element.mouseleaveHandler);
+          }
+        });
+      }
+      updateHelpToggleText();
+    });
+
+    instructionsLink.addEventListener("click", () => {
+      const windowWidth = 1200;
+      const windowHeight = 720;
+      const left = (screen.width - windowWidth) / 2;
+      const top = 100;
+
+      if (currentLanguage === "English") {
+        window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+      } else {
+        window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+      }
+    });
+
+    Object.entries(tooltipElements).forEach(([id, text]) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.mouseenterHandler = (e) => {
+          if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
+            showTooltip(id, text, e.pageX, e.pageY);
+          }
+        };
+        element.mouseleaveHandler = () => hideAllTooltips();
+        element.addEventListener("mouseenter", element.mouseenterHandler);
+        element.addEventListener("mouseleave", element.mouseleaveHandler);
+      }
+    });
+
+    function updateHelpToggleText() {
+      if (currentLanguage === "English") {
+        helpToggle.textContent = isHelpEnabled ? "Help On" : "Help Off";
+      } else {
+        helpToggle.textContent = isHelpEnabled ? "Ayuda Act" : "Ayuda Inact";
+      }
+    }
+
+    helpToggle.addEventListener("click", () => {
+      isHelpEnabled = !isHelpEnabled;
+      updateHelpToggleText();
+      if (!isHelpEnabled) {
+        hideAllTooltips();
+      }
+    });
+
+    updateHelpToggleText();
+
+    preloadAllAudio();
+  </script>
+</body>
+</html>
