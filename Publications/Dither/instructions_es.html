@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 { /* Agregamos el selector para h1 */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Agregamos la sombra */
+    }
+  .instruction-text {
+      font-size: 18px; /* Tamaño de letra personalizable */
+      font-family: 'Times New Roman', serif; /* Tipo de letra personalizable */
+    }
+    .bold-italic {
+      font-weight: bold;
+      font-style: italic;
+      text-decoration: underline;
+    }
+    .bold{
+     font-weight: bold;
+    }
+    table {
+      margin-left: 20px;
+    }
+    td {
+      padding-right: 20px; /* Espaciado entre columnas */
+    }
+    .close-text {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .close-link {
+      cursor: pointer;
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Instrucciones</h1>
+  <p class="instruction-text"><span class="bold">Dither & NS Benchmark Tool</span> es una página destinada a disponibilizar el resultado de aplicar Dither y/o Noise Shaping a señales de bajo nivel. Las pruebas se han realizado sobre dos señales:<br><br>
+1) Seno: señal senoidal de 997Hz , 2LSB (Least Sginifican Bit) nivel pico a 44.1kHz /24 bits<br>
+2) Instrumento: señal de instrumento de nivel -86 dBFS RMS a 44.1kHz/24bits<br><br>
+Ambas señales se han convertido de 24-bit a 16-bit de profundidad, a través del procesamiento con Dithering y/o Noise Shaping, de los plugins o DAWs a indicados en cada caso.<br>
+Salvo la aplicación de ganancia (posterior a la señal procesada) ningún otro proceso, efecto o alteración de la señal, ha sido incluido en el desarrollo de la medición.<br>
+A continuación se enumeran los plugins y DAWs utilizado con sus correspondientes versiones:<br><br>
+
+<table>
+  <tr>
+    <td>Izotope Ozone</td>
+    <td>v11 2.0.3296</td>
+  </tr>
+  <tr>
+    <td>FabFilter ProL2</td>
+    <td>2.21</td>
+  </tr>
+  <tr>
+    <td>Waves L2</td>
+    <td>14.12.90.381</td>
+  </tr>
+  <tr>
+    <td>Voxengo Elephant</td>
+    <td>5.1</td>
+  </tr>
+  <tr>
+    <td>DMG Limitless</td>
+    <td>1.19</td>
+  </tr>
+  <tr>
+    <td>ProTools Maxim/Dither</td>
+    <td>2024.10.0</td>
+  </tr>
+  <tr>
+    <td>Reaper</td>
+    <td>7.34</td>
+  </tr>
+  <tr>
+    <td>Ableton Live</td>
+    <td>11.3.13</td>
+  </tr>
+</table><br>
+
+
+<p class="instruction-text">Tanto la página, como los resultados presentados en ella, <span class="bold-italic">son exclusivamente para fines educativos</span>. La misma no tiene ningún fin comercial, de forma directa o indirecta, como así <span class="bold-italic">tampoco constituye ninguna representación y/o recomendación hacia marcas y/o modelos</span>.<br><br>
+
+La misma ha sido desarrollada por Pablo Panitta bajo Soundins y puede ser utilizada siempre y cuando no tenga ninguna clase de usufructo comercial.<br><br>
+
+Sugerencia y recomendaciones: <a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
+  <div class="close-text">
+    <span class="close-link" onclick="wi	ndow.close()">Close</span>
+  </div>
+</body>
+</html>
