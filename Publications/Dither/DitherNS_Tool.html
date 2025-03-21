@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v9.3_r4 -->
+<!DOCTYPE html> <!--VERSION v9.3_r5-->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -37,7 +37,6 @@
       color: white;
       margin-bottom: 10px;
       margin-top: -6px;
-      margin-left: 25px;
       text-align: center;
     }
     #version-text {
@@ -53,21 +52,22 @@
       justify-content: center;
       gap: 10px;
       margin-top: 30px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; /* Evita que los elementos se apilen */
     }
     #main-row {
       margin-top: 30px;
       position: relative;
       width: 100%;
       max-width: 1160px;
+      display: flex;
+      justify-content: flex-start; /* Alinea los elementos a la izquierda */
+      align-items: center;
+      gap: 20px; /* Espacio entre elementos */
     }
     .source-group {
       display: flex;
       flex-direction: row;
       align-items: center;
-      position: absolute;
-      left: 116px;
-      top: 0;
     }
     .source-label {
       font-weight: bold;
@@ -76,7 +76,7 @@
       margin-right: 10px;
       white-space: nowrap;
       align-self: center;
-      width: 70px;
+      width: 70px; /* Ancho fijo para evitar movimiento */
     }
     .vertical-line {
       width: 2px;
@@ -90,25 +90,13 @@
       gap: 5px;
     }
     #rect-24bits {
-      position: absolute;
-      left: 464px;
-      top: 22px;
       height: 20px;
     }
     #rect-main {
-      position: absolute;
-      left: 590px;
-      top: 22px;
       height: 20px;
     }
     #toggle-btn {
-      position: absolute;
-      left: 725px;
-      top: 24px;
-    }
-    .matrix-container {
-      width: 100%;
-      overflow-x: auto;
+      /* Sin posición absoluta, se ajusta al flujo */
     }
     table {
       border-collapse: separate;
@@ -283,7 +271,7 @@
       background-color: green;
     }
     .source-btn {
-      width: 100px;
+      width: 100px; /* Ancho fijo para evitar movimiento */
       height: 20px;
       background-color: #1a73e8;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -378,120 +366,17 @@
       opacity: 1;
     }
 
-    /* Media Query para dispositivos móviles en horizontal */
-    @media (max-width: 768px) and (orientation: landscape) {
-      body {
-        padding: 10px;
-      }
-      #header-background {
-        height: 80px;
-      }
-      #logo {
-        width: 120px;
-        top: 20px;
-        left: 10px;
-      }
-      h1 {
-        font-size: 28px;
-        margin-top: 0;
-      }
-      #version-text {
-        top: 20px;
-        right: 32%;
-      }
-      #language-toggle {
-        right: 2%;
-        font-size: 12px;
-        top: 60px;
-      }
-      #instructions-link {
-        right: 12%;
-        font-size: 12px;
-        left: auto;
-        top: 60px;
-      }
-      #help-toggle {
-        right: 22%;
-        font-size: 12px;
-        left: auto;
-        top: 60px;
-      }
+    /* Ajustes para pantallas pequeñas */
+    @media (max-width: 1160px) {
       #main-row {
-        margin-top: 20px;
-        padding: 0;
-      }
-      .source-group {
-        left: 0;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .source-label {
-        font-size: 16px;
-      }
-      .toggle-source {
-        flex-direction: column;
-        gap: 5px;
-      }
-      .source-btn {
-        width: 80px;
-        height: 25px;
-        font-size: 12px;
-      }
-      #rect-24bits {
-        left: 250px;
-        top: 10px;
-      }
-      #rect-main {
-        left: 350px;
-        top: 10px;
-      }
-      #toggle-btn {
-        left: 460px;
-        top: 12px;
-      }
-      .matrix-container {
-        margin-top: 20px;
+        transform: scale(0.8); /* Escala el contenido para que quepa */
+        transform-origin: top left; /* Escala desde la esquina superior izquierda */
+        width: 1450px; /* Ajusta el ancho para compensar la escala */
       }
       table {
-        top: 60px;
-        margin-top: 20px;
-        width: auto;
-        max-width: none;
-      }
-      th {
-        font-size: 12px;
-        padding: 5px;
-      }
-      td {
-        padding: 5px;
-      }
-      .rect {
-        width: 80px;
-        font-size: 10px;
-        padding: 6px;
-      }
-      .progress-container {
-        width: 80px;
-        left: 6px;
-      }
-    }
-
-    /* Mensaje para modo vertical en móviles */
-    @media (max-width: 768px) and (orientation: portrait) {
-      body::before {
-        content: "Por favor, rote su dispositivo a modo horizontal para una mejor experiencia.";
-        display: block;
-        background-color: #ffcc00;
-        color: black;
-        padding: 10px;
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 10px;
-        font-size: 14px;
-      }
-      /* Ocultar contenido en modo vertical para reforzar la sugerencia */
-      #main-row, .matrix-container, #loop-btn, #pause-btn {
-        display: none;
+        transform: scale(0.8);
+        transform-origin: top center;
+        width: 1450px;
       }
     }
   </style>
@@ -521,110 +406,108 @@
     </div>
     <button id="toggle-btn">997Hz</button>
   </div>
-  <div class="matrix-container">
-    <table>
-      <thead>
-        <tr>
-          <th colspan="2">Izotope</th>
-          <th>FabFilter</th>
-          <th colspan="2">Waves</th>
-          <th>Voxengo</th>
-          <th>DMG</th>
-          <th colspan="3">DAW</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-1"></div></div></div></td>
-          <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-2"></div></div></div></td>
-          <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-3"></div></div></div></td>
-          <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-4"></div></div></div></td>
-          <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-5"></div></div></div></td>
-          <td><div class="rect" id="rect-6">Elephant<br>Dither: TPDF<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-6"></div></div></div></td>
-          <td><div class="rect" id="rect-7">Limitless<br>Dither: On<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-7"></div></div></div></td>
-          <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-8"></div></div></div></td>
-          <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-9"></div></div></div></td>
-          <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-10"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="rect" id="rect-11">Ozone 11<br>Dither: Low<br>NS: Low
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-11"></div></div></div></td>
-          <td><div class="rect" id="rect-12">Ozone 11<br>Dither: Strong<br>NS: Low
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-12"></div></div></div></td>
-          <td><div class="rect" id="rect-13">Pro L2<br>Dither: On<br>NS: Basic
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-13"></div></div></div></td>
-          <td><div class="rect" id="rect-14">L2<br>Dither: T1<br>NS: Moderate
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-14"></div></div></div></td>
-          <td><div class="rect" id="rect-15">L2<br>Dither: T2<br>NS: Moderate
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-15"></div></div></div></td>
-          <td><div class="rect no-data" id="rect-16">No data
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-16"></div></div></div></td>
-          <td><div class="rect" id="rect-17">Limitless<br>Dither: On<br>NS: 50%
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-17"></div></div></div></td>
-          <td><div class="rect no-data" id="rect-18">No data
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-18"></div></div></div></td>
-          <td><div class="rect" id="rect-19">Live<br>Dither: TPDF<br>NS: POWr1
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-19"></div></div></div></td>
-          <td><div class="rect" id="rect-20">ProTools (Dither)<br>Dither: On<br>NS: Type 1
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-20"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="rect" id="rect-21">Ozone 11<br>Dither: Low<br>NS: Mid
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-21"></div></div></div></td>
-          <td><div class="rect" id="rect-22">Ozone 11<br>Dither: Strong<br>NS: Mid
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-22"></div></div></div></td>
-          <td><div class="rect" id="rect-23">Pro L2<br>Dither: On<br>NS: Optimized
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-23"></div></div></div></td>
-          <td><div class="rect" id="rect-24">L2<br>Dither: T1<br>NS: Normal
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-24"></div></div></div></td>
-          <td><div class="rect" id="rect-25">L2<br>Dither: T2<br>NS: Normal
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-25"></div></div></div></td>
-          <td><div class="rect" id="rect-26">Elephant<br>Dither: TPDF<br>NS: Equal
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-26"></div></div></div></td>
-          <td><div class="rect" id="rect-27">Limitless<br>Dither: On<br>NS: 100%
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-27"></div></div></div></td>
-          <td><div class="rect no-data" id="rect-28">No data
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-28"></div></div></div></td>
-          <td><div class="rect" id="rect-29">Live<br>Dither: TPDF<br>NS: POWr2
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-29"></div></div></div></td>
-          <td><div class="rect" id="rect-30">ProTools (Dither)<br>Dither: On<br>NS: Type 2
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-30"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-31"></div></div></div></td>
-          <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-32"></div></div></div></td>
-          <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-33"></div></div></div></td>
-          <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-34"></div></div></div></td>
-          <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-35"></div></div></div></td>
-          <td><div class="rect" id="rect-36">Elephant<br>Dither: TPDF<br>NS: Classic
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-36"></div></div></div></td>
-          <td><div class="rect" id="rect-37">Limitless<br>Dither: On<br>NS: 200%
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-37"></div></div></div></td>
-          <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-38"></div></div></div></td>
-          <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-39"></div></div></div></td>
-          <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3
-            <div class="progress-container"><div class="loading-bar" id="loading-bar-40"></div></div></div></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">Izotope</th>
+        <th>FabFilter</th>
+        <th colspan="2">Waves</th>
+        <th>Voxengo</th>
+        <th>DMG</th>
+        <th colspan="3">DAW</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-1"></div></div></div></td>
+        <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-2"></div></div></div></td>
+        <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-3"></div></div></div></td>
+        <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-4"></div></div></div></td>
+        <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-5"></div></div></div></td>
+        <td><div class="rect" id="rect-6">Elephant<br>Dither: TPDF<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-6"></div></div></div></td>
+        <td><div class="rect" id="rect-7">Limitless<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-7"></div></div></div></td>
+        <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-8"></div></div></div></td>
+        <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-9"></div></div></div></td>
+        <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-10"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-11">Ozone 11<br>Dither: Low<br>NS: Low
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-11"></div></div></div></td>
+        <td><div class="rect" id="rect-12">Ozone 11<br>Dither: Strong<br>NS: Low
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-12"></div></div></div></td>
+        <td><div class="rect" id="rect-13">Pro L2<br>Dither: On<br>NS: Basic
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-13"></div></div></div></td>
+        <td><div class="rect" id="rect-14">L2<br>Dither: T1<br>NS: Moderate
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-14"></div></div></div></td>
+        <td><div class="rect" id="rect-15">L2<br>Dither: T2<br>NS: Moderate
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-15"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-16">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-16"></div></div></div></td>
+        <td><div class="rect" id="rect-17">Limitless<br>Dither: On<br>NS: 50%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-17"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-18">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-18"></div></div></div></td>
+        <td><div class="rect" id="rect-19">Live<br>Dither: TPDF<br>NS: POWr1
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-19"></div></div></div></td>
+        <td><div class="rect" id="rect-20">ProTools (Dither)<br>Dither: On<br>NS: Type 1
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-20"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-21">Ozone 11<br>Dither: Low<br>NS: Mid
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-21"></div></div></div></td>
+        <td><div class="rect" id="rect-22">Ozone 11<br>Dither: Strong<br>NS: Mid
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-22"></div></div></div></td>
+        <td><div class="rect" id="rect-23">Pro L2<br>Dither: On<br>NS: Optimized
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-23"></div></div></div></td>
+        <td><div class="rect" id="rect-24">L2<br>Dither: T1<br>NS: Normal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-24"></div></div></div></td>
+        <td><div class="rect" id="rect-25">L2<br>Dither: T2<br>NS: Normal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-25"></div></div></div></td>
+        <td><div class="rect" id="rect-26">Elephant<br>Dither: TPDF<br>NS: Equal
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-26"></div></div></div></td>
+        <td><div class="rect" id="rect-27">Limitless<br>Dither: On<br>NS: 100%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-27"></div></div></div></td>
+        <td><div class="rect no-data" id="rect-28">No data
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-28"></div></div></div></td>
+        <td><div class="rect" id="rect-29">Live<br>Dither: TPDF<br>NS: POWr2
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-29"></div></div></div></td>
+        <td><div class="rect" id="rect-30">ProTools (Dither)<br>Dither: On<br>NS: Type 2
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-30"></div></div></div></td>
+      </tr>
+      <tr>
+        <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-31"></div></div></div></td>
+        <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-32"></div></div></div></td>
+        <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-33"></div></div></div></td>
+        <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-34"></div></div></div></td>
+        <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-35"></div></div></div></td>
+        <td><div class="rect" id="rect-36">Elephant<br>Dither: TPDF<br>NS: Classic
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-36"></div></div></div></td>
+        <td><div class="rect" id="rect-37">Limitless<br>Dither: On<br>NS: 200%
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-37"></div></div></div></td>
+        <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-38"></div></div></div></td>
+        <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-39"></div></div></div></td>
+        <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3
+          <div class="progress-container"><div class="loading-bar" id="loading-bar-40"></div></div></div></td>
+      </tr>
+    </tbody>
+  </table>
   <div style="display: flex; justify-content: center; gap: 10px; margin-top: 100px;">
     <button id="loop-btn"></button>
     <button id="pause-btn"></button>
