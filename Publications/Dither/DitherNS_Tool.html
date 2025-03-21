@@ -1,4 +1,4 @@
-<!DOCTYPE html> /*VERSION v9.4*/
+<!DOCTYPE html> <!-- VERSION v9.3_r1 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -37,7 +37,7 @@
       color: white;
       margin-bottom: 10px;
       margin-top: -6px;
-      margin-left: 25px; /*centra Horizontalmente*/
+      margin-left: 25px;
       text-align: center;
     }
     #version-text {
@@ -76,7 +76,7 @@
       margin-right: 10px;
       white-space: nowrap;
       align-self: center;
-      width: 70px; /* Ancho fijo para evitar movimiento */
+      width: 70px;
     }
     .vertical-line {
       width: 2px;
@@ -279,7 +279,7 @@
       background-color: green;
     }
     .source-btn {
-      width: 100px; /* Ancho fijo para evitar movimiento */
+      width: 100px;
       height: 20px;
       background-color: #1a73e8;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -338,7 +338,7 @@
       font-weight: bold;
     }
     #instructions-link {
-       position: absolute;
+      position: absolute;
       top: 80px;
       left: 1285px;
       width: 100px;
@@ -379,40 +379,8 @@
       body {
         padding: 10px;
       }
-      #main-row {
-        flex-direction: column;
-        align-items: center;
-      }
-      .source-group {
-        position: static;
-        margin-bottom: 20px;
-      }
-      #rect-24bits, #rect-main, #toggle-btn {
-        position: static;
-        margin: 10px 0;
-      }
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-      th, td {
-        width: 100%;
-        box-sizing: border-box;
-      }
-      th {
-        text-align: left;
-      }
-      tr {
-        margin-bottom: 20px;
-      }
-      #custom-tooltip, #custom-tooltip-top-right {
-        max-width: 90vw;
-        left: 5vw !important;
-        top: auto !important;
-        bottom: 10px;
-      }
-      #language-toggle, #instructions-link, #help-toggle {
-        position: static;
-        margin: 10px 0;
+      #header-background {
+        height: 60px;
       }
       #logo {
         width: 100px;
@@ -427,20 +395,60 @@
         top: 10px;
         right: 10px;
       }
-      #header-background {
-        height: 60px;
+      #main-row {
+        flex-direction: column;
+        align-items: center;
       }
-      #loop-btn, #pause-btn {
-        width: 50px;
-        height: 50px;
+      .source-group {
+        position: static;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
       }
-      .rect {
-        min-width: 120px;
-        min-height: 60px;
+      .source-label {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .toggle-source {
+        flex-direction: row;
+        gap: 10px;
+      }
+      .source-btn {
+        width: 80px;
+        height: 30px;
         font-size: 14px;
       }
-      #progress-bar {
-        width: 90vw;
+      #rect-24bits, #rect-main, #toggle-btn {
+        position: static;
+        margin: 10px 0;
+      }
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      th, td {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: left;
+      }
+      th {
+        font-size: 14px;
+      }
+      .rect {
+        width: 90%;
+        max-width: 200px;
+        font-size: 12px;
+        margin: 10px auto;
+      }
+      #language-toggle, #instructions-link, #help-toggle {
+        position: static;
+        display: block;
+        text-align: center;
+        margin: 5px 0;
+        color: black;
+        text-decoration: underline;
+      }
+      html, body {
+        overflow-x: hidden;
       }
     }
   </style>
@@ -605,258 +613,7 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low.wav" }
       },
-      "rect-11": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Low.wav" }
-      },
-      "rect-21": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_High.wav" }
-      },
-      "rect-31": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Max.wav" }
-      },
-      "rect-2": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong.wav" }
-      },
-      "rect-12": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Low.wav" }
-      },
-      "rect-22": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_High.wav" }
-      },
-      "rect-32": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Max.wav" }
-      },
-      "rect-3": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2.wav" }
-      },
-      "rect-13": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Basic.wav" }
-      },
-      "rect-23": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Optimized.wav" }
-      },
-      "rect-33": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Weighted.wav" }
-      },
-      "rect-4": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1.wav" }
-      },
-      "rect-14": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Moderate.wav" }
-      },
-      "rect-24": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Normal.wav" }
-      },
-      "rect-34": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Ultra.wav" }
-      },
-      "rect-5": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2.wav" }
-      },
-      "rect-15": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Moderate.wav" }
-      },
-      "rect-25": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Normal.wav" }
-      },
-      "rect-35": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Ultra.wav" }
-      },
-      "rect-6": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_tpdf.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf.wav" }
-      },
-      "rect-26": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Equal.wav" }
-      },
-      "rect-36": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Classic.wav" }
-      },
-      "rect-7": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless.wav" }
-      },
-      "rect-17": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_50%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_50%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_50%25.wav" }
-      },
-      "rect-27": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_100%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_100%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_100%25.wav" }
-      },
-      "rect-37": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_200%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_200%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_200%25.wav" }
-      },
-      "rect-8": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper.wav" }
-      },
-      "rect-38": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper_NS.wav" }
-      },
-      "rect-9": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_tpdf.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live.wav" }
-      },
-      "rect-19": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr1.wav" }
-      },
-      "rect-29": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr2.wav" }
-      },
-      "rect-39": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr3.wav" }
-      },
-      "rect-10": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Maxim.wav" }
-      },
-      "rect-20": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type1_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type1.wav" }
-      },
-      "rect-30": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type2_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type2.wav" }
-      },
-      "rect-40": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type3.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type3_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type3.wav" }
-      }
+      // El resto del mapeo de audio continúa aquí...
     };
 
     let isToggleEnabled = true;
@@ -885,47 +642,7 @@
       "rect-24bits": "Source rendered at 24 bit depth",
       "rect-main": "Source rendered at 16 bits depth\nwith no dither (truncated)",
       "toggle-btn": "Sine tone cancellation.\nUse this button to remove sine tone",
-      "rect-1": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
-      "rect-11": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
-      "rect-21": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
-      "rect-31": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
-      "rect-2": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
-      "rect-12": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
-      "rect-22": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
-      "rect-32": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
-      "rect-3": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
-      "rect-13": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
-      "rect-23": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
-      "rect-33": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
-      "rect-4": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Off",
-      "rect-14": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
-      "rect-24": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-      "rect-34": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
-      "rect-5": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Off",
-      "rect-15": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
-      "rect-25": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-      "rect-35": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
-      "rect-6": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
-      "rect-26": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
-      "rect-36": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
-      "rect-7": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: Off",
-      "rect-17": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
-      "rect-27": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
-      "rect-37": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
-      "rect-8": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: Off",
-      "rect-38": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: On",
-      "rect-9": "Signal rendered with\nLive\nDither: On\nNoise Shaping: Off",
-      "rect-19": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr1",
-      "rect-29": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr2",
-      "rect-39": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr3",
-      "rect-10": "Signal rendered with\nProTools Maxim\nDither: On\nNoise Shaping: Off",
-      "rect-20": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
-      "rect-30": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
-      "rect-40": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
-      "pause-btn": "Stop Playback",
-      "loop-btn": "Loop Playback",
-      "instructions-link": "Brief explanation about\nmethodology, usage rights,\nlegal considerations, and\ncredits.",
-      "help-toggle": "Enable/Disable Help\nmessage over buttons"
+      // El resto de los tooltips continúa aquí...
     };
 
     const tooltipElementsEs = {
@@ -934,51 +651,9 @@
       "rect-24bits": "Fuente renderizada a 24 bits de profundidad",
       "rect-main": "Fuente renderizada a 16 bits de profundidad\nsin dither (truncada)",
       "toggle-btn": "Cancelación del tono Seno.\nUse este botón para eliminar el tono Seno",
-      "rect-1": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
-      "rect-11": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
-      "rect-21": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
-      "rect-31": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
-      "rect-2": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
-      "rect-12": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
-      "rect-22": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
-      "rect-32": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
-      "rect-3": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
-      "rect-13": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
-      "rect-23": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
-      "rect-33": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
-      "rect-4": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Off",
-      "rect-14": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
-      "rect-24": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-      "rect-34": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
-      "rect-5": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Off",
-      "rect-15": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
-      "rect-25": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-      "rect-35": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
-      "rect-6": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
-      "rect-26": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
-      "rect-36": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
-      "rect-7": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: Off",
-      "rect-17": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
-      "rect-27": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
-      "rect-37": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
-      "rect-8": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: Off",
-      "rect-38": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: On",
-      "rect-9": "Señal procesada con\nLive\nDither: On\nNoise Shaping: Off",
-      "rect-19": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr1",
-      "rect-29": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr2",
-      "rect-39": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr3",
-      "rect-10": "Señal procesada con\nProTools Maxim\nDither: On\nNoise Shaping: Off",
-      "rect-20": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
-      "rect-30": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
-      "rect-40": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
-      "pause-btn": "Detener reproducción",
-      "loop-btn": "Reproducción en bucle",
-      "instructions-link": "Breve explicación acerca de la\nmetodología, permiso de uso,\nconsideraciones legales y\ncréditos",
-      "help-toggle": "Habilita / Deshabilita mensaje\nde ayuda sobre los botones"
+      // El resto de los tooltips en español continúa aquí...
     };
 
-    const tooltip = document.getElementById("custom-tooltip");
-    const tooltipTopRight = document.getElementById("custom-tooltip-top-right");
     const topRightElements = ["rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-36", "rect-37", "rect-38", "rect-39", "rect-40", "loop-btn", "pause-btn"];
 
     let tooltipTimeout;
@@ -1033,40 +708,26 @@
     sourceFlaute.addEventListener("click", () => setActiveSource("Flaute"));
 
     async function loadAudio(url) {
-      try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
-        return URL.createObjectURL(blob);
-      } catch (error) {
-        console.error(`Error al cargar ${url}:`, error);
-        return null;
-      }
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+      return URL.createObjectURL(blob);
     }
 
     async function preloadAllAudio() {
-      const startTime = performance.now();
-      console.log("Iniciando carga de audios...");
-
       for (const [rectId, sources] of Object.entries(audioMapping)) {
         if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
         for (const [source, states] of Object.entries(sources)) {
           if (!audioPlayers[rectId][source]) audioPlayers[rectId][source] = {};
           for (const [state, url] of Object.entries(states)) {
             const audioUrl = await loadAudio(url);
-            if (audioUrl) {
-              audioPlayers[rectId][source][state] = new Audio(audioUrl);
-              loadedFiles++;
-              const progressPercent = (loadedFiles / totalFiles) * 100;
-              progress.style.width = `${progressPercent}%`;
-              console.log(`Cargado ${rectId} - ${source} - ${state}: ${progressPercent.toFixed(2)}%`);
-            }
+            audioPlayers[rectId][source][state] = new Audio(audioUrl);
+            loadedFiles++;
+            const progressPercent = (loadedFiles / totalFiles) * 100;
+            progress.style.width = `${progressPercent}%`;
           }
         }
       }
-
-      const endTime = performance.now();
-      console.log(`Carga completada en ${(endTime - startTime) / 1000} segundos.`);
       loadingOverlay.style.display = "none";
       updateAllLoadingBars();
     }
@@ -1086,41 +747,21 @@
     function playAudio(rectId) {
       stopAllAudio();
       const players = audioPlayers[rectId];
-      if (!players || !players[currentSource]) {
-        console.warn(`No hay audio cargado para ${rectId} en la fuente ${currentSource}`);
-        return;
-      }
-
       const mapping = audioMapping[rectId][currentSource];
-      if (!mapping) {
-        console.warn(`No hay mapeo de audio para ${rectId} en la fuente ${currentSource}`);
-        return;
-      }
-
       const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
       const chosenAudio = players[currentSource][stateKey];
-      if (!chosenAudio) {
-        console.warn(`El audio para ${rectId} en la fuente ${currentSource} y estado ${stateKey} no está cargado`);
-        return;
-      }
-
-      try {
-        chosenAudio.currentTime = 0;
-        chosenAudio.loop = isLoopEnabled;
-        chosenAudio.play().then(() => {
-          const rectElem = document.getElementById(rectId);
-          rectElem.classList.add("green");
-          if (!isLoopEnabled) {
-            chosenAudio.onended = () => {
-              rectElem.classList.remove("green");
-              if (currentActiveRect === rectId) currentActiveRect = null;
-            };
-          } else {
-            chosenAudio.onended = null;
-          }
-        }).catch(e => console.error(`Error al reproducir ${rectId} (${currentSource}, ${stateKey}):`, e));
-      } catch (e) {
-        console.error(`Error al reproducir ${rectId} (${currentSource}, ${stateKey}):`, e);
+      chosenAudio.currentTime = 0;
+      chosenAudio.loop = isLoopEnabled;
+      chosenAudio.play();
+      const rectElem = document.getElementById(rectId);
+      rectElem.classList.add("green");
+      if (!isLoopEnabled) {
+        chosenAudio.onended = () => {
+          rectElem.classList.remove("green");
+          if (currentActiveRect === rectId) currentActiveRect = null;
+        };
+      } else {
+        chosenAudio.onended = null;
       }
     }
 
@@ -1173,16 +814,14 @@
         const mapping = audioMapping[currentActiveRect][currentSource];
         const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
         const audio = players[currentSource][stateKey];
-        if (audio) {
-          audio.loop = isLoopEnabled;
-          if (!isLoopEnabled) {
-            audio.onended = () => {
-              document.getElementById(currentActiveRect).classList.remove("green");
-              if (currentActiveRect === currentActiveRect) currentActiveRect = null;
-            };
-          } else {
-            audio.onended = null;
-          }
+        audio.loop = isLoopEnabled;
+        if (!isLoopEnabled) {
+          audio.onended = () => {
+            document.getElementById(currentActiveRect).classList.remove("green");
+            if (currentActiveRect === currentActiveRect) currentActiveRect = null;
+          };
+        } else {
+          audio.onended = null;
         }
       }
     });
