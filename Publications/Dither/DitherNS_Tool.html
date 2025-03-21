@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v215 -->
+<!DOCTYPE html> <!-- VERSION v216 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -378,42 +378,27 @@
     .mobile .row-3 {
       display: none;
     }
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      table {
-        width: 10%;
-        max-width: none;
-        margin: 0 auto; /* Centrar la tabla */
-        top: 120px; /* Ajustar la posición vertical de la tabla */
-      }
-      #main-row {
-        max-width: none;
-        width: 100%; /* Asegurar que ocupe todo el ancho */
-        margin: 0 auto; /* Centrar el main-row */
-        margin-top: 60px; /* Desplazar main-row hacia abajo */
-      }
-      .source-group {
-        left: 0; /* Ajustar la posición para que no desplace la tabla */
-        top: 20px; /* Ajustar la posición vertical de source-group */
-      }
-      /* Cambios solicitados solo para móvil */
-      #header-background {
-        width: 100vw;
-        left: 0;
-      }
-      h1 {
-        margin-left: 0;
-      }
-    }
+@media (max-width: 768px) {
+  body {
+    padding: 10px; /* Suponiendo que este es el padding que mencionaste */
+  }
+  #header-background {
+    width: 100vw;        /* Ancho total del viewport */
+    left: 0;             /* Pegado al borde izquierdo */
+    margin-left: -10px;  /* Compensa el padding del body */
+  }
+  h1 {
+    margin-left: 0;      /* Sin margen lateral */
+    text-align: center;  /* Centrado horizontal */
+  }
+}
   </style>
 </head>
 <body>
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v215</div>
+  <div id="version-text">v216</div>
   <div id="language-toggle">English</div>
   <div id="instructions-link">Read me</div>
   <div id="help-toggle">Help On</div>
