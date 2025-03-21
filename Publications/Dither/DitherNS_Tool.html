@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v200 -->
+<!DOCTYPE html> <!-- VERSION v201 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -29,7 +29,7 @@
       }
     }
 
-    /* Estilos para la versión laptop (sin cambios) */
+    /* Estilos para la versión laptop (restaurada a la original) */
     .laptop-version body {
       display: flex;
       flex-direction: column;
@@ -58,7 +58,7 @@
       color: white;
       margin-bottom: 10px;
       margin-top: -6px;
-      margin-left: 25px; /* centra Horizontalmente */
+      margin-left: 25px; /* Centra horizontalmente */
       text-align: center;
     }
     .laptop-version #version-text {
@@ -396,7 +396,7 @@
       opacity: 1;
     }
 
-    /* Estilos para la versión móvil */
+    /* Estilos para la versión móvil (con correcciones) */
     .mobile-version {
       padding: 10px;
       height: 100vh; /* Abarca toda la altura de la pantalla */
@@ -409,7 +409,7 @@
       width: 100%;
       height: 60px; /* Reducido para móvil */
       background-color: black;
-      z-index: -1;
+      z-index: 1;
     }
     .mobile-version #logo {
       position: fixed;
@@ -417,7 +417,7 @@
       left: 10px;
       width: 100px; /* Reducido para móvil */
       height: auto;
-      z-index: 1;
+      z-index: 2;
     }
     .mobile-version h1 {
       font-size: 24px; /* Reducido para móvil */
@@ -425,6 +425,11 @@
       margin: 0;
       padding-top: 10px;
       text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
     }
     .mobile-version #version-text {
       position: fixed;
@@ -432,6 +437,7 @@
       right: 10px;
       font-size: 10px; /* Reducido para móvil */
       color: #888;
+      z-index: 2;
     }
     .mobile-version #language-toggle {
       position: fixed;
@@ -441,6 +447,7 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      z-index: 2;
     }
     .mobile-version #instructions-link {
       position: fixed;
@@ -450,6 +457,7 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      z-index: 2;
     }
     .mobile-version #help-toggle {
       position: fixed;
@@ -459,6 +467,7 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      z-index: 2;
     }
     .mobile-version #language-toggle:hover,
     .mobile-version #help-toggle:hover,
@@ -469,10 +478,10 @@
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
-      justify-content: space-between;
+      justify-content: flex-start; /* Mueve elementos a la izquierda */
       align-items: center;
       margin-top: 70px; /* Espacio para el header fijo */
-      padding: 0 10px;
+      padding: 0 5px; /* Reducido para mover más a la izquierda */
     }
     .mobile-version .source-group {
       display: flex;
@@ -719,12 +728,12 @@
   </style>
 </head>
 <body>
-  <!-- Versión para laptop (sin cambios) -->
+  <!-- Versión para laptop (restaurada a la original) -->
   <div class="laptop-version version-container">
     <div id="header-background"></div>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v200</div>
+    <div id="version-text">v201</div>
     <div id="language-toggle">English</div>
     <div id="instructions-link">Read me</div>
     <div id="help-toggle">Help On</div>
@@ -861,12 +870,12 @@
     <div id="custom-tooltip-top-right" style="display: none; position: absolute; background-color: #333; color: white; padding: 10px; border-radius: 15px; white-space: pre-wrap; z-index: 1000; font-size: 11px; opacity: 1;"></div>
   </div>
 
-  <!-- Versión para móvil (adaptada) -->
+  <!-- Versión para móvil (con correcciones) -->
   <div class="mobile-version version-container">
     <div id="header-background"></div>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v9.3</div>
+    <div id="version-text">vlite201</div>
     <div id="language-toggle">English</div>
     <div id="instructions-link">Read me</div>
     <div id="help-toggle">Help On</div>
@@ -980,54 +989,12 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low.wav" }
       },
-      "rect-11": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Low_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Low.wav" }
-      },
-      "rect-21": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_High_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_High.wav" }
-      },
-      "rect-31": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Max.wav" }
-      },
       "rect-2": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong.wav",
           "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_no997.wav"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong.wav" }
-      },
-      "rect-12": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Low_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Low.wav" }
-      },
-      "rect-22": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_High_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_High.wav" }
-      },
-      "rect-32": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Max.wav" }
       },
       "rect-3": {
         "Sine": {
@@ -1036,54 +1003,12 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2.wav" }
       },
-      "rect-13": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Basic_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Basic.wav" }
-      },
-      "rect-23": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Optimized_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Optimized.wav" }
-      },
-      "rect-33": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Weighted.wav" }
-      },
       "rect-4": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T1.wav",
           "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_no997.wav"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1.wav" }
-      },
-      "rect-14": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Moderate_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Moderate.wav" }
-      },
-      "rect-24": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Normal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Normal.wav" }
-      },
-      "rect-34": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Ultra.wav" }
       },
       "rect-5": {
         "Sine": {
@@ -1092,47 +1017,12 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2.wav" }
       },
-      "rect-15": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Moderate_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Moderate.wav" }
-      },
-      "rect-25": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Normal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Normal.wav" }
-      },
-      "rect-35": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Ultra.wav" }
-      },
       "rect-6": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_tpdf.wav",
           "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_no997.wav"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf.wav" }
-      },
-      "rect-26": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Equal_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Equal.wav" }
-      },
-      "rect-36": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Classic.wav" }
       },
       "rect-7": {
         "Sine": {
@@ -1141,40 +1031,12 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless.wav" }
       },
-      "rect-17": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_50%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_50%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_50%25.wav" }
-      },
-      "rect-27": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_100%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_100%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_100%25.wav" }
-      },
-      "rect-37": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_200%25.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_200%25_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_200%25.wav" }
-      },
       "rect-8": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper.wav",
           "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_no997.wav"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper.wav" }
-      },
-      "rect-38": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper_NS.wav" }
       },
       "rect-9": {
         "Sine": {
@@ -1183,27 +1045,6 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live.wav" }
       },
-      "rect-19": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr1_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr1.wav" }
-      },
-      "rect-29": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr2_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr2.wav" }
-      },
-      "rect-39": {
-        "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3_no997.wav"
-        },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr3.wav" }
-      },
       "rect-10": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim.wav",
@@ -1211,19 +1052,68 @@
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Maxim.wav" }
       },
-      "rect-20": {
+      "rect-31": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type1_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max_no997.wav"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type1.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Max.wav" }
       },
-      "rect-30": {
+      "rect-32": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type2_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.wav"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type2.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Max.wav" }
+      },
+      "rect-33": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Weighted.wav" }
+      },
+      "rect-34": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Ultra.wav" }
+      },
+      "rect-35": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Ultra.wav" }
+      },
+      "rect-36": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Elephant_Classic_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Elephant_tpdf_Classic.wav" }
+      },
+      "rect-37": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_DMG_200%25.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Limitless_200%25_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Limitless_200%25.wav" }
+      },
+      "rect-38": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper_NS.wav" }
+      },
+      "rect-39": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3.wav",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3_no997.wav"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr3.wav" }
       },
       "rect-40": {
         "Sine": {
@@ -1345,10 +1235,14 @@
         chosenAudio.play().then(() => {
           const container = getActiveContainer();
           const rectElem = container.querySelector(`#${rectId}`);
-          rectElem.classList.add("green");
+          if (rectId !== "source-Sine" && rectId !== "source-flaute") {
+            rectElem.classList.add("green");
+          }
           if (!isLoopEnabled) {
             chosenAudio.onended = () => {
-              rectElem.classList.remove("green");
+              if (rectId !== "source-Sine" && rectId !== "source-flaute") {
+                rectElem.classList.remove("green");
+              }
               if (currentActiveRect === rectId) currentActiveRect = null;
             };
           } else {
@@ -1395,41 +1289,24 @@
       "rect-main": "Source rendered at 16 bits depth\nwith no dither (truncated)",
       "toggle-btn": "Sine tone cancellation.\nUse this button to remove sine tone",
       "rect-1": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
-      "rect-11": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
-      "rect-21": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
-      "rect-31": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
       "rect-2": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
-      "rect-12": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
-      "rect-22": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
-      "rect-32": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
       "rect-3": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
-      "rect-13": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
-      "rect-23": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
-      "rect-33": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
       "rect-4": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Off",
-      "rect-14": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
-      "rect-24": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-      "rect-34": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
       "rect-5": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Off",
-      "rect-15": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
-      "rect-25": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-      "rect-35": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
       "rect-6": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
-      "rect-26": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
-      "rect-36": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
       "rect-7": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: Off",
-      "rect-17": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
-      "rect-27": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
-      "rect-37": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
       "rect-8": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: Off",
-      "rect-38": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: On",
       "rect-9": "Signal rendered with\nLive\nDither: On\nNoise Shaping: Off",
-      "rect-19": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr1",
-      "rect-29": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr2",
-      "rect-39": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr3",
       "rect-10": "Signal rendered with\nProTools Maxim\nDither: On\nNoise Shaping: Off",
-      "rect-20": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
-      "rect-30": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
+      "rect-31": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
+      "rect-32": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
+      "rect-33": "Signal rendered with\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
+      "rect-34": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
+      "rect-35": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
+      "rect-36": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
+      "rect-37": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
+      "rect-38": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: On",
+      "rect-39": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr3",
       "rect-40": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
       "pause-btn": "Stop Playback",
       "loop-btn": "Loop Playback",
@@ -1444,41 +1321,24 @@
       "rect-main": "Fuente renderizada a 16 bits de profundidad\nsin dither (truncada)",
       "toggle-btn": "Cancelación del tono Seno.\nUse este botón para eliminar el tono Seno",
       "rect-1": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
-      "rect-11": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
-      "rect-21": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
-      "rect-31": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
       "rect-2": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
-      "rect-12": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
-      "rect-22": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
-      "rect-32": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
       "rect-3": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Off",
-      "rect-13": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Basic",
-      "rect-23": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Optimized",
-      "rect-33": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
       "rect-4": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Off",
-      "rect-14": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
-      "rect-24": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-      "rect-34": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
       "rect-5": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Off",
-      "rect-15": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
-      "rect-25": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-      "rect-35": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
       "rect-6": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
-      "rect-26": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
-      "rect-36": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
       "rect-7": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: Off",
-      "rect-17": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
-      "rect-27": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
-      "rect-37": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
       "rect-8": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: Off",
-      "rect-38": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: On",
       "rect-9": "Señal procesada con\nLive\nDither: On\nNoise Shaping: Off",
-      "rect-19": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr1",
-      "rect-29": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr2",
-      "rect-39": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr3",
       "rect-10": "Señal procesada con\nProTools Maxim\nDither: On\nNoise Shaping: Off",
-      "rect-20": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
-      "rect-30": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
+      "rect-31": "Señal procesada con\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
+      "rect-32": "Señal procesada con\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
+      "rect-33": "Señal procesada con\nFabFilter ProL2\nDither: on\nNoise Shaping: Weighted",
+      "rect-34": "Señal procesada con\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
+      "rect-35": "Señal procesada con\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
+      "rect-36": "Señal procesada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
+      "rect-37": "Señal procesada con\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
+      "rect-38": "Señal procesada con\nReaper\nDither: On\nNoise Shaping: On",
+      "rect-39": "Señal procesada con\nLive\nDither: On\nNoise Shaping: POWr3",
       "rect-40": "Señal procesada con\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
       "pause-btn": "Detener reproducción",
       "loop-btn": "Reproducción en bucle",
@@ -1565,7 +1425,9 @@
             if (!isLoopEnabled) {
               audio.onended = () => {
                 const rectElem = container.querySelector(`#${currentActiveRect}`);
-                rectElem.classList.remove("green");
+                if (currentActiveRect !== "source-Sine" && currentActiveRect !== "source-flaute") {
+                  rectElem.classList.remove("green");
+                }
                 if (currentActiveRect === currentActiveRect) currentActiveRect = null;
               };
             } else {
