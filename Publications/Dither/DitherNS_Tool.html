@@ -1,4 +1,4 @@
-<!DOCTYPE html> /*VERSION v210*/
+<!DOCTYPE html> <!-- VERSION v211 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -385,9 +385,15 @@
       table {
         width: 100%;
         max-width: none;
+        margin: 0 auto; /* Centrar la tabla */
       }
       #main-row {
         max-width: none;
+        width: 100%; /* Asegurar que ocupe todo el ancho */
+        margin: 0 auto; /* Centrar el main-row */
+      }
+      .source-group {
+        left: 0; /* Ajustar la posición para que no desplace la tabla */
       }
     }
   </style>
@@ -396,7 +402,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v210</div>
+  <div id="version-text">v211</div>
   <div id="language-toggle">English</div>
   <div id="instructions-link">Read me</div>
   <div id="help-toggle">Help On</div>
