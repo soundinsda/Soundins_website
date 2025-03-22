@@ -94,7 +94,7 @@
       font-size: clamp(12px, 3vw, 16px);
       color: #333;
       margin-bottom: 5px;
-      transform: translateY(5px); /* Desplaza el label "Source" 5px hacia abajo */
+      transform: translateY(5px);
     }
     .source-btn {
       width: 80px;
@@ -125,10 +125,10 @@
       background-color: green;
     }
     #rect-24bits {
-      transform: translateY(2px); /* Desplaza rect-24bits 2px hacia abajo */
+      transform: translateY(2px);
     }
     #rect-main {
-      transform: translateY(9px); /* Desplaza rect-main 9px hacia abajo */
+      transform: translateY(9px);
     }
     /* Botón toggle */
     #toggle-btn {
@@ -140,7 +140,7 @@
       border: none;
       cursor: pointer;
       font-size: clamp(8px, 2vw, 10px);
-      transform: translateY(9px); /* Desplaza toggle-btn 9px hacia abajo */
+      transform: translateY(9px);
     }
     #toggle-btn.red {
       background-color: red;
@@ -156,7 +156,7 @@
       position: relative;
       margin-left: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      transform: translateY(9px); /* Desplaza stop-btn 9px hacia abajo */
+      transform: translateY(9px);
     }
     #stop-btn::before {
       content: '';
@@ -203,6 +203,7 @@
       max-width: 400px;
       text-align: center;
       z-index: 10;
+      display: none;
     }
     #progress-bar {
       width: 100%;
@@ -244,7 +245,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v13Mobile</div>
+  <div id="version-text">v14Mobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -432,11 +433,14 @@
     let currentActiveRect = null;
     let currentSource = "Sine";
     const audioPlayers = {};
+    let firstClick = true;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
     const toggleBtn = document.getElementById("toggle-btn");
     const stopBtn = document.getElementById("stop-btn");
+    const progressContainer = document.getElementById("progress-container");
+    const progressFill = document.getElementById("progress-fill");
 
     const rectsToLoad = [
       "rect-24bits", "rect-main",
@@ -471,18 +475,6 @@
     }
 
     async function preloadAllAudio() {
-      let totalFiles = 0;
-      for (const rectId of rectsToLoad) {
-        const sources = audioMapping[rectId];
-        for (const states of Object.values(sources)) {
-          totalFiles += Object.keys(states).length;
-        }
-      }
-
-      let loadedFiles = 0;
-      const progressFill = document.getElementById("progress-fill");
-      const progressContainer = document.getElementById("progress-container");
-
       for (const rectId of rectsToLoad) {
         if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
         const sources = audioMapping[rectId];
@@ -493,16 +485,16 @@
             if (audioUrl) {
               audioPlayers[rectId][source][state] = new Audio(audioUrl);
             }
-            loadedFiles++;
-            const progress = (loadedFiles / totalFiles) * 100;
-            progressFill.style.width = `${progress}%`;
           }
         }
       }
-      progressContainer.style.display = "none";
     }
 
     function playAudio(rectId) {
+      if (firstClick) {
+        firstClick = false;
+        showProgressBar();
+      }
       stopAllAudio();
       const players = audioPlayers[rectId];
       if (!players || !players[currentSource]) return;
@@ -516,6 +508,11 @@
       chosenAudio.play().then(() => {
         const rectElem = document.getElementById(rectId);
         rectElem.classList.add("green");
+        chosenAudio.onplay = () => {
+          if (!firstClick) {
+            progressContainer.style.display = "none";
+          }
+        };
         chosenAudio.onended = () => {
           rectElem.classList.remove("green");
           if (currentActiveRect === rectId) currentActiveRect = null;
@@ -545,6 +542,21 @@
       }
     }
 
+    function showProgressBar() {
+      progressContainer.style.display = "block";
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 1;
+        progressFill.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            progressContainer.style.display = "none";
+          }, 7000);
+        }
+      }, 70);
+    }
+
     toggleBtn.addEventListener("click", () => {
       if (!toggleBtn.disabled) {
         isToggleEnabled = !isToggleEnabled;
@@ -569,7 +581,6 @@
       });
     });
 
-    // Iniciar la precarga al cargar la página
     window.onload = function() {
       preloadAllAudio();
     };
