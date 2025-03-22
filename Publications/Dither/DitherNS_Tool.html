@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v300 -->
+<!DOCTYPE html> <!-- VERSION v301 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,20 +6,23 @@
   <title>Soundins - Dither & NS Benchmarker</title>
   <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
   <style>
+    :root {
+      --body-padding: 20px; /* Padding por defecto para escritorio */
+    }
     body {
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
-      padding: 20px;
+      padding: var(--body-padding); /* Usamos la variable para el padding */
       background-color: #EEEEF2;
     }
     #header-background {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
+      left: calc(-1 * var(--body-padding)); /* Compensamos el padding del body */
+      width: 100vw; /* Ancho completo de la ventana gráfica */
       height: 100px;
       background-color: black;
       z-index: -1;
@@ -373,19 +376,21 @@
       font-size: 11px;
       opacity: 1;
     }
-    /* Nuevos estilos para móvil */
+    /* Ajustes para móvil */
     .mobile .row-2,
     .mobile .row-3 {
       display: none;
     }
     @media (max-width: 768px) {
+      :root {
+        --body-padding: 10px; /* Reducimos el padding en móviles */
+      }
       body {
-        padding: 10px;
+        padding: var(--body-padding);
       }
       #header-background {
-        width: 100vw; /* Usar el ancho completo de la ventana gráfica */
-        left: 0; /* Asegurar que comience desde el borde izquierdo */
-        margin-left: -10px; /* Compensar el padding del body */
+        left: calc(-1 * var(--body-padding)); /* Ajustamos para el nuevo padding */
+        width: 100vw; /* Mantenemos el ancho completo */
       }
       table {
         width: 100%;
@@ -410,7 +415,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v300</div>
+  <div id="version-text">v301</div>
   <div id="language-toggle">English</div>
   <div id="instructions-link">Read me</div>
   <div id="help-toggle">Help On</div>
