@@ -245,7 +245,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v14Mobile</div>
+  <div id="version-text">v15Mobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -508,16 +508,19 @@
       chosenAudio.play().then(() => {
         const rectElem = document.getElementById(rectId);
         rectElem.classList.add("green");
-        chosenAudio.onplay = () => {
-          if (!firstClick) {
-            progressContainer.style.display = "none";
-          }
-        };
+        chosenAudio.addEventListener('playing', () => {
+          progressContainer.style.display = "none";
+        }, { once: true });
         chosenAudio.onended = () => {
           rectElem.classList.remove("green");
           if (currentActiveRect === rectId) currentActiveRect = null;
         };
-      }).catch(e => console.error(`Error al reproducir ${rectId}:`, e));
+      }).catch(e => {
+        console.error(`Error al reproducir ${rectId}:`, e);
+        setTimeout(() => {
+          progressContainer.style.display = "none";
+        }, 10000);
+      });
     }
 
     function stopAllAudio() {
@@ -550,9 +553,6 @@
         progressFill.style.width = `${progress}%`;
         if (progress >= 100) {
           clearInterval(interval);
-          setTimeout(() => {
-            progressContainer.style.display = "none";
-          }, 7000);
         }
       }, 70);
     }
