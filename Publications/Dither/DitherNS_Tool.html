@@ -27,7 +27,7 @@
       top: 0;
       left: 0;
       width: 100vw;
-      height: 60px;/* antes: 80px*/
+      height: 60px; /* antes: 80px */
       background-color: black;
       z-index: -1;
     }
@@ -43,7 +43,7 @@
     /* Título */
     h1 {
       position: absolute;
-      top: 5px;/*antes 20px*/
+      top: 5px; /* antes 20px */
       left: 50%;
       transform: translateX(-50%);
       font-size: clamp(16px, 4vw, 24px); /* Tamaño ajustado */
@@ -64,7 +64,7 @@
     /* Contenedor principal */
     #main-row {
       width: 90%;
-      margin-top: 90px;
+      margin-top: 70px; /* Reducido de 90px a 70px para mover hacia arriba */
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -129,7 +129,7 @@
     /* Tabla */
     #table-container {
       width: 90%;
-      margin-top: 20px;
+      margin-top: 10px; /* Reducido de 20px a 10px para mover hacia arriba */
       overflow-x: auto; /* Permitir desplazamiento horizontal */
       -webkit-overflow-scrolling: touch; /* Suavizar desplazamiento en iOS */
     }
@@ -164,7 +164,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v4bMobile</div>
+  <div id="version-text">v5Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>
@@ -405,7 +405,7 @@
 
       const mapping = audioMapping[rectId][currentSource];
       const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
-      const chosenAudio = players[currentSource][stateKey];
+      const chosenAudio = playersDosnt matterplayers[currentSource][stateKey];
       if (!chosenAudio) return;
 
       chosenAudio.currentTime = 0;
