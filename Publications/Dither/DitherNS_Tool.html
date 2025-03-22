@@ -43,13 +43,14 @@
     /* Título */
     h1 {
       position: absolute;
-      top: 10px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: clamp(20px, 5vw, 30px); /* Escala entre 20px y 30px según pantalla */
+      font-size: clamp(16px, 4vw, 24px); /* Tamaño ajustado */
       color: white;
       text-align: center;
       z-index: 1;
+      white-space: nowrap; /* Forzar una sola línea */
     }
     /* Versión */
     #version-text {
@@ -129,10 +130,13 @@
     #table-container {
       width: 90%;
       margin-top: 20px;
+      overflow-x: auto; /* Permitir desplazamiento horizontal */
+      -webkit-overflow-scrolling: touch; /* Suavizar desplazamiento en iOS */
     }
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 600px; /* Asegurar que la tabla sea más ancha */
     }
     th, td {
       padding: 5px;
@@ -160,7 +164,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v3 Mobile</div>
+  <div id="version-text">v4Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>
