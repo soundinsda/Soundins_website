@@ -83,6 +83,7 @@
       font-size: clamp(12px, 3vw, 16px);
       color: #333;
       margin-bottom: 5px;
+      transform: translateY(5px); /* Desplaza el label "Source" 5px hacia abajo */
     }
     .source-btn {
       width: 80px;
@@ -112,6 +113,12 @@
     .rect.green {
       background-color: green;
     }
+    #rect-24bits {
+      transform: translateY(2px); /* Desplaza rect-24bits 2px hacia abajo */
+    }
+    #rect-main {
+      transform: translateY(9px); /* Desplaza rect-main 9px hacia abajo */
+    }
     /* Botón toggle */
     #toggle-btn {
       width: 40px;
@@ -122,21 +129,23 @@
       border: none;
       cursor: pointer;
       font-size: clamp(8px, 2vw, 10px);
+      transform: translateY(9px); /* Desplaza toggle-btn 2px hacia abajo */
     }
     #toggle-btn.red {
       background-color: red;
     }
     /* Botón de stop audio */
     #stop-btn {
-      width: 28px; /* 80% de 40px */
-      height: 28px; /* 80% de 40px */
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       background-color: red;
       border: none;
       cursor: pointer;
       position: relative;
-      margin-left: 20px; /* Separación del botón 997Hz */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+      margin-left: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: translateY(9px); /* Desplaza toggle-btn 2px hacia abajo */
     }
     #stop-btn::before {
       content: '';
@@ -144,12 +153,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 10px; /* 50% del tamaño del botón */
+      width: 10px;
       height: 10px;
       background-color: black;
     }
     #stop-btn:active {
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra más leve al presionar */
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
     /* Tabla */
     #table-container {
@@ -189,7 +198,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v7Mobile</div>
+  <div id="version-text">v9Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>
