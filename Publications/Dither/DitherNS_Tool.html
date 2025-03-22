@@ -55,11 +55,22 @@
     /* Versión */
     #version-text {
       position: absolute;
-      top: 40px;
+      top: 20px;
       right: 10px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
       z-index: 1;
+    }
+    /* Readme link */
+    #readme-link {
+      position: absolute;
+      top: 40px;
+      right: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      text-decoration: none;
+      z-index: 2;
     }
     /* Contenedor principal */
     #main-row {
@@ -129,7 +140,7 @@
       border: none;
       cursor: pointer;
       font-size: clamp(8px, 2vw, 10px);
-      transform: translateY(9px); /* Desplaza toggle-btn 2px hacia abajo */
+      transform: translateY(9px); /* Desplaza toggle-btn 9px hacia abajo */
     }
     #toggle-btn.red {
       background-color: red;
@@ -145,7 +156,7 @@
       position: relative;
       margin-left: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      transform: translateY(9px); /* Desplaza toggle-btn 2px hacia abajo */
+      transform: translateY(9px); /* Desplaza stop-btn 9px hacia abajo */
     }
     #stop-btn::before {
       content: '';
@@ -196,9 +207,10 @@
 </head>
 <body>
   <div id="header-background"></div>
+  <a href="instructions_mobile4.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v9Mobile</div>
+  <div id="version-text">v10Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Selector de Idioma</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      background-color: #ddd;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab.active {
+      background-color: #007BFF;
+      color: white;
+    }
+    .close-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .close-btn:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <div id="tab-es" class="tab active" onclick="openPDF('Instrucciones_movil.pdf', 'es')">Español</div>
+    <div id="tab-en" class="tab" onclick="openPDF('Instructions_mobile.pdf', 'en')">English</div>
+  </div>
+
+  <!-- Botón para cerrar la página y volver al HTML anterior -->
+  <button class="close-btn" onclick="closePage()">Close</button>
+
+  <script>
+    function openPDF(pdfFile, language) {
+      window.open(pdfFile, '_blank'); // Abre el PDF en una nueva pestaña
+
+      // Actualizar la pestaña activa
+      document.getElementById("tab-es").classList.remove("active");
+      document.getElementById("tab-en").classList.remove("active");
+      document.getElementById("tab-" + language).classList.add("active");
+    }
+
+    function closePage() {
+      window.history.back(); // Regresa a la página anterior
+    }
+  </script>
+
+</body>
+</html>
