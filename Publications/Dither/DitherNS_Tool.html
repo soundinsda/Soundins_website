@@ -27,7 +27,7 @@
       top: 0;
       left: 0;
       width: 100vw;
-      height: 60px; /* antes: 80px */
+      height: 60px;
       background-color: black;
       z-index: -1;
     }
@@ -43,14 +43,14 @@
     /* Título */
     h1 {
       position: absolute;
-      top: 5px; /* antes 20px */
+      top: 5px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: clamp(16px, 4vw, 24px); /* Tamaño ajustado */
+      font-size: clamp(16px, 4vw, 24px);
       color: white;
       text-align: center;
       z-index: 1;
-      white-space: nowrap; /* Forzar una sola línea */
+      white-space: nowrap;
     }
     /* Versión */
     #version-text {
@@ -64,7 +64,7 @@
     /* Contenedor principal */
     #main-row {
       width: 90%;
-      margin-top: 70px; /* Reducido de 90px a 70px para mover hacia arriba */
+      margin-top: 60px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -126,17 +126,42 @@
     #toggle-btn.red {
       background-color: red;
     }
+    /* Botón de stop audio */
+    #stop-btn {
+      width: 28px; /* 80% de 40px */
+      height: 28px; /* 80% de 40px */
+      border-radius: 50%;
+      background-color: red;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      margin-left: 20px; /* Separación del botón 997Hz */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+    }
+    #stop-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px; /* 50% del tamaño del botón */
+      height: 10px;
+      background-color: black;
+    }
+    #stop-btn:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra más leve al presionar */
+    }
     /* Tabla */
     #table-container {
       width: 90%;
-      margin-top: 10px; /* Reducido de 20px a 10px para mover hacia arriba */
-      overflow-x: auto; /* Permitir desplazamiento horizontal */
-      -webkit-overflow-scrolling: touch; /* Suavizar desplazamiento en iOS */
+      margin-top: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px; /* Asegurar que la tabla sea más ancha */
+      min-width: 600px;
     }
     th, td {
       padding: 5px;
@@ -164,7 +189,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v5Mobile</div>
+  <div id="version-text">v7Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>
@@ -174,6 +199,7 @@
     <div class="rect" id="rect-24bits">24 bits</div>
     <div class="rect" id="rect-main">16 bits No Dither</div>
     <button id="toggle-btn">997Hz</button>
+    <button id="stop-btn"></button>
   </div>
   <div id="table-container">
     <table>
@@ -349,6 +375,7 @@
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
     const toggleBtn = document.getElementById("toggle-btn");
+    const stopBtn = document.getElementById("stop-btn");
 
     const rectsToLoad = [
       "rect-24bits", "rect-main",
@@ -405,7 +432,7 @@
 
       const mapping = audioMapping[rectId][currentSource];
       const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
-      const chosenAudio = playersDosnt matterplayers[currentSource][stateKey];
+      const chosenAudio = players[currentSource][stateKey];
       if (!chosenAudio) return;
 
       chosenAudio.currentTime = 0;
@@ -449,6 +476,10 @@
           playAudio(currentActiveRect);
         }
       }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      stopAllAudio();
     });
 
     rectsToLoad.forEach(rectId => {
