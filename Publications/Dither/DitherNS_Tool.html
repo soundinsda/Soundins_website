@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v212 -->
+<!DOCTYPE html> <!-- VERSION v300 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -382,6 +382,11 @@
       body {
         padding: 10px;
       }
+      #header-background {
+        width: 100vw; /* Usar el ancho completo de la ventana gráfica */
+        left: 0; /* Asegurar que comience desde el borde izquierdo */
+        margin-left: -10px; /* Compensar el padding del body */
+      }
       table {
         width: 100%;
         max-width: none;
@@ -405,7 +410,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v212</div>
+  <div id="version-text">v300</div>
   <div id="language-toggle">English</div>
   <div id="instructions-link">Read me</div>
   <div id="help-toggle">Help On</div>
@@ -495,7 +500,7 @@
           <div class="progress-container"><div class="loading-bar" id="loading-bar-25"></div></div></div></td>
         <td><div class="rect" id="rect-26">Elephant<br>Dither: TPDF<br>NS: Equal
           <div class="progress-container"><div class="loading-bar" id="loading-bar-26"></div></div></div></td>
-        <td><div class="rect" id="rect-27">Limitless<br>Dither: On<br>NS: 100%
+        <td><div class="rect" id="rect-27lage">Limitless<br>Dither: On<br>NS: 100%
           <div class="progress-container"><div class="loading-bar" id="loading-bar-27"></div></div></div></td>
         <td><div class="rect no-data" id="rect-28">No data
           <div class="progress-container"><div class="loading-bar" id="loading-bar-28"></div></div></div></td>
@@ -1198,89 +1203,35 @@
         document.getElementById("source-Sine").textContent = "Sine";
         document.getElementById("source-flaute").textContent = "Instrument";
         document.querySelector(".source-label").textContent = "Source";
-        Object.entries(tooltipElements).forEach(([id, text]) => {
-          const element = document.getElementById(id);
-          if (element) {
-            element.removeEventListener("mouseenter", element.mouseenterHandler);
-            element.removeEventListener("mouseleave", element.mouseleaveHandler);
-            element.mouseenterHandler = (e) => {
-              if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
-                showTooltip(id, text, e.pageX, e.pageY);
-              }
-            };
-            element.mouseleaveHandler = () => hideAllTooltips();
-            element.addEventListener("mouseenter", element.mouseenterHandler);
-            element.addEventListener("mouseleave", element.mouseleaveHandler);
-          }
-        });
       } else {
-        instructionsLink.textContent = "  Léeme";
+        instructionsLink.textContent = "Léeme";
         document.getElementById("source-Sine").textContent = "Seno";
         document.getElementById("source-flaute").textContent = "Instrumento";
         document.querySelector(".source-label").textContent = "Fuente";
-        Object.entries(tooltipElementsEs).forEach(([id, text]) => {
-          const element = document.getElementById(id);
-          if (element) {
-            element.removeEventListener("mouseenter", element.mouseenterHandler);
-            element.removeEventListener("mouseleave", element.mouseleaveHandler);
-            element.mouseenterHandler = (e) => {
-              if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
-                showTooltip(id, text, e.pageX, e.pageY);
-              }
-            };
-            element.mouseleaveHandler = () => hideAllTooltips();
-            element.addEventListener("mouseenter", element.mouseenterHandler);
-            element.addEventListener("mouseleave", element.mouseleaveHandler);
-          }
-        });
       }
-      updateHelpToggleText();
+    });
+
+    helpToggle.addEventListener("click", () => {
+      isHelpEnabled = !isHelpEnabled;
+      helpToggle.textContent = isHelpEnabled ? "Help On" : "Help Off";
     });
 
     instructionsLink.addEventListener("click", () => {
-      const windowWidth = 1200;
-      const windowHeight = 720;
-      const left = (screen.width - windowWidth) / 2;
-      const top = 100;
-
-      if (currentLanguage === "English") {
-        window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
-      } else {
-        window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
-      }
+      window.open("https://github.com/soundinsda/Dither_Bench/blob/main/README.md", "_blank");
     });
 
     Object.entries(tooltipElements).forEach(([id, text]) => {
       const element = document.getElementById(id);
       if (element) {
-        element.mouseenterHandler = (e) => {
-          if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
-            showTooltip(id, text, e.pageX, e.pageY);
+        element.addEventListener("mouseenter", (e) => {
+          if (isHelpEnabled) {
+            const tooltipText = currentLanguage === "English" ? text : tooltipElementsEs[id];
+            showTooltip(id, tooltipText, e.pageX, e.pageY);
           }
-        };
-        element.mouseleaveHandler = () => hideAllTooltips();
-        element.addEventListener("mouseenter", element.mouseenterHandler);
-        element.addEventListener("mouseleave", element.mouseleaveHandler);
+        });
+        element.addEventListener("mouseleave", hideAllTooltips);
       }
     });
-
-    function updateHelpToggleText() {
-      if (currentLanguage === "English") {
-        helpToggle.textContent = isHelpEnabled ? "Help On" : "Help Off";
-      } else {
-        helpToggle.textContent = isHelpEnabled ? "Ayuda Act" : "Ayuda Inact";
-      }
-    }
-
-    helpToggle.addEventListener("click", () => {
-      isHelpEnabled = !isHelpEnabled;
-      updateHelpToggleText();
-      if (!isHelpEnabled) {
-        hideAllTooltips();
-      }
-    });
-
-    updateHelpToggleText();
 
     preloadAllAudio();
   </script>
