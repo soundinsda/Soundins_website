@@ -245,7 +245,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v15Mobile</div>
+  <div id="version-text">v15bMobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -434,6 +434,7 @@
     let currentSource = "Sine";
     const audioPlayers = {};
     let firstClick = true;
+    let progressInterval;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -509,7 +510,7 @@
         const rectElem = document.getElementById(rectId);
         rectElem.classList.add("green");
         chosenAudio.addEventListener('playing', () => {
-          progressContainer.style.display = "none";
+          completeProgressBar();
         }, { once: true });
         chosenAudio.onended = () => {
           rectElem.classList.remove("green");
@@ -518,7 +519,7 @@
       }).catch(e => {
         console.error(`Error al reproducir ${rectId}:`, e);
         setTimeout(() => {
-          progressContainer.style.display = "none";
+          completeProgressBar();
         }, 10000);
       });
     }
@@ -548,13 +549,22 @@
     function showProgressBar() {
       progressContainer.style.display = "block";
       let progress = 0;
-      const interval = setInterval(() => {
-        progress += 1;
-        progressFill.style.width = `${progress}%`;
-        if (progress >= 100) {
-          clearInterval(interval);
+      progressInterval = setInterval(() => {
+        if (progress < 100) {
+          progress += 1;
+          progressFill.style.width = `${progress}%`;
+        } else {
+          clearInterval(progressInterval);
         }
       }, 70);
+    }
+
+    function completeProgressBar() {
+      clearInterval(progressInterval);
+      progressFill.style.width = "100%";
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 500);
     }
 
     toggleBtn.addEventListener("click", () => {
