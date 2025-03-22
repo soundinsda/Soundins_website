@@ -219,7 +219,7 @@
     }
     #progress-text {
       margin-top: 10px;
-      font-size: 16px;
+      font-size: 20px;
       font-weight: bold;
       color: #333;
       animation: blink 1s infinite;
@@ -244,7 +244,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v11Mobile</div>
+  <div id="version-text">v12Mobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -499,7 +499,10 @@
           }
         }
       }
-      progressContainer.style.display = "none"; // Oculta la barra al completar
+      // Retraso artificial de 5 segundos antes de ocultar la barra de progreso
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 5000);
     }
 
     function playAudio(rectId) {
@@ -569,8 +572,17 @@
       });
     });
 
-    // Iniciar la precarga al cargar la página
+    // Iniciar la precarga y reproducir el audio silencioso al cargar la página
     window.onload = function() {
+      // Reproducir audio silencioso para inicializar el contexto de audio
+      const silentAudio = new Audio('https://raw.githubusercontent.com/soundinsda/Soundins_website/main/Publications/Dither/Audio/audio_mute.wav');
+      silentAudio.play().then(() => {
+        console.log('Contexto de audio inicializado');
+      }).catch(error => {
+        console.error('Error al inicializar el audio:', error);
+      });
+      
+      // Precargar los archivos de audio
       preloadAllAudio();
     };
   </script>
