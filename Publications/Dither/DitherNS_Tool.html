@@ -17,6 +17,9 @@
       font-family: Arial, sans-serif;
       background-color: #EEEEF2;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     /* Header background */
     #header-background {
@@ -43,7 +46,7 @@
       top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 30px;
+      font-size: clamp(20px, 5vw, 30px); /* Escala entre 20px y 30px según pantalla */
       color: white;
       text-align: center;
       z-index: 1;
@@ -53,39 +56,34 @@
       position: absolute;
       top: 40px;
       right: 10px;
-      font-size: 10px;
+      font-size: clamp(8px, 2vw, 10px);
       color: #888;
       z-index: 1;
     }
     /* Contenedor principal */
     #main-row {
-      position: relative;
       width: 90%;
       margin-top: 90px;
-      left: 5%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
     }
     /* Grupo de fuentes */
     .source-group {
-      position: absolute;
-      top: 0;
-      left: 0;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
       gap: 5px;
     }
     .source-label {
-      position: absolute;
       font-weight: bold;
-      top: 38px;
-      left: 35px;
-      font-size: 16px;
+      font-size: clamp(12px, 3vw, 16px);
       color: #333;
+      margin-bottom: 5px;
     }
-    #source-Sine {
-      position: absolute;
-      top: 20px;
-      left: 100px;
+    .source-btn {
       width: 80px;
       padding: 5px;
       background-color: #1a73e8;
@@ -93,32 +91,13 @@
       text-align: center;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 12px;
+      font-size: clamp(10px, 2.5vw, 12px);
     }
-    #source-Sine.active {
-      background-color: green;
-    }
-    #source-flaute {
-      position: absolute;
-      top: 50px;
-      left: 100px;
-      width: 80px;
-      padding: 5px;
-      background-color: #1a73e8;
-      color: white;
-      text-align: center;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    #source-flaute.active {
+    .source-btn.active {
       background-color: green;
     }
     /* Rectángulos principales */
-    #rect-24bits {
-      position: absolute;
-      top: 20px;
-      left: 300px;
+    .rect {
       width: 80px;
       padding: 8px;
       border-radius: 10px;
@@ -126,31 +105,14 @@
       color: white;
       text-align: center;
       cursor: pointer;
-      font-size: 12px;
+      font-size: clamp(10px, 2.5vw, 12px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
-    #rect-main {
-      position: absolute;
-      top: 20px;
-      left: 420px;
-      width: 80px;
-      padding: 8px;
-      border-radius: 10px;
-      background-color: blue;
-      color: white;
-      text-align: center;
-      cursor: pointer;
-      font-size: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    #rect-24bits.green, #rect-main.green {
+    .rect.green {
       background-color: green;
     }
     /* Botón toggle */
     #toggle-btn {
-      position: absolute;
-      top: 20px;
-      right: 250px;
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -158,17 +120,15 @@
       color: white;
       border: none;
       cursor: pointer;
-      font-size: 10px;
+      font-size: clamp(8px, 2vw, 10px);
     }
     #toggle-btn.red {
       background-color: red;
     }
     /* Tabla */
     #table-container {
-      position: relative;
       width: 90%;
-      top: 110px;
-      left: 5%;
+      margin-top: 20px;
     }
     table {
       width: 100%;
@@ -177,28 +137,22 @@
     th, td {
       padding: 5px;
       text-align: center;
-      font-size: 12px;
+      font-size: clamp(10px, 2.5vw, 12px);
     }
     th {
       font-weight: bold;
       color: #333;
       border-bottom: 2px solid #333;
     }
-    /* Rectángulos en la tabla */
-    .rect {
-      position: relative;
-      width: 80px; /* Igual que rect-main */
-      padding: 8px; /* Igual que rect-main */
-      border-radius: 10px;
-      background-color: blue;
-      color: white;
-      text-align: center;
-      cursor: pointer;
-      font-size: 12px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    .rect.green {
-      background-color: green;
+    /* Media Queries para pantallas pequeñas */
+    @media (max-width: 400px) {
+      #main-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      .source-group {
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
@@ -206,7 +160,7 @@
   <div id="header-background"></div>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v302 Mobile</div>
+  <div id="version-text">v301 Mobile</div>
   <div id="main-row">
     <div class="source-group">
       <span class="source-label">Source</span>
