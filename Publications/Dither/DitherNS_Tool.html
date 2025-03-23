@@ -145,6 +145,10 @@
     #toggle-btn.red {
       background-color: red;
     }
+    #toggle-btn:disabled {
+      background-color: grey;
+      cursor: not-allowed;
+    }
     /* Botón de stop audio */
     #stop-btn {
       width: 28px;
@@ -279,7 +283,7 @@
     <a href="instructions_mobile.html" id="readme-link">Readme</a>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v16aMobile</div>
+    <div id="version-text">v16bMobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -582,10 +586,15 @@
     }
 
     function updateToggleButtonState() {
-      if (!currentActiveRect || !audioMapping[currentActiveRect][currentSource]["997_no"]) {
+      if (currentSource === "Flaute" || currentActiveRect === "rect-24bits") {
         toggleBtn.disabled = true;
+        toggleBtn.classList.remove("red");
+      } else if (!currentActiveRect || !audioMapping[currentActiveRect][currentSource]["997_no"]) {
+        toggleBtn.disabled = true;
+        toggleBtn.classList.remove("red");
       } else {
         toggleBtn.disabled = false;
+        toggleBtn.classList.toggle("red", !isToggleEnabled);
       }
     }
 
