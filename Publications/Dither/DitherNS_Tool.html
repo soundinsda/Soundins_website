@@ -245,7 +245,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v15dMobile</div>
+  <div id="version-text">v15eMobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -508,15 +508,15 @@
       const rectElem = document.getElementById(rectId);
       chosenAudio.currentTime = 0;
 
-      // Reproducir el audio y gestionar la barra de progreso
       chosenAudio.play()
         .then(() => {
           rectElem.classList.add("green");
-          // Verificar si el audio está realmente reproduciéndose
           const checkPlaying = setInterval(() => {
             if (!chosenAudio.paused) {
-              completeProgressBar();
               clearInterval(checkPlaying);
+              setTimeout(() => {
+                completeProgressBar();
+              }, 2000); // Retraso de 2 segundos antes de cerrar la barra
             }
           }, 100);
 
@@ -555,13 +555,13 @@
     }
 
     function showProgressBar() {
-      if (progressInterval) clearInterval(progressInterval); // Limpiar cualquier intervalo previo
+      if (progressInterval) clearInterval(progressInterval);
       progressContainer.style.display = "block";
       progressFill.style.width = "0%";
       let progress = 0;
       progressInterval = setInterval(() => {
         if (progress < 100) {
-          progress += 2; // Incremento más rápido para simular carga
+          progress += 2;
           progressFill.style.width = `${progress}%`;
         }
       }, 50);
