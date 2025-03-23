@@ -228,6 +228,27 @@
     @keyframes blink {
       50% { opacity: 0; }
     }
+    /* Mensaje de rotación */
+    #rotation-message {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      text-align: center;
+      z-index: 1000;
+      display: none; /* Inicialmente oculto */
+    }
+    /* Contenedor principal */
+    #main-content {
+      width: 100%;
+    }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
       #main-row {
@@ -241,65 +262,68 @@
   </style>
 </head>
 <body>
-  <div id="header-background"></div>
-  <a href="instructions_mobile.html" id="readme-link">Readme</a>
-  <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
-  <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v15eMobile</div>
-  <div id="progress-container">
-    <div id="progress-bar">
-      <div id="progress-fill"></div>
+  <div id="rotation-message">Por favor, rote el dispositivo a la posición horizontal</div>
+  <div id="main-content">
+    <div id="header-background"></div>
+    <a href="instructions_mobile.html" id="readme-link">Readme</a>
+    <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
+    <h1>Dither & NS Benchmark Tool</h1>
+    <div id="version-text">v16Mobile</div>
+    <div id="progress-container">
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+      <div id="progress-text">Loading Audio Files</div>
     </div>
-    <div id="progress-text">Loading Audio Files</div>
-  </div>
-  <div id="main-row">
-    <div class="source-group">
-      <span class="source-label">Source</span>
-      <div class="source-btn active" id="source-Sine">Sine</div>
-      <div class="source-btn" id="source-flaute">Instrument</div>
+    <div id="main-row">
+      <div class="source-group">
+        <span class="source-label">Source</span>
+        <div class="source-btn active" id="source-Sine">Sine</div>
+        <div class="source-btn" id="source-flaute">Instrument</div>
+      </div>
+      <div class="rect" id="rect-24bits">24 bits</div>
+      <div class="rect" id="rect-main">16 bits No Dither</div>
+      <button id="toggle-btn">997Hz</button>
+      <button id="stop-btn"></button>
     </div>
-    <div class="rect" id="rect-24bits">24 bits</div>
-    <div class="rect" id="rect-main">16 bits No Dither</div>
-    <button id="toggle-btn">997Hz</button>
-    <button id="stop-btn"></button>
-  </div>
-  <div id="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Izotope</th>
-          <th>Izotope</th>
-          <th>FabFilter</th>
-          <th>Waves</th>
-          <th>Waves</th>
-          <th>Reaper</th>
-          <th>Live</th>
-          <th>ProTools</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off</div></td>
-          <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off</div></td>
-        </tr>
-        <tr>
-          <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max</div></td>
-          <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max</div></td>
-          <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted</div></td>
-          <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra</div></td>
-          <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra</div></td>
-          <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On</div></td>
-          <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3</div></td>
-          <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3</div></td>
-        </tr>
-      </tbody>
-    </table>
+    <div id="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Izotope</th>
+            <th>Izotope</th>
+            <th>FabFilter</th>
+            <th>Waves</th>
+            <th>Waves</th>
+            <th>Reaper</th>
+            <th>Live</th>
+            <th>ProTools</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off</div></td>
+          </tr>
+          <tr>
+            <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted</div></td>
+            <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On</div></td>
+            <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3</div></td>
+            <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -601,6 +625,29 @@
         playAudio(rectId);
       });
     });
+
+    // Lógica para manejar la orientación
+    const rotationMessage = document.getElementById("rotation-message");
+    const mainContent = document.getElementById("main-content");
+
+    function checkOrientation() {
+      const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+      if (isPortrait) {
+        rotationMessage.style.display = "flex";
+        mainContent.style.display = "none";
+      } else {
+        rotationMessage.style.display = "none";
+        mainContent.style.display = "block";
+      }
+    }
+
+    // Verificar la orientación al cargar la página
+    checkOrientation();
+
+    // Escuchar cambios de orientación
+    window.addEventListener("orientationchange", checkOrientation);
+    // Fallback para navegadores que no soporten orientationchange
+    window.addEventListener("resize", checkOrientation);
 
     window.onload = function() {
       preloadAllAudio();
