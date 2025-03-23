@@ -245,7 +245,7 @@
   <a href="instructions_mobile.html" id="readme-link">Readme</a>
   <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v15bMobile</div>
+  <div id="version-text">v15dMobile</div>
   <div id="progress-container">
     <div id="progress-bar">
       <div id="progress-fill"></div>
@@ -434,7 +434,7 @@
     let currentSource = "Sine";
     const audioPlayers = {};
     let firstClick = true;
-    let progressInterval;
+    let progressInterval = null;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -505,23 +505,30 @@
       const chosenAudio = players[currentSource][stateKey];
       if (!chosenAudio) return;
 
+      const rectElem = document.getElementById(rectId);
       chosenAudio.currentTime = 0;
-      chosenAudio.play().then(() => {
-        const rectElem = document.getElementById(rectId);
-        rectElem.classList.add("green");
-        chosenAudio.addEventListener('playing', () => {
-          completeProgressBar();
-        }, { once: true });
-        chosenAudio.onended = () => {
-          rectElem.classList.remove("green");
-          if (currentActiveRect === rectId) currentActiveRect = null;
-        };
-      }).catch(e => {
-        console.error(`Error al reproducir ${rectId}:`, e);
-        setTimeout(() => {
-          completeProgressBar();
-        }, 10000);
-      });
+
+      // Reproducir el audio y gestionar la barra de progreso
+      chosenAudio.play()
+        .then(() => {
+          rectElem.classList.add("green");
+          // Verificar si el audio está realmente reproduciéndose
+          const checkPlaying = setInterval(() => {
+            if (!chosenAudio.paused) {
+              completeProgressBar();
+              clearInterval(checkPlaying);
+            }
+          }, 100);
+
+          chosenAudio.onended = () => {
+            rectElem.classList.remove("green");
+            if (currentActiveRect === rectId) currentActiveRect = null;
+          };
+        })
+        .catch(e => {
+          console.error(`Error al reproducir ${rectId}:`, e);
+          completeProgressBar(); // Cerrar la barra en caso de error
+        });
     }
 
     function stopAllAudio() {
@@ -536,6 +543,7 @@
       if (currentActiveRect) {
         document.getElementById(currentActiveRect).classList.remove("green");
       }
+      completeProgressBar(); // Asegurar que la barra se cierre al detener el audio
     }
 
     function updateToggleButtonState() {
@@ -547,24 +555,27 @@
     }
 
     function showProgressBar() {
+      if (progressInterval) clearInterval(progressInterval); // Limpiar cualquier intervalo previo
       progressContainer.style.display = "block";
+      progressFill.style.width = "0%";
       let progress = 0;
       progressInterval = setInterval(() => {
         if (progress < 100) {
-          progress += 1;
+          progress += 2; // Incremento más rápido para simular carga
           progressFill.style.width = `${progress}%`;
-        } else {
-          clearInterval(progressInterval);
         }
-      }, 70);
+      }, 50);
     }
 
     function completeProgressBar() {
-      clearInterval(progressInterval);
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
       progressFill.style.width = "100%";
       setTimeout(() => {
         progressContainer.style.display = "none";
-      }, 500);
+      }, 200); // Pequeño retraso para mostrar el 100% antes de ocultar
     }
 
     toggleBtn.addEventListener("click", () => {
