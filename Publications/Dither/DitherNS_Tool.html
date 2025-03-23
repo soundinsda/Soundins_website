@@ -231,7 +231,7 @@
     /* Mensaje de rotación */
     #rotation-message {
       position: fixed;
-      top: -80px;
+      top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
@@ -244,6 +244,15 @@
       text-align: center;
       z-index: 1000;
       display: none; /* Inicialmente oculto */
+    }
+    /* Texto con animación de parpadeo */
+    #rotation-text {
+      animation: blink-message 1s infinite;
+    }
+    @keyframes blink-message {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
     /* Contenedor principal */
     #main-content {
@@ -262,15 +271,15 @@
   </style>
 </head>
 <body>
-  <div id="rotation-message">  Por favor, rote el dispositivo a la posición horizontal
-  <br><br>
-  Please rotate the device to horizontal position</div>
+  <div id="rotation-message">
+    <div id="rotation-text">Por favor, rote el dispositivo a la posición horizontal<br><br>Please rotate the device to horizontal position</div>
+  </div>
   <div id="main-content">
     <div id="header-background"></div>
     <a href="instructions_mobile.html" id="readme-link">Readme</a>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v16Mobile</div>
+    <div id="version-text">v16aMobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -651,9 +660,8 @@
     // Fallback para navegadores que no soporten orientationchange
     window.addEventListener("resize", checkOrientation);
 
-    window.onload = function() {
-      preloadAllAudio();
-    };
+    // Iniciar la precarga de audios directamente
+    preloadAllAudio();
   </script>
 </body>
 </html>
