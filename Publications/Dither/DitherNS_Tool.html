@@ -283,7 +283,7 @@
     <a href="instructions_mobile.html" id="readme-link">Readme</a>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v16bMobile</div>
+    <div id="version-text">mobile_v16c</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -474,6 +474,7 @@
     const audioPlayers = {};
     let firstClick = true;
     let progressInterval = null;
+    let preloadPromise = null; // Promesa para rastrear la carga de audios
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -514,20 +515,24 @@
       }
     }
 
-    async function preloadAllAudio() {
+    function preloadAllAudio() {
+      const promises = [];
       for (const rectId of rectsToLoad) {
         if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
         const sources = audioMapping[rectId];
         for (const [source, states] of Object.entries(sources)) {
           if (!audioPlayers[rectId][source]) audioPlayers[rectId][source] = {};
           for (const [state, url] of Object.entries(states)) {
-            const audioUrl = await loadAudio(url);
-            if (audioUrl) {
-              audioPlayers[rectId][source][state] = new Audio(audioUrl);
-            }
+            const promise = loadAudio(url).then(audioUrl => {
+              if (audioUrl) {
+                audioPlayers[rectId][source][state] = new Audio(audioUrl);
+              }
+            });
+            promises.push(promise);
           }
         }
       }
+      return Promise.all(promises);
     }
 
     function playAudio(rectId) {
@@ -550,15 +555,6 @@
       chosenAudio.play()
         .then(() => {
           rectElem.classList.add("green");
-          const checkPlaying = setInterval(() => {
-            if (!chosenAudio.paused) {
-              clearInterval(checkPlaying);
-              setTimeout(() => {
-                completeProgressBar();
-              }, 2000); // Retraso de 2 segundos antes de cerrar la barra
-            }
-          }, 100);
-
           chosenAudio.onended = () => {
             rectElem.classList.remove("green");
             if (currentActiveRect === rectId) currentActiveRect = null;
@@ -566,7 +562,6 @@
         })
         .catch(e => {
           console.error(`Error al reproducir ${rectId}:`, e);
-          completeProgressBar(); // Cerrar la barra en caso de error
         });
     }
 
@@ -582,7 +577,6 @@
       if (currentActiveRect) {
         document.getElementById(currentActiveRect).classList.remove("green");
       }
-      completeProgressBar(); // Asegurar que la barra se cierre al detener el audio
     }
 
     function updateToggleButtonState() {
@@ -605,10 +599,17 @@
       let progress = 0;
       progressInterval = setInterval(() => {
         if (progress < 100) {
-          progress += 2;
+          progress += 2; // Incremento para simular progreso
           progressFill.style.width = `${progress}%`;
         }
       }, 50);
+
+      // Temporizador de 5 segundos
+      setTimeout(() => {
+        preloadPromise.then(() => {
+          completeProgressBar();
+        });
+      }, 5000);
     }
 
     function completeProgressBar() {
@@ -669,8 +670,8 @@
     // Fallback para navegadores que no soporten orientationchange
     window.addEventListener("resize", checkOrientation);
 
-    // Iniciar la precarga de audios directamente
-    preloadAllAudio();
+    // Iniciar la precarga de audios y guardar la promesa
+    preloadPromise = preloadAllAudio();
   </script>
 </body>
 </html>
