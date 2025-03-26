@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soundins - Dither & NS Benchmarker</title>
+  <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
+  <script>
+    // Función para detectar si es un dispositivo móvil
+    function isMobileDevice() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      return /mobile|android|iphone|ipad|tablet/i.test(userAgent);
+    }
+
+    // Redirigir según el tipo de dispositivo
+    if (isMobileDevice()) {
+      window.location.href = "DitherNS_Tool_Mobile.html";
+    } else {
+      window.location.href = "DitherNS_Tool_Laptop.html";
+    }
+  </script>
+</head>
+<body>
+  <p>Redirigiendo al contenido adecuado para tu dispositivo...</p>
+</body>
+</html>
