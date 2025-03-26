@@ -71,6 +71,30 @@
       font-size: 12px;
       text-decoration: none;
       z-index: 2;
+      cursor: pointer;
+    }
+    /* Menú desplegable para idiomas */
+    #language-menu {
+      position: absolute;
+      top: 60px;
+      right: 10px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: none;
+      z-index: 3;
+    }
+    #language-menu button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+    }
+    #language-menu button:hover {
+      background-color: #f0f0f0;
     }
     /* Contenedor principal */
     #main-row {
@@ -280,10 +304,16 @@
   </div>
   <div id="main-content">
     <div id="header-background"></div>
-    <a href="instructions_mobile.html" id="readme-link">Readme</a>
+    <!-- Modificación: Cambiar <a> a <span> y añadir onclick -->
+    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+    <!-- Menú desplegable para seleccionar idioma -->
+    <div id="language-menu">
+      <button onclick="openInstructions('en')">English</button>
+      <button onclick="openInstructions('es')">Español</button>
+    </div>
     <img src="/Publications/Dither/Soundins.png" id="logo" alt="Logo de Soundins">
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">mobile_v16c</div>
+    <div id="version-text">v17Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -488,6 +518,19 @@
       "rect-1", "rect-2", "rect-3", "rect-4", "rect-5", "rect-8", "rect-9", "rect-10",
       "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
     ];
+
+    // Función para alternar la visibilidad del menú de idiomas
+    function toggleLanguageMenu() {
+      const menu = document.getElementById("language-menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    // Función para abrir las instrucciones según el idioma seleccionado
+    function openInstructions(lang) {
+      const url = lang === "en" ? "instructionsmobile_en.html" : "instructionsmobile_es.html";
+      window.open(url, "_blank");
+      toggleLanguageMenu(); // Cerrar el menú después de seleccionar
+    }
 
     function setActiveSource(source) {
       stopAllAudio();
