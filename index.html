@@ -41,17 +41,39 @@
                 transform: rotate(2deg);
             }
         }
+        #credit {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            margin-top: -10px;
+            text-align: center;
+        }
+        #email {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        #email a {
+            color: blue;
+            text-decoration: none; /* Elimina el subrayado por defecto */
+        }
+        #email a:hover {
+            text-decoration: underline; /* Subrayado al pasar el mouse */
+        }
     </style>
 </head>
 <body>
     <h1>Site under construction</h1>
     <img id="logo" alt="Soundins Logo">
+    <p id="credit">by Pablo Panitta</p>
+    <p id="email"><a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var logo = document.getElementById("logo");
 
-            // Intenta diferentes rutas en caso de que la imagen no se cargue
+            // Intenta diferentes rutas para cargar la imagen
             var possiblePaths = [
                 "Soundins.png",
                 "./Soundins.png",
