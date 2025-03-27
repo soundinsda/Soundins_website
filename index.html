@@ -45,6 +45,45 @@
 </head>
 <body>
     <h1>Site under construction</h1>
-    <img src="Soundins.png" alt="Soundins Logo">
+    <img id="logo" alt="Soundins Logo">
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var logo = document.getElementById("logo");
+
+            // Intenta diferentes rutas en caso de que la imagen no se cargue
+            var possiblePaths = [
+                "Soundins.png",
+                "./Soundins.png",
+                "/Soundins.png",
+                "assets/Soundins.png",
+                "images/Soundins.png"
+            ];
+
+            function checkImage(url, callback) {
+                var img = new Image();
+                img.onload = function() { callback(true, url); };
+                img.onerror = function() { callback(false, url); };
+                img.src = url;
+            }
+
+            function findValidImage(paths) {
+                if (paths.length === 0) {
+                    logo.alt = "Image not found";
+                    return;
+                }
+                var path = paths.shift();
+                checkImage(path, function(success, validUrl) {
+                    if (success) {
+                        logo.src = validUrl;
+                    } else {
+                        findValidImage(paths);
+                    }
+                });
+            }
+
+            findValidImage(possiblePaths);
+        });
+    </script>
 </body>
 </html>
