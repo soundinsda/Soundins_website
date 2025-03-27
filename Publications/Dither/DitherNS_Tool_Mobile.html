@@ -259,7 +259,7 @@
     /* Mensaje de rotación */
     #rotation-message {
       position: fixed;
-      top: -10px;
+      top: 0; /* Volvemos a 0 */
       left: 0;
       width: 100vw;
       height: 100vh;
@@ -267,7 +267,7 @@
       color: white;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* Cambiado de center a flex-start */
       font-size: 24px;
       text-align: center;
       z-index: 1000;
@@ -275,11 +275,12 @@
     }
     /* Texto con animación de parpadeo */
     #rotation-text {
+      margin-top: 20px; /* Ajusta este valor para mover el texto verticalmente */
       animation: blink-message 1s infinite;
     }
     @keyframes blink-message {
       0% { opacity: 1; }
-      50% { opacity: 0.2; }
+      50% { opacity: 0.1; }
       100% { opacity: 1; }
     }
     /* Contenedor principal */
