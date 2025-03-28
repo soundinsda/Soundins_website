@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>/*Mobile_v2.0*//*FLAC 1st version*/
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -23,7 +23,7 @@
     }
     /* Header background */
     #header-background {
-      position: fixed;
+      position: absolute; /* Cambiado de fixed a absolute */
       top: 0;
       left: 0;
       width: 100vw;
@@ -316,7 +316,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v1.9Mobile</div>
+    <div id="version-text">v2.0Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -377,127 +377,127 @@
   <script>
     const audioMapping = {
       "rect-24bits": {
-        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Sine_24bits.wav" },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_24bits.wav" }
+        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Sine_24bits.flac" },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_24bits.flac" }
       },
       "rect-main": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_16bits_NoDither.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_16bits_NoDither_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_16bits_NoDither.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_16bits_NoDither.flac" }
       },
       "rect-1": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low.flac" }
       },
       "rect-2": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong.flac" }
       },
       "rect-3": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2.flac" }
       },
       "rect-4": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T1.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T1.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1.flac" }
       },
       "rect-5": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_L2T2.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T2.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2.flac" }
       },
       "rect-8": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper.flac" }
       },
       "rect-9": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_tpdf.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_tpdf.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live.flac" }
       },
       "rect-10": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Maxim_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Maxim.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Maxim.flac" }
       },
       "rect-31": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Low_Max_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Low_Max.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low_Max.flac" }
       },
       "rect-32": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Ozo_Strong_Max.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong_Max.flac" }
       },
       "rect-33": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_ProL2_Weighted_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_ProL2_Weighted.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
       },
       "rect-34": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T1_Ultra_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T1_Ultra.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Ultra.flac" }
       },
       "rect-35": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_T2_Ultra_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_T2_Ultra.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2_Ultra.flac" }
       },
       "rect-38": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Reaper_NS_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Reaper_NS.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper_NS.flac" }
       },
       "rect-39": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Live_POWr3_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Live_POWr3.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live_POWr3.flac" }
       },
       "rect-40": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_AVID_Type3.wav",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Sine/997Hz_2LSB_Avid_Type3_no997.wav"
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_AVID_Type3.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Avid_Type3_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/Dither_Bench/main/Audio/Flaute/Flaute_Avid_Type3.wav" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Type3.flac" }
       }
     };
 
