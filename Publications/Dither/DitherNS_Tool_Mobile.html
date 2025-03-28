@@ -1,8 +1,8 @@
-<!DOCTYPE html>/*v2.2*/
+<!DOCTYPE html><!-- Mobile_v2.3 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
   <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
   <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
   <style>
@@ -329,7 +329,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v2.2Mobile</div>
+    <div id="version-text">v2.3Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -458,7 +458,7 @@
       },
       "rect-31": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max.flac",
+          "997ridge_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max_no997.flac"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low_Max.flac" }
@@ -552,7 +552,7 @@
     document.getElementById('fullscreen-btn').addEventListener('click', function() {
       if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
         // Entrar en modo de pantalla completa
-        var elem = document.documentElement;
+        var elem = document.getElementById('main-content'); // Cambio aquí
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
         } else if (elem.mozRequestFullScreen) { /* Firefox */
