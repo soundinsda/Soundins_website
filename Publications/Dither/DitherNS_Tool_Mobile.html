@@ -1,8 +1,8 @@
-<!DOCTYPE html><!-- Mobile_v2.2 -->
+<!DOCTYPE html><!-- Mobile_v2.8 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
   <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
   <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
   <style>
@@ -20,10 +20,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background-color 0.3s, color 0.3s;
     }
     /* Header background */
     #header-background {
-      position: absolute; /* Cambiado de fixed a absolute */
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
@@ -55,8 +56,8 @@
     /* Versión */
     #version-text {
       position: absolute;
-      top: 20px;
-      right: 40px;
+      top: 46px;
+      right: 5px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
       z-index: 1;
@@ -64,8 +65,8 @@
     /* Readme link */
     #readme-link {
       position: absolute;
-      top: 40px;
-      right: 40px;
+      top: 45px;
+      right: 60px;
       color: white;
       font-weight: bold;
       font-size: 12px;
@@ -99,7 +100,7 @@
     /* Botón de maximización */
     #fullscreen-btn {
       position: absolute;
-      top: 15px;
+      top: 3px;
       right: 3px;
       background: none;
       border: none;
@@ -107,6 +108,23 @@
       font-size: 27px;
       cursor: pointer;
       z-index: 2;
+    }
+    /* Contenedor de toggle de modo (modificado) */
+    #mode-toggle-container {
+      position: absolute;
+      top: 7px; /* Debajo de la banda negra */
+      right: 50px;
+      z-index: 2;
+    }
+    #mode-toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    #mode-icon {
+      width: 32px;
+      height: 32px;
     }
     /* Contenedor principal */
     #main-row {
@@ -213,7 +231,7 @@
     }
     /* Tabla */
     #table-container {
-      width: 100%; /* Cambiado de 90% a 100% */
+      width: 100%;
       margin-top: 10px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -271,7 +289,7 @@
     /* Mensaje de rotación */
     #rotation-message {
       position: fixed;
-      top: 0; /* Volvemos a 0 */
+      top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
@@ -279,15 +297,15 @@
       color: white;
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Cambiado de center a flex-start */
+      align-items: flex-start;
       font-size: 24px;
       text-align: center;
       z-index: 1000;
-      display: none; /* Inicialmente oculto */
+      display: none;
     }
     /* Texto con animación de parpadeo */
     #rotation-text {
-      margin-top: 220px; /* Ajusta este valor para mover el texto verticalmente */
+      margin-top: 220px;
       animation: blink-message 1s infinite;
     }
     @keyframes blink-message {
@@ -298,6 +316,7 @@
     /* Contenedor principal */
     #main-content {
       width: 100%;
+      padding-bottom: 40px; /* Incrementado para permitir más desplazamiento vertical */
     }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
@@ -309,6 +328,78 @@
         margin-bottom: 10px;
       }
     }
+    /* Estilos para dark mode (modificados) */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    body.dark-mode #header-background {
+      background-color: #1f1f1f;
+    }
+    body.dark-mode h1 {
+      color: #ffffff;
+    }
+    body.dark-mode #version-text {
+      color: #aaaaaa;
+    }
+    body.dark-mode #readme-link {
+      color: #ffffff;
+    }
+    body.dark-mode .source-label {
+      color: #ffffff;
+    }
+    body.dark-mode .source-btn {
+      background-color: #3a3a3a;
+      color: #ffffff;
+    }
+    body.dark-mode .source-btn.active {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #toggle-btn {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #toggle-btn.red {
+      background-color: #f44336;
+    }
+    body.dark-mode #toggle-btn:disabled {
+      background-color: #555555;
+    }
+    body.dark-mode #stop-btn {
+      background-color: #f44336;
+    }
+    body.dark-mode #stop-btn::before {
+      background-color: #ffffff;
+    }
+    body.dark-mode th {
+      color: #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    body.dark-mode td {
+      color: #ffffff;
+    }
+    body.dark-mode #progress-bar {
+      background-color: #555555;
+    }
+    body.dark-mode #progress-fill {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #progress-text {
+      color: #ffffff;
+    }
+    body.dark-mode #rotation-message {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000000;
+    }
+    /* Estilos para la barra de desplazamiento */
+    #table-container::-webkit-scrollbar {
+      height: 7px;
+    }
+    #table-container::-webkit-scrollbar-thumb {
+      background-color: #000; /* Negro para modo bright */
+    }
+    body.dark-mode #table-container::-webkit-scrollbar-thumb {
+      background-color: #fff; /* Blanco para modo dark */
+    }
   </style>
 </head>
 <body>
@@ -318,9 +409,7 @@
   <div id="main-content">
     <div id="header-background"></div>
     <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
-    <!-- Modificación: Cambiar <a> a <span> y añadir onclick -->
     <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
-    <!-- Menú desplegable para seleccionar idioma -->
     <div id="language-menu">
       <button onclick="openInstructions('en')">English</button>
       <button onclick="openInstructions('es')">Español</button>
@@ -329,7 +418,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v2.2Mobile</div>
+    <div id="version-text">v2.8Mobile</div> <!-- Actualizado a v2.7 -->
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -346,6 +435,11 @@
       <div class="rect" id="rect-main">16 bits No Dither</div>
       <button id="toggle-btn">997Hz</button>
       <button id="stop-btn"></button>
+    </div>
+    <div id="mode-toggle-container">
+      <button id="mode-toggle-btn">
+        <img id="mode-icon" src="dark_mode2.png" alt="Dark Mode">
+      </button>
     </div>
     <div id="table-container">
       <table>
@@ -520,7 +614,7 @@
     const audioPlayers = {};
     let firstClick = true;
     let progressInterval = null;
-    let preloadPromise = null; // Promesa para rastrear la carga de audios
+    let preloadPromise = null;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -545,36 +639,56 @@
     function openInstructions(lang) {
       const url = lang === "en" ? "instructionsmobile_en.html" : "instructionsmobile_es.html";
       window.open(url, "_blank");
-      toggleLanguageMenu(); // Cerrar el menú después de seleccionar
+      toggleLanguageMenu();
     }
 
     // Función para alternar el modo de pantalla completa
     document.getElementById('fullscreen-btn').addEventListener('click', function() {
       if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        // Entrar en modo de pantalla completa
         var elem = document.documentElement;
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) { /* Firefox */
+        } else if (elem.mozRequestFullScreen) {
           elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
+        } else if (elem.webkitRequestFullscreen) {
           elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        } else if (elem.msRequestFullscreen) {
           elem.msRequestFullscreen();
         }
       } else {
-        // Salir del modo de pantalla completa
         if (document.exitFullscreen) {
           document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { /* Firefox */
+        } else if (document.mozCancelFullScreen) {
           document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { /* Chrome, Safari y Opera */
+        } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE/Edge */
+        } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
       }
     });
+
+    // Función para actualizar el ícono del modo
+    function updateModeIcon() {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      const modeIcon = document.getElementById('mode-icon');
+      if (isDarkMode) {
+        modeIcon.src = 'bright_mode.png';
+        modeIcon.alt = 'Bright Mode';
+      } else {
+        modeIcon.src = 'dark_mode2.png';
+        modeIcon.alt = 'Dark Mode';
+      }
+    }
+
+    // Evento para alternar el modo y actualizar el ícono
+    document.getElementById('mode-toggle-btn').addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      updateModeIcon();
+    });
+
+    // Inicializar el ícono correcto al cargar la página
+    updateModeIcon();
 
     function setActiveSource(source) {
       stopAllAudio();
@@ -686,12 +800,11 @@
       let progress = 0;
       progressInterval = setInterval(() => {
         if (progress < 100) {
-          progress += 2; // Incremento para simular progreso
+          progress += 2;
           progressFill.style.width = `${progress}%`;
         }
       }, 50);
 
-      // Temporizador de 5 segundos
       setTimeout(() => {
         preloadPromise.then(() => {
           completeProgressBar();
@@ -707,7 +820,7 @@
       progressFill.style.width = "100%";
       setTimeout(() => {
         progressContainer.style.display = "none";
-      }, 200); // Pequeño retraso para mostrar el 100% antes de ocultar
+      }, 200);
     }
 
     toggleBtn.addEventListener("click", () => {
@@ -749,15 +862,10 @@
       }
     }
 
-    // Verificar la orientación al cargar la página
     checkOrientation();
-
-    // Escuchar cambios de orientación
     window.addEventListener("orientationchange", checkOrientation);
-    // Fallback para navegadores que no soporten orientationchange
     window.addEventListener("resize", checkOrientation);
 
-    // Iniciar la precarga de audios y guardar la promesa
     preloadPromise = preloadAllAudio();
   </script>
 </body>
