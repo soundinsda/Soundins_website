@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- VERSION v9.11 -->
+<!DOCTYPE html> <!-- VERSION v9.14 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -27,6 +27,9 @@
       background-color: black;
       z-index: -1;
     }
+    body.dark-mode #header-background {
+      background-color: #333333;
+    }
     #logo {
       position: absolute;
       top: 25px;
@@ -45,7 +48,7 @@
     }
     #version-text {
       position: absolute;
-      top: 73px;
+      top: 10px;
       right: 27px;
       font-size: 12px;
       color: #888;
@@ -340,6 +343,7 @@
       display: flex;
       gap: 20px; /* Espacio entre los elementos */
       align-items: center; /* Alineación vertical */
+      justify-content: flex-end; /* Alinea los elementos al final (derecha) */
     }
     #mode-help-container {
       display: flex;
@@ -352,8 +356,8 @@
       width: 48px;
       height: 48px;
       position: relative;
-      top: -20px;
-      left: 260px;
+      top: -20px; /* Sube el ícono */
+      left: 100px; /* Lo mueve a la derecha */
     }
     #language-toggle, #instructions-link, #help-toggle {
       cursor: pointer;
@@ -361,10 +365,23 @@
       font-weight: bold;
       white-space: nowrap; /* Evita que el texto se divida en varias líneas */
       font-size: 16px; /* Tamaño de fuente común */
+      text-align: center;
+    }
+    #language-toggle {
+      width: 80px; /* Ancho fijo para consistencia entre idiomas */
+      position: relative;
+      top: 10px; /* Mantiene el ajuste vertical original */
+      right: 10px;
     }
     #instructions-link {
       width: 100px; /* Ancho fijo para consistencia */
-      text-align: center;
+      position: relative;
+      top: 10px; /* Mantiene el ajuste vertical original */
+    }
+    #help-toggle {
+      width: 60px; /* Ancho fijo para consistencia */
+      position: relative;
+      top: -16px; /* Mantiene el ajuste vertical original */
     }
     #language-toggle:hover, #instructions-link:hover, #help-toggle:hover, #mode-toggle:hover {
       color: #00BFFF; /* Color al pasar el ratón */
@@ -381,26 +398,6 @@
       font-size: 11px;
       opacity: 1;
     }
-
-#language-toggle {
-  position: relative;
-  top: 10px; /* Ajusta valor vertical */
-  right: -8px;
-}
-
-#instructions-link {
-  position: relative;
-  top: 10px; /* Ajusta según sea necesario */
-}
-
-#help-toggle {
-  position: relative;
-  top: -16px; /* Ajusta según sea necesario */
-}
-
-
-
-
     body.dark-mode #custom-tooltip,
     body.dark-mode #custom-tooltip-top-right {
       background-color: #ffffff;
@@ -424,14 +421,14 @@
     <img src="Soundins.png" id="logo" alt="Logo de Soundins">
   </a>
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v9.11</div>
+  <div id="version-text">v9.14</div>
   <div id="top-right-container">
     <div id="mode-help-container">
-      <img id="mode-toggle" src="bright_mode.png" alt="Toggle Bright/Dark Mode">
+      <img id="mode-toggle" src="dark_mode.png" alt="Toggle Bright/Dark Mode">
       <div id="help-toggle">Help On</div>
     </div>
-    <div id="language-toggle">English</div>
     <div id="instructions-link">Read me</div>
+    <div id="language-toggle">English</div>
   </div>
   <div id="main-row" class="row">
     <div class="source-group">
@@ -568,7 +565,7 @@
   <script>
     const audioMapping = {
       "rect-24bits": {
-        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Sine_24bits.flac" },
+        "Discover": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Sine_24bits.flac" },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_24bits.flac" }
       },
       "rect-main": {
@@ -671,7 +668,7 @@
       },
       "rect-14": {
         "Sine": {
-          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Moderate.flac",
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Moderate.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Moderate_no997.flac"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Moderate.flac" }
@@ -681,7 +678,7 @@
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Normal.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Normal_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Normal.flac" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Normal.flac" }
       },
       "rect-34": {
         "Sine": {
@@ -1300,7 +1297,7 @@
     modeToggle.addEventListener("click", () => {
       isDarkMode = !isDarkMode;
       document.body.classList.toggle("dark-mode", isDarkMode);
-      modeToggle.src = isDarkMode ? "dark_mode.png" : "bright_mode.png";
+      modeToggle.src = isDarkMode ? "bright_mode.png" : "dark_mode.png";
     });
 
     updateHelpToggleText();
