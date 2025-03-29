@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Mobile_v3.0 -->
+<!DOCTYPE html><!-- Mobile_v3.2 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -57,7 +57,7 @@
     #version-text {
       position: absolute;
       top: 10px;/*antes 46*/
-      right: 5px;
+      right: 10px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
       z-index: 1;
@@ -77,8 +77,6 @@
     /* Menú desplegable para idiomas */
     #language-menu {
       position: absolute;
-      top: 60px;
-      right: 10px;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -288,7 +286,7 @@
     }
     /* Mensaje de rotación */
     #rotation-message {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
@@ -419,7 +417,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v3.0Mobile</div> <!-- Actualizado a v2.9 -->
+    <div id="version-text">v3.2Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -630,10 +628,34 @@
       "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
     ];
 
-    // Función para alternar la visibilidad del menú de idiomas
+    // Función para alternar la visibilidad del menú de idiomas y centrarlo debajo de "Readme"
     function toggleLanguageMenu() {
       const menu = document.getElementById("language-menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      const readmeLink = document.getElementById("readme-link");
+      const rect = readmeLink.getBoundingClientRect();
+
+      // Mostrar el menú temporalmente para calcular su ancho
+      menu.style.display = "block";
+      const menuWidth = menu.offsetWidth;
+
+      // Calcular el centro del elemento "Readme"
+      const readmeCenterX = rect.left + rect.width / 2;
+
+      // Calcular la posición izquierda del menú para centrarlo
+      const menuLeft = readmeCenterX - menuWidth / 2 + window.scrollX;
+
+      // Aplicar las posiciones
+      menu.style.top = `${rect.bottom + window.scrollY}px`; // Justo debajo de "Readme"
+      menu.style.left = `${menuLeft}px`; // Centrado horizontalmente
+
+      // Alternar visibilidad
+      if (menu.dataset.isVisible === "true") {
+        menu.style.display = "none";
+        menu.dataset.isVisible = "false";
+      } else {
+        menu.style.display = "block";
+        menu.dataset.isVisible = "true";
+      }
     }
 
     // Función para abrir las instrucciones según el idioma seleccionado
