@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Mobile_v2.9 -->
+<!DOCTYPE html><!-- Mobile_v3.0 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -56,7 +56,7 @@
     /* Versión */
     #version-text {
       position: absolute;
-      top: 46px;
+      top: 10px;/*antes 46*/
       right: 5px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
@@ -65,11 +65,11 @@
     /* Readme link */
     #readme-link {
       position: absolute;
-      top: 45px;
-      right: 70px;
+      top: 43px;
+      right: 100px;
       color: white;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 14px;
       text-decoration: none;
       z-index: 2;
       cursor: pointer;
@@ -100,7 +100,7 @@
     /* Botón de maximización */
     #fullscreen-btn {
       position: absolute;
-      top: 3px;
+      top: 23px;
       right: 3px;
       background: none;
       border: none;
@@ -112,7 +112,7 @@
     /* Contenedor de toggle de modo (modificado) */
     #mode-toggle-container {
       position: absolute;
-      top: 7px; /* Misma altura vertical que el botón de maximización */
+      top: 27px; /* Misma altura vertical que el botón de maximización */
       right: calc(3px + 32px + 10px); /* A la izquierda del botón de maximización */
       z-index: 2;
     }
@@ -419,7 +419,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v2.9Mobile</div> <!-- Actualizado a v2.9 -->
+    <div id="version-text">v3.0Mobile</div> <!-- Actualizado a v2.9 -->
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
