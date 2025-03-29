@@ -9,10 +9,11 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    h1 { /* Agregamos el selector para h1 */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Agregamos la sombra */
+    h1 { /* Selector para h1 */
+      font-size: 24px; /* Tamaño específico para los títulos */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Sombra existente */
     }
-  .instruction-text {
+    .instruction-text {
       font-size: 18px; /* Tamaño de letra personalizable */
       font-family: 'Times New Roman', serif; /* Tipo de letra personalizable */
     }
@@ -25,9 +26,8 @@
       font-weight: bold;
       font-style: italic;
     }
-
-    .bold{
-     font-weight: bold;
+    .bold {
+      font-weight: bold;
     }
     table {
       margin-left: 20px;
@@ -49,13 +49,29 @@
 </head>
 <body>
   <h1>Instructions</h1>
-  <p class="instruction-text"><span class="bold">Dither & NS Benchmark Tool</span> is a website designed to provide the results of applying dither and/or noise shaping to low-level signals.<br><br> 
+  <p class="instruction-text"><span class="bold">Dither & NS Benchmark Tool</span> is  is intended for audio professionals, researchers, and enthusiasts who wish to evaluate the effects of Dithering and Noise Shaping on low-level signals for educational and analytical purposes.
+The tool allows to compare the result of different processing methods applied to test signals and analyze their impact on noise and distortion characteristics.<br><br>
 <span class="bold-italic2">Important:  This is a Lite version of the tool because you are accessing from a mobile device. For a full version please access from a computer.</span><br><br>
 Tests were performed on two signals:<br><br>
 1) Sine: Sinusoidal at 997Hz, 2LSB (Least Significant Bit) peak level at 44.1kHz/24-bit.<br>
 2) Instrument: -86dBFS RMS instrument signal at 44.1kHz/24-bit.<br><br>
 Both signals were converted from 24-bit to 16-bit depth through dithering and/or noise shaping processing, using the plugins or DAWs indicated in each case.<br><br>
 Except for the gain application (after processed signal), no other processes, effects, or signal alterations were included in the measurement.<br>
+
+<h1>How to Use</h1>
+
+First, select the type of source you want to play (sine wave or instrument) using the "Source" buttons in the panel.<br><br>
+
+Next, choose the process applied to the selected source. To do this, select the corresponding rectangle in the main panel. Each one describes the applied process inside it (or via an associated tooltip). Pressing it will play the corresponding processed audio.<br><br>
+
+The 997Hz button enables or disables the sine tone. Disabling it is useful for listening to the noise profile and distortion.<br>
+At the bottom of the page, you will find the Loop and Stop audio buttons.
+
+
+<h1>Versions</h1>
+
+
+
 The plugins and DAWs used, along with their corresponding versions, are listed below:<br><br>
 
 <table>
@@ -85,8 +101,10 @@ The plugins and DAWs used, along with their corresponding versions, are listed b
   </tr>
 </table><br>
 
+<h1>Purpose of Use and Responsibilities. Disclamer</h1>
 
-<p class="instruction-text">Both this page and the results presented herein are <span class="bold-italic">for educational purposes only</span>. It has no commercial purpose, directly or indirectly, <span class="bold-italic">nor does it constitute any endorsement or recommendation of brands and/or models</span>.<br><br>
+<p class="instruction-text">Both this page and the results presented herein are  <span class="bold-italic">for educational purposes only</span>. It has no commercial purpose, directly or indirectly, <span class="bold-italic">nor does it constitute any endorsement or recommendation of brands and/or models</span>.<br><br>
+The tool is provided "as is," and its creators are not responsible for any misinterpretations, incorrect analyses, or unintended uses.<br><br>
 
 It was developed by Pablo Panitta under Soundins and may be used as long as it is not for commercial use.<br><br>
 
