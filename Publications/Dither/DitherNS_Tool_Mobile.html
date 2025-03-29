@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Mobile_v2.8 -->
+<!DOCTYPE html><!-- Mobile_v2.9 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -66,7 +66,7 @@
     #readme-link {
       position: absolute;
       top: 45px;
-      right: 60px;
+      right: 70px;
       color: white;
       font-weight: bold;
       font-size: 12px;
@@ -112,8 +112,8 @@
     /* Contenedor de toggle de modo (modificado) */
     #mode-toggle-container {
       position: absolute;
-      top: 7px; /* Debajo de la banda negra */
-      right: 50px;
+      top: 7px; /* Misma altura vertical que el botón de maximización */
+      right: calc(3px + 32px + 8px); /* A la izquierda del botón de maximización */
       z-index: 2;
     }
     #mode-toggle-btn {
@@ -317,6 +317,7 @@
     #main-content {
       width: 100%;
       padding-bottom: 40px; /* Incrementado para permitir más desplazamiento vertical */
+      position: relative; /* Para que los elementos absolutos se posicionen respecto a este contenedor */
     }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
@@ -418,7 +419,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v2.8Mobile</div> <!-- Actualizado a v2.7 -->
+    <div id="version-text">v2.9Mobile</div> <!-- Actualizado a v2.9 -->
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -438,7 +439,7 @@
     </div>
     <div id="mode-toggle-container">
       <button id="mode-toggle-btn">
-        <img id="mode-icon" src="dark_mode2.png" alt="Dark Mode">
+        <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
       </button>
     </div>
     <div id="table-container">
@@ -676,7 +677,7 @@
         modeIcon.src = 'bright_mode.png';
         modeIcon.alt = 'Bright Mode';
       } else {
-        modeIcon.src = 'dark_mode2.png';
+        modeIcon.src = 'dark_mode.png';
         modeIcon.alt = 'Dark Mode';
       }
     }
