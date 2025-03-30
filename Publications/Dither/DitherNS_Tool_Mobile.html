@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Mobile_v3.2 -->
+<!DOCTYPE html><!-- Mobile_v3.5 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -332,6 +332,9 @@
       background-color: #121212;
       color: #ffffff;
     }
+    body.dark-mode #main-content {
+      background-color: #121212;
+    }
     body.dark-mode #header-background {
       background-color: #1f1f1f;
     }
@@ -370,8 +373,8 @@
       background-color: #ffffff;
     }
     body.dark-mode th {
-      color: #ffffff;
-      border-bottom: 2px solid #ffffff;
+      color: #ffffff !important;
+      border-bottom: 2px solid #ffffff !important;
     }
     body.dark-mode td {
       color: #ffffff;
@@ -417,7 +420,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v3.2Mobile</div>
+    <div id="version-text">v3.5Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -667,7 +670,7 @@
 
     // Función para alternar el modo de pantalla completa
     document.getElementById('fullscreen-btn').addEventListener('click', function() {
-      if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+      if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
         var elem = document.documentElement;
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
@@ -708,10 +711,24 @@
     document.getElementById('mode-toggle-btn').addEventListener('click', function() {
       document.body.classList.toggle('dark-mode');
       updateModeIcon();
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
 
-    // Inicializar el ícono correcto al cargar la página
+    // Inicializar el modo oscuro basado en el almacenamiento local
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
     updateModeIcon();
+
+    // Listener para actualizar el modo al regresar a la página
+    window.addEventListener('focus', function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      updateModeIcon();
+    });
 
     function setActiveSource(source) {
       stopAllAudio();
@@ -869,6 +886,11 @@
         playAudio(rectId);
       });
     });
+
+    // Ocultar el botón de maximización en iOS
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      document.getElementById('fullscreen-btn').style.display = 'none';
+    }
 
     // Lógica para manejar la orientación
     const rotationMessage = document.getElementById("rotation-message");
