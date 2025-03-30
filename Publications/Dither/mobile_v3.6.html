@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Mobile_v3.5 -->
+<!DOCTYPE html><!-- Mobile_v3.6 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -20,7 +20,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: background-color 0.3s, color 0.3s;
+      transition: color 0.3s; /* Eliminamos transición de background-color */
     }
     /* Header background */
     #header-background {
@@ -56,7 +56,7 @@
     /* Versión */
     #version-text {
       position: absolute;
-      top: 10px;/*antes 46*/
+      top: 10px;
       right: 10px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
@@ -107,11 +107,11 @@
       cursor: pointer;
       z-index: 2;
     }
-    /* Contenedor de toggle de modo (modificado) */
+    /* Contenedor de toggle de modo */
     #mode-toggle-container {
       position: absolute;
-      top: 27px; /* Misma altura vertical que el botón de maximización */
-      right: calc(3px + 32px + 10px); /* A la izquierda del botón de maximización */
+      top: 27px;
+      right: calc(3px + 32px + 10px);
       z-index: 2;
     }
     #mode-toggle-btn {
@@ -314,8 +314,8 @@
     /* Contenedor principal */
     #main-content {
       width: 100%;
-      padding-bottom: 40px; /* Incrementado para permitir más desplazamiento vertical */
-      position: relative; /* Para que los elementos absolutos se posicionen respecto a este contenedor */
+      padding-bottom: 40px;
+      position: relative;
     }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
@@ -327,68 +327,64 @@
         margin-bottom: 10px;
       }
     }
-    /* Estilos para dark mode (modificados) */
-    body.dark-mode {
-      background-color: #121212;
+    /* Estilos para dark mode */
+    .dark-mode {
       color: #ffffff;
     }
-    body.dark-mode #main-content {
-      background-color: #121212;
-    }
-    body.dark-mode #header-background {
+    .dark-mode #header-background {
       background-color: #1f1f1f;
     }
-    body.dark-mode h1 {
+    .dark-mode h1 {
       color: #ffffff;
     }
-    body.dark-mode #version-text {
+    .dark-mode #version-text {
       color: #aaaaaa;
     }
-    body.dark-mode #readme-link {
+    .dark-mode #readme-link {
       color: #ffffff;
     }
-    body.dark-mode .source-label {
+    .dark-mode .source-label {
       color: #ffffff;
     }
-    body.dark-mode .source-btn {
+    .dark-mode .source-btn {
       background-color: #3a3a3a;
       color: #ffffff;
     }
-    body.dark-mode .source-btn.active {
+    .dark-mode .source-btn.active {
       background-color: #4CAF50;
     }
-    body.dark-mode #toggle-btn {
+    .dark-mode #toggle-btn {
       background-color: #4CAF50;
     }
-    body.dark-mode #toggle-btn.red {
+    .dark-mode #toggle-btn.red {
       background-color: #f44336;
     }
-    body.dark-mode #toggle-btn:disabled {
+    .dark-mode #toggle-btn:disabled {
       background-color: #555555;
     }
-    body.dark-mode #stop-btn {
+    .dark-mode #stop-btn {
       background-color: #f44336;
     }
-    body.dark-mode #stop-btn::before {
+    .dark-mode #stop-btn::before {
       background-color: #ffffff;
     }
-    body.dark-mode th {
+    .dark-mode th {
       color: #ffffff !important;
       border-bottom: 2px solid #ffffff !important;
     }
-    body.dark-mode td {
+    .dark-mode td {
       color: #ffffff;
     }
-    body.dark-mode #progress-bar {
+    .dark-mode #progress-bar {
       background-color: #555555;
     }
-    body.dark-mode #progress-fill {
+    .dark-mode #progress-fill {
       background-color: #4CAF50;
     }
-    body.dark-mode #progress-text {
+    .dark-mode #progress-text {
       color: #ffffff;
     }
-    body.dark-mode #rotation-message {
+    .dark-mode #rotation-message {
       background-color: rgba(255, 255, 255, 0.8);
       color: #000000;
     }
@@ -399,7 +395,7 @@
     #table-container::-webkit-scrollbar-thumb {
       background-color: #000; /* Negro para modo bright */
     }
-    body.dark-mode #table-container::-webkit-scrollbar-thumb {
+    .dark-mode #table-container::-webkit-scrollbar-thumb {
       background-color: #fff; /* Blanco para modo dark */
     }
   </style>
@@ -420,7 +416,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v3.5Mobile</div>
+    <div id="version-text">v3.6Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -631,27 +627,56 @@
       "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
     ];
 
+    // Función para detectar si es iOS
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    // Función para actualizar el fondo y los estilos
+    function updateModeStyles() {
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      const body = document.body;
+
+      // Forzar reinicio completo de estilos en iOS
+      if (isIOS()) {
+        body.classList.remove('dark-mode');
+        body.style.backgroundColor = ''; // Limpiar estilo inline
+        setTimeout(() => {
+          if (isDarkMode) {
+            body.classList.add('dark-mode');
+            body.style.backgroundColor = '#121212';
+          } else {
+            body.classList.remove('dark-mode');
+            body.style.backgroundColor = '#EEEEF2';
+          }
+        }, 10); // Pequeño retraso para forzar actualización
+      } else {
+        // Para otros dispositivos, aplicar directamente
+        if (isDarkMode) {
+          body.classList.add('dark-mode');
+          body.style.backgroundColor = '#121212';
+        } else {
+          body.classList.remove('dark-mode');
+          body.style.backgroundColor = '#EEEEF2';
+        }
+      }
+      updateModeIcon();
+    }
+
     // Función para alternar la visibilidad del menú de idiomas y centrarlo debajo de "Readme"
     function toggleLanguageMenu() {
       const menu = document.getElementById("language-menu");
       const readmeLink = document.getElementById("readme-link");
       const rect = readmeLink.getBoundingClientRect();
 
-      // Mostrar el menú temporalmente para calcular su ancho
       menu.style.display = "block";
       const menuWidth = menu.offsetWidth;
-
-      // Calcular el centro del elemento "Readme"
       const readmeCenterX = rect.left + rect.width / 2;
-
-      // Calcular la posición izquierda del menú para centrarlo
       const menuLeft = readmeCenterX - menuWidth / 2 + window.scrollX;
 
-      // Aplicar las posiciones
-      menu.style.top = `${rect.bottom + window.scrollY}px`; // Justo debajo de "Readme"
-      menu.style.left = `${menuLeft}px`; // Centrado horizontalmente
+      menu.style.top = `${rect.bottom + window.scrollY}px`;
+      menu.style.left = `${menuLeft}px`;
 
-      // Alternar visibilidad
       if (menu.dataset.isVisible === "true") {
         menu.style.display = "none";
         menu.dataset.isVisible = "false";
@@ -707,27 +732,19 @@
       }
     }
 
-    // Evento para alternar el modo y actualizar el ícono
+    // Evento para alternar el modo
     document.getElementById('mode-toggle-btn').addEventListener('click', function() {
-      document.body.classList.toggle('dark-mode');
-      updateModeIcon();
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      localStorage.setItem('darkMode', !isDarkMode);
+      updateModeStyles();
     });
 
-    // Inicializar el modo oscuro basado en el almacenamiento local
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
-    }
-    updateModeIcon();
+    // Inicializar el modo basado en el almacenamiento local
+    updateModeStyles();
 
     // Listener para actualizar el modo al regresar a la página
     window.addEventListener('focus', function() {
-      if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
-      updateModeIcon();
+      updateModeStyles();
     });
 
     function setActiveSource(source) {
@@ -888,7 +905,7 @@
     });
 
     // Ocultar el botón de maximización en iOS
-    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+    if (isIOS()) {
       document.getElementById('fullscreen-btn').style.display = 'none';
     }
 
