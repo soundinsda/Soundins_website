@@ -17,10 +17,14 @@
   <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
   
   <script>
-    // Función para detectar si es un dispositivo móvil
+    // Función para detectar si es un dispositivo móvil (excluyendo tablets)
     function isMobileDevice() {
       const userAgent = navigator.userAgent.toLowerCase();
-      return /mobile|android|iphone|ipad|tablet/i.test(userAgent);
+      const isMobile = /mobile|android|iphone/i.test(userAgent); // Solo teléfonos
+      const isTablet = /ipad|tablet/i.test(userAgent); // Identifica tablets
+
+      // Si es tablet, lo consideramos como "no móvil" (es decir, como laptop)
+      return isMobile && !isTablet;
     }
 
     // Redirigir según el tipo de dispositivo
