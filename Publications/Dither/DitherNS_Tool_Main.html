@@ -17,18 +17,15 @@
   <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
   
   <script>
-    // Función para detectar si es un dispositivo móvil (excluyendo tablets)
-    function isMobileDevice() {
+    // Función para detectar si es un dispositivo móvil o tablet
+    function isMobileOrTablet() {
       const userAgent = navigator.userAgent.toLowerCase();
-      const isMobile = /mobile|android|iphone/i.test(userAgent); // Solo teléfonos
-      const isTablet = /ipad|tablet/i.test(userAgent); // Identifica tablets
-
-      // Si es tablet, lo consideramos como "no móvil" (es decir, como laptop)
-      return isMobile && !isTablet;
+      // Identifica móviles y tablets
+      return /mobile|android|iphone|ipad|tablet/i.test(userAgent);
     }
 
     // Redirigir según el tipo de dispositivo
-    if (isMobileDevice()) {
+    if (isMobileOrTablet()) {
       window.location.href = "DitherNS_Tool_Mobile.html";
     } else {
       window.location.href = "DitherNS_Tool_Laptop.html";
