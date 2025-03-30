@@ -10,12 +10,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
             margin: 0;
             background-color: black;
             color: white;
-            overflow: hidden;
+            overflow-y: auto;
         }
         h1 {
             position: absolute;
@@ -56,10 +56,16 @@
         }
         #email a {
             color: blue;
-            text-decoration: none; /* Elimina el subrayado por defecto */
+            text-decoration: none;
         }
         #email a:hover {
-            text-decoration: underline; /* Subrayado al pasar el mouse */
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            body {
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -72,8 +78,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var logo = document.getElementById("logo");
-
-            // Intenta diferentes rutas para cargar la imagen
             var possiblePaths = [
                 "Soundins.png",
                 "./Soundins.png",
