@@ -21,7 +21,7 @@
     function isMobileDevice() {
       const userAgent = navigator.userAgent.toLowerCase();
       const isMobile = /mobile|android|iphone/i.test(userAgent); // Solo teléfonos
-      const isTablet = /ipad|tablet/i.test(userAgent); // Identifica tablets
+      const isTablet = /ipad|tablet|sm-t[0-9]{3}/i.test(userAgent); // Incluye tablets Samsung (SM-Txxx)
 
       // Si es tablet, lo consideramos como "no móvil" (es decir, como laptop)
       return isMobile && !isTablet;
