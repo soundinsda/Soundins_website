@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundins</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            margin: 0;
+            background-color: black;
+            color: white;
+            overflow-y: auto;
+        }
+        h1 {
+            position: absolute;
+            top: 20px;
+            font-size: 24px;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            animation: wave 2s infinite ease-in-out;
+        }
+        @keyframes wave {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(2deg);
+            }
+            50% {
+                transform: rotate(-2deg);
+            }
+            75% {
+                transform: rotate(2deg);
+            }
+        }
+        #credit {
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            margin-top: -10px;
+            text-align: center;
+        }
+        #email {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        #email a {
+            color: blue;
+            text-decoration: none;
+        }
+        #email a:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            body {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Site under construction</h1>
+    <img id="logo" alt="Soundins Logo">
+    <p id="credit">by Pablo Panitta</p>
+    <p id="email"><a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var logo = document.getElementById("logo");
+            var possiblePaths = [
+                "Soundins.png",
+                "./Soundins.png",
+                "/Soundins.png",
+                "assets/Soundins.png",
+                "images/Soundins.png"
+            ];
+
+            function checkImage(url, callback) {
+                var img = new Image();
+                img.onload = function() { callback(true, url); };
+                img.onerror = function() { callback(false, url); };
+                img.src = url;
+            }
+
+            function findValidImage(paths) {
+                if (paths.length === 0) {
+                    logo.alt = "Image not found";
+                    return;
+                }
+                var path = paths.shift();
+                checkImage(path, function(success, validUrl) {
+                    if (success) {
+                        logo.src = validUrl;
+                    } else {
+                        findValidImage(paths);
+                    }
+                });
+            }
+
+            findValidImage(possiblePaths);
+        });
+    </script>
+</body>
+</html>
