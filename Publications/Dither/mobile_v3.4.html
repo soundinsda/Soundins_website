@@ -1,0 +1,907 @@
+<!DOCTYPE html><!-- Mobile_v3.4 -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
+  <link rel="icon" type="image/x-icon" href="/Publications/Dither/favicon.ico">
+  <style>
+    /* Reset básico */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #EEEEF2;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    /* Header background */
+    #header-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 60px;
+      background-color: black;
+      z-index: -1;
+    }
+    /* Logo */
+    #logo {
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      width: 100px;
+      height: auto;
+      z-index: 1;
+    }
+    /* Título */
+    h1 {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(16px, 4vw, 24px);
+      color: white;
+      text-align: center;
+      z-index: 1;
+      white-space: nowrap;
+    }
+    /* Versión */
+    #version-text {
+      position: absolute;
+      top: 10px;/*antes 46*/
+      right: 10px;
+      font-size: clamp(8px, 2vw, 10px);
+      color: #888;
+      z-index: 1;
+    }
+    /* Readme link */
+    #readme-link {
+      position: absolute;
+      top: 43px;
+      right: 100px;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
+      z-index: 2;
+      cursor: pointer;
+    }
+    /* Menú desplegable para idiomas */
+    #language-menu {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: none;
+      z-index: 3;
+    }
+    #language-menu button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+    }
+    #language-menu button:hover {
+      background-color: #f0f0f0;
+    }
+    /* Botón de maximización */
+    #fullscreen-btn {
+      position: absolute;
+      top: 23px;
+      right: 3px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 27px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    /* Contenedor de toggle de modo (modificado) */
+    #mode-toggle-container {
+      position: absolute;
+      top: 27px; /* Misma altura vertical que el botón de maximización */
+      right: calc(3px + 32px + 10px); /* A la izquierda del botón de maximización */
+      z-index: 2;
+    }
+    #mode-toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    #mode-icon {
+      width: 32px;
+      height: 32px;
+    }
+    /* Contenedor principal */
+    #main-row {
+      width: 90%;
+      margin-top: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+    /* Grupo de fuentes */
+    .source-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .source-label {
+      font-weight: bold;
+      font-size: clamp(12px, 3vw, 16px);
+      color: #333;
+      margin-bottom: 5px;
+      transform: translateY(5px);
+    }
+    .source-btn {
+      width: 80px;
+      padding: 5px;
+      background-color: #1a73e8;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: clamp(10px, 2.5vw, 12px);
+    }
+    .source-btn.active {
+      background-color: green;
+    }
+    /* Rectángulos principales */
+    .rect {
+      width: 80px;
+      padding: 8px;
+      border-radius: 10px;
+      background-color: blue;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      font-size: clamp(10px, 2.5vw, 12px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .rect.green {
+      background-color: green;
+    }
+    #rect-24bits {
+      transform: translateY(2px);
+    }
+    #rect-main {
+      transform: translateY(9px);
+    }
+    /* Botón toggle */
+    #toggle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: clamp(8px, 2vw, 10px);
+      transform: translateY(9px);
+    }
+    #toggle-btn.red {
+      background-color: red;
+    }
+    #toggle-btn:disabled {
+      background-color: grey;
+      cursor: not-allowed;
+    }
+    /* Botón de stop audio */
+    #stop-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: red;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      margin-left: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transform: translateY(9px);
+    }
+    #stop-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      background-color: black;
+    }
+    #stop-btn:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    /* Tabla */
+    #table-container {
+      width: 100%;
+      margin-top: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    th, td {
+      padding: 5px;
+      text-align: center;
+      font-size: clamp(10px, 2.5vw, 12px);
+    }
+    th {
+      font-weight: bold;
+      color: #333;
+      border-bottom: 2px solid #333;
+    }
+    /* Barra de progreso */
+    #progress-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      z-index: 10;
+      display: none;
+    }
+    #progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #progress-fill {
+      width: 0%;
+      height: 100%;
+      background-color: #4CAF50;
+      transition: width 0.3s ease-in-out;
+    }
+    #progress-text {
+      margin-top: -21px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    /* Mensaje de rotación */
+    #rotation-message {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      font-size: 24px;
+      text-align: center;
+      z-index: 1000;
+      display: none;
+    }
+    /* Texto con animación de parpadeo */
+    #rotation-text {
+      margin-top: 220px;
+      animation: blink-message 1s infinite;
+    }
+    @keyframes blink-message {
+      0% { opacity: 1; }
+      50% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+    /* Contenedor principal */
+    #main-content {
+      width: 100%;
+      padding-bottom: 40px; /* Incrementado para permitir más desplazamiento vertical */
+      position: relative; /* Para que los elementos absolutos se posicionen respecto a este contenedor */
+    }
+    /* Media Queries para pantallas pequeñas */
+    @media (max-width: 400px) {
+      #main-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      .source-group {
+        margin-bottom: 10px;
+      }
+    }
+    /* Estilos para dark mode (modificados) */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    body.dark-mode #main-content {
+      background-color: #121212;
+    }
+    body.dark-mode #header-background {
+      background-color: #1f1f1f;
+    }
+    body.dark-mode h1 {
+      color: #ffffff;
+    }
+    body.dark-mode #version-text {
+      color: #aaaaaa;
+    }
+    body.dark-mode #readme-link {
+      color: #ffffff;
+    }
+    body.dark-mode .source-label {
+      color: #ffffff;
+    }
+    body.dark-mode .source-btn {
+      background-color: #3a3a3a;
+      color: #ffffff;
+    }
+    body.dark-mode .source-btn.active {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #toggle-btn {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #toggle-btn.red {
+      background-color: #f44336;
+    }
+    body.dark-mode #toggle-btn:disabled {
+      background-color: #555555;
+    }
+    body.dark-mode #stop-btn {
+      background-color: #f44336;
+    }
+    body.dark-mode #stop-btn::before {
+      background-color: #ffffff;
+    }
+    body.dark-mode th {
+      color: #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    body.dark-mode td {
+      color: #ffffff;
+    }
+    body.dark-mode #progress-bar {
+      background-color: #555555;
+    }
+    body.dark-mode #progress-fill {
+      background-color: #4CAF50;
+    }
+    body.dark-mode #progress-text {
+      color: #ffffff;
+    }
+    body.dark-mode #rotation-message {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000000;
+    }
+    /* Estilos para la barra de desplazamiento */
+    #table-container::-webkit-scrollbar {
+      height: 7px;
+    }
+    #table-container::-webkit-scrollbar-thumb {
+      background-color: #000; /* Negro para modo bright */
+    }
+    body.dark-mode #table-container::-webkit-scrollbar-thumb {
+      background-color: #fff; /* Blanco para modo dark */
+    }
+  </style>
+</head>
+<body>
+  <div id="rotation-message">
+    <div id="rotation-text">Por favor, rote el dispositivo a la posición horizontal<br><br>Please rotate the device to horizontal position</div>
+  </div>
+  <div id="main-content">
+    <div id="header-background"></div>
+    <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
+    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+    <div id="language-menu">
+      <button onclick="openInstructions('en')">English</button>
+      <button onclick="openInstructions('es')">Español</button>
+    </div>
+    <a href="http://www.soundins.com.ar">
+      <img src="Soundins.png" id="logo" alt="Logo de Soundins">
+    </a>
+    <h1>Dither & NS Benchmark Tool</h1>
+    <div id="version-text">v3.4Mobile</div>
+    <div id="progress-container">
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+      <div id="progress-text">Loading Audio Files</div>
+    </div>
+    <div id="main-row">
+      <div class="source-group">
+        <span class="source-label">Source</span>
+        <div class="source-btn active" id="source-Sine">Sine</div>
+        <div class="source-btn" id="source-flaute">Instrument</div>
+      </div>
+      <div class="rect" id="rect-24bits">24 bits</div>
+      <div class="rect" id="rect-main">16 bits No Dither</div>
+      <button id="toggle-btn">997Hz</button>
+      <button id="stop-btn"></button>
+    </div>
+    <div id="mode-toggle-container">
+      <button id="mode-toggle-btn">
+        <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
+      </button>
+    </div>
+    <div id="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Izotope</th>
+            <th>Izotope</th>
+            <th>FabFilter</th>
+            <th>Waves</th>
+            <th>Waves</th>
+            <th>Reaper</th>
+            <th>Ableton</th>
+            <th>Avid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off</div></td>
+          </tr>
+          <tr>
+            <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted</div></td>
+            <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On</div></td>
+            <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3</div></td>
+            <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const audioMapping = {
+      "rect-24bits": {
+        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Sine_24bits.flac" },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_24bits.flac" }
+      },
+      "rect-main": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_16bits_NoDither.flac" }
+      },
+      "rect-1": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low.flac" }
+      },
+      "rect-2": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong.flac" }
+      },
+      "rect-3": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2.flac" }
+      },
+      "rect-4": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T1.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1.flac" }
+      },
+      "rect-5": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T2.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2.flac" }
+      },
+      "rect-8": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper.flac" }
+      },
+      "rect-9": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_tpdf.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live.flac" }
+      },
+      "rect-10": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Maxim.flac" }
+      },
+      "rect-31": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low_Max.flac" }
+      },
+      "rect-32": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong_Max.flac" }
+      },
+      "rect-33": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+      },
+      "rect-34": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Ultra.flac" }
+      },
+      "rect-35": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2_Ultra.flac" }
+      },
+      "rect-38": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper_NS.flac" }
+      },
+      "rect-39": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live_POWr3.flac" }
+      },
+      "rect-40": {
+        "Sine": {
+          "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_AVID_Type3.flac",
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Avid_Type3_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Type3.flac" }
+      }
+    };
+
+    let isToggleEnabled = true;
+    let currentActiveRect = null;
+    let currentSource = "Sine";
+    const audioPlayers = {};
+    let firstClick = true;
+    let progressInterval = null;
+    let preloadPromise = null;
+
+    const sourceSine = document.getElementById("source-Sine");
+    const sourceFlaute = document.getElementById("source-flaute");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const stopBtn = document.getElementById("stop-btn");
+    const progressContainer = document.getElementById("progress-container");
+    const progressFill = document.getElementById("progress-fill");
+
+    const rectsToLoad = [
+      "rect-24bits", "rect-main",
+      "rect-1", "rect-2", "rect-3", "rect-4", "rect-5", "rect-8", "rect-9", "rect-10",
+      "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
+    ];
+
+    // Función para alternar la visibilidad del menú de idiomas y centrarlo debajo de "Readme"
+    function toggleLanguageMenu() {
+      const menu = document.getElementById("language-menu");
+      const readmeLink = document.getElementById("readme-link");
+      const rect = readmeLink.getBoundingClientRect();
+
+      // Mostrar el menú temporalmente para calcular su ancho
+      menu.style.display = "block";
+      const menuWidth = menu.offsetWidth;
+
+      // Calcular el centro del elemento "Readme"
+      const readmeCenterX = rect.left + rect.width / 2;
+
+      // Calcular la posición izquierda del menú para centrarlo
+      const menuLeft = readmeCenterX - menuWidth / 2 + window.scrollX;
+
+      // Aplicar las posiciones
+      menu.style.top = `${rect.bottom + window.scrollY}px`; // Justo debajo de "Readme"
+      menu.style.left = `${menuLeft}px`; // Centrado horizontalmente
+
+      // Alternar visibilidad
+      if (menu.dataset.isVisible === "true") {
+        menu.style.display = "none";
+        menu.dataset.isVisible = "false";
+      } else {
+        menu.style.display = "block";
+        menu.dataset.isVisible = "true";
+      }
+    }
+
+    // Función para abrir las instrucciones según el idioma seleccionado
+    function openInstructions(lang) {
+      const url = lang === "en" ? "instructionsmobile_en.html" : "instructionsmobile_es.html";
+      window.open(url, "_blank");
+      toggleLanguageMenu();
+    }
+
+    // Función para alternar el modo de pantalla completa
+    document.getElementById('fullscreen-btn').addEventListener('click', function() {
+      if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
+        var elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    });
+
+    // Función para actualizar el ícono del modo
+    function updateModeIcon() {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      const modeIcon = document.getElementById('mode-icon');
+      if (isDarkMode) {
+        modeIcon.src = 'bright_mode.png';
+        modeIcon.alt = 'Bright Mode';
+      } else {
+        modeIcon.src = 'dark_mode.png';
+        modeIcon.alt = 'Dark Mode';
+      }
+    }
+
+    // Evento para alternar el modo y actualizar el ícono
+    document.getElementById('mode-toggle-btn').addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      updateModeIcon();
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    // Inicializar el modo oscuro basado en el almacenamiento local
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+    updateModeIcon();
+
+    function setActiveSource(source) {
+      stopAllAudio();
+      currentSource = source;
+      sourceSine.classList.toggle("active", source === "Sine");
+      sourceFlaute.classList.toggle("active", source === "Flaute");
+      updateToggleButtonState();
+      if (currentActiveRect) {
+        playAudio(currentActiveRect);
+      }
+    }
+
+    sourceSine.addEventListener("click", () => setActiveSource("Sine"));
+    sourceFlaute.addEventListener("click", () => setActiveSource("Flaute"));
+
+    async function loadAudio(url) {
+      try {
+        const response = await fetch(url, { cache: 'force-cache' });
+        const arrayBuffer = await response.arrayBuffer();
+        const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+        return URL.createObjectURL(blob);
+      } catch (error) {
+        console.error(`Error al cargar ${url}:`, error);
+        return null;
+      }
+    }
+
+    function preloadAllAudio() {
+      const promises = [];
+      for (const rectId of rectsToLoad) {
+        if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
+        const sources = audioMapping[rectId];
+        for (const [source, states] of Object.entries(sources)) {
+          if (!audioPlayers[rectId][source]) audioPlayers[rectId][source] = {};
+          for (const [state, url] of Object.entries(states)) {
+            const promise = loadAudio(url).then(audioUrl => {
+              if (audioUrl) {
+                audioPlayers[rectId][source][state] = new Audio(audioUrl);
+              }
+            });
+            promises.push(promise);
+          }
+        }
+      }
+      return Promise.all(promises);
+    }
+
+    function playAudio(rectId) {
+      if (firstClick) {
+        firstClick = false;
+        showProgressBar();
+      }
+      stopAllAudio();
+      const players = audioPlayers[rectId];
+      if (!players || !players[currentSource]) return;
+
+      const mapping = audioMapping[rectId][currentSource];
+      const stateKey = mapping["997_no"] && mapping["997_act"] ? (isToggleEnabled ? "997_act" : "997_no") : "NA";
+      const chosenAudio = players[currentSource][stateKey];
+      if (!chosenAudio) return;
+
+      const rectElem = document.getElementById(rectId);
+      chosenAudio.currentTime = 0;
+
+      chosenAudio.play()
+        .then(() => {
+          rectElem.classList.add("green");
+          chosenAudio.onended = () => {
+            rectElem.classList.remove("green");
+            if (currentActiveRect === rectId) currentActiveRect = null;
+          };
+        })
+        .catch(e => {
+          console.error(`Error al reproducir ${rectId}:`, e);
+        });
+    }
+
+    function stopAllAudio() {
+      Object.values(audioPlayers).forEach(sources => {
+        Object.values(sources).forEach(states => {
+          Object.values(states).forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+          });
+        });
+      });
+      if (currentActiveRect) {
+        document.getElementById(currentActiveRect).classList.remove("green");
+      }
+    }
+
+    function updateToggleButtonState() {
+      if (currentSource === "Flaute" || currentActiveRect === "rect-24bits") {
+        toggleBtn.disabled = true;
+        toggleBtn.classList.remove("red");
+      } else if (!currentActiveRect || !audioMapping[currentActiveRect][currentSource]["997_no"]) {
+        toggleBtn.disabled = true;
+        toggleBtn.classList.remove("red");
+      } else {
+        toggleBtn.disabled = false;
+        toggleBtn.classList.toggle("red", !isToggleEnabled);
+      }
+    }
+
+    function showProgressBar() {
+      if (progressInterval) clearInterval(progressInterval);
+      progressContainer.style.display = "block";
+      progressFill.style.width = "0%";
+      let progress = 0;
+      progressInterval = setInterval(() => {
+        if (progress < 100) {
+          progress += 2;
+          progressFill.style.width = `${progress}%`;
+        }
+      }, 50);
+
+      setTimeout(() => {
+        preloadPromise.then(() => {
+          completeProgressBar();
+        });
+      }, 5000);
+    }
+
+    function completeProgressBar() {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+      }
+      progressFill.style.width = "100%";
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 200);
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      if (!toggleBtn.disabled) {
+        isToggleEnabled = !isToggleEnabled;
+        toggleBtn.classList.toggle("red", !isToggleEnabled);
+        if (currentActiveRect) {
+          playAudio(currentActiveRect);
+        }
+      }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      stopAllAudio();
+    });
+
+    rectsToLoad.forEach(rectId => {
+      const rectElem = document.getElementById(rectId);
+      rectElem.addEventListener("click", () => {
+        stopAllAudio();
+        currentActiveRect = rectId;
+        updateToggleButtonState();
+        playAudio(rectId);
+      });
+    });
+
+    // Ocultar el botón de maximización en iOS
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      document.getElementById('fullscreen-btn').style.display = 'none';
+    }
+
+    // Lógica para manejar la orientación
+    const rotationMessage = document.getElementById("rotation-message");
+    const mainContent = document.getElementById("main-content");
+
+    function checkOrientation() {
+      const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+      if (isPortrait) {
+        rotationMessage.style.display = "flex";
+        mainContent.style.display = "none";
+      } else {
+        rotationMessage.style.display = "none";
+        mainContent.style.display = "block";
+      }
+    }
+
+    checkOrientation();
+    window.addEventListener("orientationchange", checkOrientation);
+    window.addEventListener("resize", checkOrientation);
+
+    preloadPromise = preloadAllAudio();
+  </script>
+</body>
+</html>
