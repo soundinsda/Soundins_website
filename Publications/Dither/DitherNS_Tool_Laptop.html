@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!--VERSION v9.14-->
+<!DOCTYPE html> <!-- VERSION v9.15 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -422,22 +422,22 @@
     <img src="Soundins.png" id="logo" alt="Logo de Soundins">
   </a>
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v9.14</div>
+  <div id="version-text">v9.2</div>
   <div id="top-right-container">
     <div id="mode-help-container">
       <img id="mode-toggle" src="dark_mode.png" alt="Toggle Bright/Dark Mode">
-      <div id="help-toggle">Help On</div>
+      <div id="help-toggle">Ayuda Act</div>
     </div>
-    <div id="instructions-link">Read me</div>
+    <div id="instructions-link">  Léeme</div>
     <div id="language-toggle">English</div>
   </div>
   <div id="main-row" class="row">
     <div class="source-group">
-      <span class="source-label">Source</span>
+      <span class="source-label">Fuente</span>
       <div class="vertical-line"></div>
       <div class="toggle-source">
-        <div class="rect source-btn active" id="source-Sine">Sine</div>
-        <div class="rect source-btn" id="source-flaute">Instrument</div>
+        <div class="rect source-btn active" id="source-Sine">Seno</div>
+        <div class="rect source-btn" id="source-flaute">Instrumento</div>
       </div>
     </div>
     <div class="rect" id="rect-24bits">24 bits
@@ -556,7 +556,7 @@
   </div>
   <div id="loading-overlay">
     <div style="position: relative; text-align: center;">
-      <span class="loading-text">Loading Audio Files</span>
+      <span class="loading-text">Cargando Archivos de Audio</span>
       <div id="progress-bar"><div id="progress"></div></div>
     </div>
   </div>
@@ -845,7 +845,7 @@
     let loadedFiles = 0;
     let isLoopEnabled = false;
     let isHelpEnabled = true;
-    let currentLanguage = "English";
+    let currentLanguage = "Español";
     let isDarkMode = false;
 
     const sourceSine = document.getElementById("source-Sine");
@@ -1016,7 +1016,7 @@
       try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
-        const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+        const blob = new Blob([arrayBuffer], { type: 'audio/flac' });
         return URL.createObjectURL(blob);
       } catch (error) {
         console.error(`Error al cargar ${url}:`, error);
@@ -1028,41 +1028,46 @@
       const startTime = performance.now();
       console.log("Iniciando carga de audios...");
 
-      const totalVisibleFiles = Math.min(40, totalFiles); // Máximo 40 archivos para la barra visible
-      const firstStageFiles = Math.min(20, totalFiles); // Primeros 20 archivos
-      const secondStageFiles = totalVisibleFiles - firstStageFiles; // Siguientes 20 archivos
+      const audioPromises = [];
+      const audioDetails = [];
 
+      // Recolectar todas las URLs y detalles
       for (const [rectId, sources] of Object.entries(audioMapping)) {
         if (!audioPlayers[rectId]) audioPlayers[rectId] = {};
         for (const [source, states] of Object.entries(sources)) {
           if (!audioPlayers[rectId][source]) audioPlayers[rectId][source] = {};
           for (const [state, url] of Object.entries(states)) {
-            const audioUrl = await loadAudio(url);
-            if (audioUrl) {
-              audioPlayers[rectId][source][state] = new Audio(audioUrl);
-              loadedFiles++;
-
-              if (loadedFiles <= totalVisibleFiles) {
-                let progressPercent;
-                if (loadedFiles <= firstStageFiles) {
-                  progressPercent = (loadedFiles / firstStageFiles) * 50; // 0% a 50%
-                } else {
-                  progressPercent = 50 + ((loadedFiles - firstStageFiles) / secondStageFiles) * 50; // 50% a 100%
-                }
-                progress.style.width = `${progressPercent}%`;
-                console.log(`Cargado ${rectId} - ${source} - ${state}: ${progressPercent.toFixed(2)}%`);
-              }
-
-              if (loadedFiles === totalVisibleFiles) {
-                loadingOverlay.style.display = "none"; // Oculta la barra al llegar a 40 archivos
-              }
-            }
+            audioPromises.push(loadAudio(url));
+            audioDetails.push({ rectId, source, state });
           }
         }
       }
 
+      // Cargar todos los audios en paralelo y actualizar el progreso
+      const results = await Promise.all(audioPromises.map((promise, index) =>
+        promise.then(audioUrl => {
+          if (audioUrl) {
+            loadedFiles++;
+            const { rectId, source, state } = audioDetails[index];
+            audioPlayers[rectId][source][state] = new Audio(audioUrl);
+            const progressPercent = (loadedFiles / totalFiles) * 100;
+            progress.style.width = `${progressPercent}%`;
+            console.log(`Cargado ${rectId} - ${source} - ${state}: ${progressPercent.toFixed(2)}%`);
+          }
+          return audioUrl;
+        }).catch(error => {
+          console.error(`Fallo en la carga del archivo ${audioDetails[index].rectId} - ${audioDetails[index].source} - ${audioDetails[index].state}:`, error);
+          return null;
+        })
+      ));
+
+      // Ocultar el overlay cuando todo esté cargado
+      if (loadedFiles > 0) {
+        loadingOverlay.style.display = "none";
+      }
+
       const endTime = performance.now();
-      console.log(`Carga completada en ${(endTime - startTime) / 1000} segundos.`);
+      console.log(`Carga completada en ${(endTime - startTime) / 1000} segundos. Total cargados: ${loadedFiles} de ${totalFiles}`);
       updateAllLoadingBars();
     }
 
@@ -1205,14 +1210,20 @@
       }
     }
 
-    languageToggle.addEventListener("click", () => {
-      currentLanguage = currentLanguage === "English" ? "Español" : "English";
-      languageToggle.textContent = currentLanguage;
-      if (currentLanguage === "English") {
+    // Función para actualizar el texto del indicador de idioma
+    function updateLanguageToggleText() {
+      languageToggle.textContent = currentLanguage === "English" ? "Español" : "English";
+    }
+
+    // Función para cambiar el idioma
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      if (lang === "English") {
         instructionsLink.textContent = "Read me";
         document.getElementById("source-Sine").textContent = "Sine";
         document.getElementById("source-flaute").textContent = "Instrument";
         document.querySelector(".source-label").textContent = "Source";
+        document.querySelector(".loading-text").textContent = "Loading Audio Files";
         Object.entries(tooltipElements).forEach(([id, text]) => {
           const element = document.getElementById(id);
           if (element) {
@@ -1228,11 +1239,12 @@
             element.addEventListener("mouseleave", element.mouseleaveHandler);
           }
         });
-      } else {
+      } else { // Español
         instructionsLink.textContent = "  Léeme";
         document.getElementById("source-Sine").textContent = "Seno";
         document.getElementById("source-flaute").textContent = "Instrumento";
         document.querySelector(".source-label").textContent = "Fuente";
+        document.querySelector(".loading-text").textContent = "Cargando Archivos de Audio";
         Object.entries(tooltipElementsEs).forEach(([id, text]) => {
           const element = document.getElementById(id);
           if (element) {
@@ -1250,6 +1262,13 @@
         });
       }
       updateHelpToggleText();
+      updateLanguageToggleText(); // Actualiza el indicador al idioma opuesto
+    }
+
+    // Event listener para cambiar el idioma
+    languageToggle.addEventListener("click", () => {
+      const targetLanguage = languageToggle.textContent;
+      setLanguage(targetLanguage);
     });
 
     instructionsLink.addEventListener("click", () => {
@@ -1262,20 +1281,6 @@
         window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
       } else {
         window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
-      }
-    });
-
-    Object.entries(tooltipElements).forEach(([id, text]) => {
-      const element = document.getElementById(id);
-      if (element) {
-        element.mouseenterHandler = (e) => {
-          if (isHelpEnabled || id === "help-toggle" || id === "instructions-link") {
-            showTooltip(id, text, e.pageX, e.pageY);
-          }
-        };
-        element.mouseleaveHandler = () => hideAllTooltips();
-        element.addEventListener("mouseenter", element.mouseenterHandler);
-        element.addEventListener("mouseleave", element.mouseleaveHandler);
       }
     });
 
@@ -1301,8 +1306,8 @@
       modeToggle.src = isDarkMode ? "bright_mode.png" : "dark_mode.png";
     });
 
-    updateHelpToggleText();
-
+    // Inicializar el idioma al cargar la página
+    setLanguage(currentLanguage);
     preloadAllAudio();
   </script>
 </body>
