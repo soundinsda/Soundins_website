@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículo en Español</title>
+
+
+  <style>
+
+  body {
+        background-color: #f5f5f5;
+    }
+
+
+.header {
+    background-color: black;  /* Fondo negro */
+    color: white;             /* Texto en blanco */
+    padding: 20px;            /* Espaciado interno */
+    text-align: center;       /* Centrar el texto */
+}
+/* 1) Estilos de los encabezados */
+h1 {
+    font-size: 32px; /* Tamaño más grande para el título principal */
+    font-weight: bold;
+     text-align:center;
+}
+
+h2 {
+    font-size: 24px; /* Un poco más pequeño para los títulos de sección */
+    font-weight: bold;
+}
+
+/* 2) Estilo de los párrafos */
+p {
+    font-size: 20px;
+    text-align:justified;
+}
+
+/* 3) Párrafo en negrita */
+.bold {
+    font-weight: bold;
+}
+
+/* 4) Párrafo en negrita + cursiva */
+.bold-italic {
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* 5) Párrafo en negrita + cursiva + subrayado */
+.bold-italic-underline {
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+
+
+        /* Contenedor de cada imagen con su respectiva descripción */
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Ancho ajustado para cada imagen */
+        }
+
+        /* Contenedor principal para alinear los gráficos en fila */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Ajuste del tamaño de las imágenes */
+        .image-wrapper img {
+            width: 90%; /* Ocupará el ancho definido por .image-wrapper */
+            height: auto;
+        }
+
+        /* Estilos para los textos descriptivos */
+        .caption {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+  
+    sup {
+    font-size: 0.75em; /* Reduce el tamaño al 75% del tamaño del texto normal */
+        }      
+
+</style>
+
+
+</head>
+
+
+
+<body>
+    <div class="header">
+        <h1>Dihter & Noise Shaping. Un abordaje práctico.</h1>
+    </div>
+
+
+    <h2>Introducción</h1>
+    
+    <!-- Insertar introducción en español aquí -->
+    <p>Al reducir la profundidad de bits de una señal digital (por ejemplo de 24 a 16), se producirá lo que se denomina <em>“ruido de cuantización” </em>.
+Esto es producto de realizar un <em>“truncado”</em> (sacar los 8 bits menos significativos) de la señal de 24 y así llegar a la de 16 bits. A fin de reducir los efectos adversos de este proceso, es que aplicamos una técnica llamada <strong>“Dithering”</strong>.<br><br>
+Este artículo no intenta presentar la teoría detallada del proceso (que por cierto hay muchísima bibliografía al respecto), sino darle un abordaje más práctico, el cual es un poco más difícil de encontrar.<sup><a href="#nota1">[1]</a></sup> </p>
+    
+   <h2>Dither. Un poco de teoría.</h1>
+    
+<p>Ya dijimos que el “ruido de cuantización” es un efecto que aparece luego de haber reducido la cantidad de bits a través del truncado la señal. La forma de minimizar este ruido de cuantización es a través del proceso de Ditherning el cuál es simplemente el agregado de ruido blanco (aleatorio y uniformemente distribuido) a la señal original, antes de la reducción.<br><br>
+¿Agrego ruido blanco para eliminar “ruido de cuantización”? Esto no parece tener mucho sentido. Y es verdad, en una primera lectura, esto no parece ser un proceso muy útil.<br><br>
+La realidad es que el llamado “ruido de cuantización” <b>no es un ruido</b> como tal, sino más bien una <b>distorsión</b>. Por definición, para que una señal sea considerada como ruido, debe ser aleatoria y, por lo tanto, no debe estar relacionada (correlacionada) con otras variables. Y resulta ser que el ruido de cuantización, si lo está, y su relación es con el nivel de la señal a cuantizar.<br><br>
+Por lo tanto, lo que buscamos con proceso de<b> Dithering</b> es <b>cambiar distorsión por ruido</b>.<sup><a href="#nota1">[2]</a></sup> <br><br>
+¿Y por qué eso sería un buen cambio? Bueno, resulta que la psicoacústica humana tolera mejor el ruido que la distorsión. Esta última resulta mucho más molesta y distractiva que el ruido en sí mismo. </p>
+
+   <h2>Dither. La práctica.</h1>
+
+
+<p>
+A continuación se presentan los resultados de mediciones realizadas con una señal de 24-bits 997Hz a 2LSB (least significant bits) a la que se ha procesado con distintos plugins o DAWs, para convertirla a 16-bits. Como se mencionó anteriormente, con el proceso intentamos bajar la distorsión a costa de un mayor ruido, y por lo tanto podemos medir parámetros relacionados con estos fenómenos, a saber: TD (Total Distortion) y SNR (Signal to Noise Ratio).
+<br><br><br><br>
+
+</p>
+   <div class="image-container">
+        <div class="image-wrapper">
+            <img src="Figure1.png" alt="Figura 1">
+            <p class="caption">Figura 1: Distorsión total (TD) en la señal convertida a 16 bits.</p>
+        </div>
+        <div class="image-wrapper">
+            <img src="Figure2.png" alt="Figura 2">
+            <p class="caption">Figura 2: Relación Señal a ruido (SNR). Si el proceso no baja significativamente<br> la distorsión, no se procede a medir este parámetro (na).</p>
+        </div>
+    </div>
+
+
+<p>En la Figura 1 podemos ver el impacto en la distorsión en las señales cuantizadas a 16-bits con el agregado de dither.
+Vemos como la <strong>distorsión se reduce drásticamente</strong> (o se anula) con respecto a la señal original sin dither. <em>¡Exactamente lo que queríamos lograr!</em><br><br>
+En la Figura 2 vemos el precio a pagar por esa reducción. Se observa fácilmente la <b>degradación de la relación SNR</b>, debido al haber introducido el dither (aka ruido).<br><br>
+Vemos también que hay algunos procesadores que arrojan unos resultados particulares (Waves L2, Weiss DS1 v2.6.1, Maxim). <br><br>
+En relación a estos, me gustaría solo comentar el caso del plugin de Softube Weiss DS1, en el cuál la versión actual (v2.6.1) incorpora autoblanking mientras que la anterior 
+(v2.5.9) no lo tenía. Esto hace que para los niveles muy bajos de señal (como los utilizados en estas mediciones), la nueva versión no aplique dithering y, por lo ende, vemos 
+los mismos valores de distorsión y SNR que en la señal de 16-bits sin dither.<sup><a href="#nota1">[3]</a></sup>  Por tal motivo, el comportamiento de ambas versiones es diferente para éstos niveles.<br><br>
+La selección de la intensidad del dither (en aquellos plugin que lo permiten), afectan al porcentaje de muestras que cambian de estado, o dicho de otra manera, que modifican 
+su nivel con respecto a la señal original. Valores típicos para dither de baja intensidad rondan el 20% , para medios un 30% y altos de 35% en adelante.<sup><a href="#nota1">[4]</a></sup> <br><br>
+Algo interesante para mencionar es que la aplicación del dither es <em>independiente en cada canal</em>. Por ejemplo, para el caso del procesamiento con dithering en stereo, el generado para el canal izquierdo será independiente al generado para el derecho.<br><br>
+</p>
+
+
+<h2>El Noise Shaping.</h2>
+
+<p>
+
+El modelado del ruido (Noise Shaping) es una técnica que me va a permitir, redistribuir el ruido a zonas de frecuencia de menor percepción acústica. <b>Si el dither agrega ruido uniformemente distribuido, el noise shaping lo “acomoda”</b>.<br><br>
+En otras palabras, se trata de reducir la potencia de ruido en zonas de mayor sensibilidad psicoacústica (medias y medias altas) y aumentarla en las zonas de menor sensibilidad      (altas frecuencias). Con esto logro <em>mejorar la percepción de la relación señal a ruido</em>.<br><br>
+En la teoría, la potencia total de ruido se mantiene inalterada (solo existe redistribución) pero en la implementación práctica la misma aumenta luego de aplicar noise shaping. Sin embargo, esto es transparente para la escucha, ya que el oyente efectivamente percibirá una reducción 
+del ruido frente a la señal útil, logrando una mejora notable en la calidad total percibida.<br><br>
+Los distintos niveles de noise shaping (en el caso que sea seleccionable), tiene que ver con la cantidad de potencia desplazada hacia las frecuencias psicoacústicamente menos sensibles.<br><br>
+A diferencia del Dihter, que no tiene mucha personalización posible<sup><a href="#nota1">[5]</a></sup> , el Noise shaping si puede tener (y de hecho lo tiene) un trabajo de ajuste importante. Muchos de los fabricantes utilizan distribución de ruido basada en modelos desarrollados por ellos de manera de optimizar los efectos psicoacústicos. Es así que vemos siglas como: POWr, MBIT, IDR, UV22, etc. <br><br>
+De forma sencilla se puede insertar un analizador de espectro, y analizar las curvas de ruido de las distintas marcas y modelos de plugins.<br><br>
+</p>
+
+<h2>Resultados.</h2>
+
+
+<p>
+
+En la Figura 3, vemos reflejado los valores obtenidos de Noise Power(Npow) y Noise to Mask Ratio (NMR)<sup><a href="#nota1">[6]</a></sup> para distintos niveles de dithering de los plugins medidos. 
+La convención de etiquetado es: <br><br>
+Nombre plugin / Tipo de Dither / Intensidad Noise Shaping. <br><br>
+
+Por ejemplo: 		   Ozone                 /    Medium               /            Low :
+
+indica que corresponde al plugin Ozone con un Dither Medium y una intensidad de  Noise Shaping Low.<br><br>
+
+</p>
+<div style="text-align: center; margin-top: 20px;">
+    <img src="Figure3.png" alt="Figura 3" style="width: 70%; height: auto;">
+    <p class="caption">Figura 3: Niveles de Noise Power y Noise to Mask Ratio para cada combinación medida. Si el procesador presenta autoblanking, no se muestra en el gráfico.</p>
+</div>
+
+
+<p>
+<br>Recordar que el Noise Power se relaciona con la potencia de ruido que se encuentra en la banda y el NMR a cuánto psicoacústicamente se percibe dicho ruido. Mayores niveles de Noise Power (menos negativos) significan mayor ruido presente mientras que menores valores de NMR (más negativos) resultan en una menor percepción del mismo.<br><br>
+Se puede apreciar cómo, a medida que aumento la intensidad del noise shaping, el parámetro NPower (potencia de ruido sobre toda la banda) aumenta y en NMR (que es un parámetro de enmascaramiento de ruido) en general disminuye.<br><br>
+
+</p>
+
+<h2>La escucha. Comparaciones</h2>
+
+<p>
+
+Si bien los resultados son indicadores que nos orientan hacia las características de la señal procesada, no nos dan una idea cabal de cómo se escucha cada combinación.<br> ¿Es una distorsión de x% algo tolerable a estos niveles?  ¿qué tan bueno o malo es un valor de SNR de ydB?. O ¿cuánto es la diferencia de percepción entre los distintos valores de NMR?<br><br>
+Para que el lector pueda tener una representación auditiva, he creado una página en donde se pueden escuchar cada una de las señales procesadas, con el fin de poder ayudarlo a seleccionar el Dither y/o Noise Shaping que más le resulte conveniente.<br><br>
+Se puede validar cómo mediciones con una potencia de ruido (NPower) menor efectivamente se traduce en una menor percepción auditiva, o incluso combinaciones con el mismo valor de NPower pero menor NMR, se perciben con menor carga ruidosa, validando los resultados de las mediciones.<br><br>
+La realidad es que como todo esto ocurre a niveles muy bajos de señal, en la mayoría de los casos no será un tema de extrema preocupación. Pero como siempre estamos en la búsqueda de la excelencia…¿por qué privarse de elegir lo que más nos sirva?<br><br>
+El siguiente link apunta a una página donde he creado una herramienta para poder comparar varias combinaciones de Dither y Noise Shaping, tanto para una señal senoidal como para una de instrumento.<br><br>
+Si bien se puede acceder desde cualquier dispositivo, se recomienda ingresar desde una PC ya que se accederá a la versión completa. El acceso desde un dispositivo móvil, redireccionará a la versión reducida de la herramienta.<br><br>
+
+<a href="https://www.soundins.com.ar/Publications/Dither/DitherNS_Tool_Main.html" target="_blank">Dither & NS Benchmark Tool</a>
+
+<br><br><br>
+
+Ing Pablo Panitta<br>
+Soundins<br><br>
+</p>
+
+<h2>Notas</h2>
+<p id="nota1">[1] Importante: El presente trabajo no constituye ninguna representación, recomendación o preferencia hacia ninguna marca o modelo mencionado. No se realiza un ranking de mejor o peor funcionamiento, sino solamente se exponen los resultados.</p>
+<p id="nota2">[2] El agregado de ruido a la señal a recuantizar hace decorrelacionar el error de cuantización del nivel de señal, y por lo tanto lo transformamos en verdaderamente ruido en vez de distorsión.</p>
+<p id="nota1">[3] Ingenieros de Softube me han confirmado que se ha introducido este cambio con el fin de reducir el consumo de CPU para señales de entrada de tan bajo nivel.</p>
+<p id="nota2">[4] La intensidad del Dither también puede relacionarse con los LSB (nivel) agregados (ticamente 1, 2 o 3 LSB). Generalmente para distribuciones triangulares, lo común son 2 LSB.</p>
+<p id="nota1">[5] Parámetros que pueden variar en el Dither son su intensidad y su distribución (Rectangular, Triangular, Gaussiana). En audio, el uso común y recomendado es la distribución triangular (aunque unos pocos plugin permiten seleccionar el tipo a aplicar)</p>
+<p id="nota2">[6] Noise to Mask Ratio (NMR) es una medida de enmascaramiento del ruido. Valores más negativos indican que el perfil de ruido se encuentra más alejado del umbral de enmascaramiento, presentando una menor percepción psicoacústica.</p>
+
+
+
+
+</body>
+</html>
