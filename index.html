@@ -202,9 +202,19 @@
         }
 
         /* Ajustes para orientación horizontal en móviles */
-        @media only screen and (max-width: 768px) and (orientation: landscape) {
+        @media only screen and (max-width: 1024px) and (orientation: landscape) {
+            body {
+                height: auto; /* Permite que el contenido crezca más allá de la pantalla */
+                overflow-y: auto; /* Habilita el scroll vertical */
+            }
             img {
-                margin-top: 100px; /* Desplaza la imagen hacia abajo en horizontal */
+                margin-top: 80px; /* Desplaza la imagen hacia abajo */
+            }
+            #credit {
+                margin-top: -10vh; /* Desplazamiento relativo basado en la altura de la pantalla */
+            }
+            #email {
+                margin-top: -5vh; /* Desplazamiento relativo basado en la altura de la pantalla */
             }
         }
 
