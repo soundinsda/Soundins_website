@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v4.2 -->
+<!DOCTYPE html><!--Mobile_v4.3 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -326,7 +326,7 @@
         margin-bottom: 10px;
       }
     }
-    /* Media Query para tablets */
+    /* Media Query para tablets intermedios */
     @media (min-width: 401px) and (max-width: 768px) {
       #main-row {
         width: 100%;
@@ -341,28 +341,28 @@
       }
     }
     /* Media Query para tablets en cualquier orientación */
-    @media (min-width: 1024px) and (max-width: 2732px) {
+    @media (min-width: 800px) {
       #table-container {
-        transform: translateY(50px); /* Desplaza la matriz principal hacia abajo en tablets */
+        transform: translateY(60px); /* Desplaza la matriz principal hacia abajo en tablets */
       }
       /* Desplazamiento horizontal y vertical combinado para los elementos solicitados */
       .source-label {
-        transform: translate(60px, 15px); /* 15px derecha, 15px abajo (5px base + 10px extra) */
+        transform: translate(65px, 15px); /* 15px derecha, 15px abajo (5px base + 10px extra) */
       }
       #source-Sine, #source-flaute {
-        transform: translate(60px, 10px); /* 15px derecha, 10px abajo (0px base + 10px extra) */
+        transform: translate(65px, 10px); /* 15px derecha, 10px abajo (0px base + 10px extra) */
       }
       #rect-24bits {
-        transform: translate(60px, 12px); /* 15px derecha, 12px abajo (2px base + 10px extra) */
+        transform: translate(65px, 12px); /* 15px derecha, 12px abajo (2px base + 10px extra) */
       }
       #rect-main {
-        transform: translate(60px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
+        transform: translate(65px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
       }
       #toggle-btn {
-        transform: translate(60px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
+        transform: translate(65px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
       }
       #stop-btn {
-        transform: translate(60px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
+        transform: translate(65px, 19px); /* 15px derecha, 19px abajo (9px base + 10px extra) */
       }
     }
     /* Estilos para dark mode */
@@ -458,7 +458,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v4.2Mobile</div>
+    <div id="version-text">v4.3Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
