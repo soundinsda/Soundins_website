@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v3.7 -->
+<!DOCTYPE html><!--Mobile_v3.8 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -334,8 +334,11 @@
         padding: 0 10px;
         box-sizing: border-box;
       }
+    }
+    /* Media Query para tablets en posición horizontal */
+    @media (min-width: 401px) and (max-width: 768px) and (orientation: landscape) {
       td > .rect {
-        margin-left: 5px; /* Desplazamiento leve a la derecha solo para los rectángulos en la tabla */
+        margin-left: 5px; /* Desplazamiento a la derecha solo en tablet horizontal */
       }
     }
     /* Estilos para dark mode (modificados) */
@@ -431,7 +434,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v3.7Mobile</div>
+    <div id="version-text">v3.8Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
