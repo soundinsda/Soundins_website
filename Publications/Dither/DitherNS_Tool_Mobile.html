@@ -292,7 +292,7 @@
     }
     /* Mensaje de rotación */
     #rotation-message {
-      position: absolute;
+      position: fixed; /* Cambiado a fixed para cubrir todo */
       top: 0;
       left: 0;
       width: 100vw;
@@ -304,7 +304,7 @@
       align-items: flex-start;
       font-size: 24px;
       text-align: center;
-      z-index: 1000;
+      z-index: 1000; /* Muy alto para estar encima de todo */
       display: none;
     }
     #rotation-text {
@@ -606,7 +606,7 @@
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publicateness/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
       },
       "rect-34": {
         "Sine": {
@@ -900,15 +900,33 @@
 
     const rotationMessage = document.getElementById("rotation-message");
     const mainContent = document.getElementById("main-content");
+    const headerBackground = document.getElementById("header-background");
+    const headerElements = [
+      document.getElementById("fullscreen-btn"),
+      document.getElementById("readme-link"),
+      document.getElementById("language-menu"),
+      document.getElementById("logo"),
+      document.querySelector("h1"),
+      document.getElementById("version-text"),
+      document.getElementById("mode-toggle-container")
+    ];
 
     function checkOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
       if (isPortrait && window.innerWidth <= 768) {
         rotationMessage.style.display = "flex";
         mainContent.style.display = "none";
+        headerBackground.style.display = "none"; /* Ocultar header-background */
+        headerElements.forEach(element => {
+          if (element) element.style.display = "none"; /* Ocultar elementos del encabezado */
+        });
       } else {
         rotationMessage.style.display = "none";
         mainContent.style.display = "block";
+        headerBackground.style.display = "block"; /* Mostrar header-background */
+        headerElements.forEach(element => {
+          if (element) element.style.display = ""; /* Restaurar visibilidad */
+        });
       }
     }
 
