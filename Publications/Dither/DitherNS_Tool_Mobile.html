@@ -335,10 +335,10 @@
         box-sizing: border-box;
       }
     }
-    /* Media Query para tablets en posición horizontal */
-    @media (min-width: 401px) and (max-width: 768px) and (orientation: landscape) {
-      td > .rect {
-        margin-left: 5px; /* Desplazamiento a la derecha solo en tablet horizontal */
+    /* Media Query para tablets en posición horizontal, incluyendo iPad Pro y Galaxy Tab S4 */
+    @media (min-width: 401px) and (max-width: 2732px) and (orientation: landscape) {
+      #table-container table td > .rect {
+        transform: translateX(23px); /* Desplaza los rectángulos a la derecha solo en tablet horizontal */
       }
     }
     /* Estilos para dark mode (modificados) */
