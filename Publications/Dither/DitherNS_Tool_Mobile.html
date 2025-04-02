@@ -334,11 +334,8 @@
         padding: 0 10px;
         box-sizing: border-box;
       }
-      #main-row > * {
-        margin-left: 5px; /* Desplazamiento hacia la derecha para los elementos de #main-row */
-      }
-      td {
-        padding-left: 10px; /* Desplazamiento hacia la derecha para los rectángulos en la tabla */
+      td > .rect {
+        margin-left: 5px; /* Desplazamiento leve a la derecha solo para los rectángulos en la tabla */
       }
     }
     /* Estilos para dark mode (modificados) */
@@ -576,9 +573,7 @@
       "rect-32": {
         "Sine": {
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max.flac",
-          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Public
-
-ations/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
+          "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong_Max.flac" }
       },
@@ -914,7 +909,7 @@ ations/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
 
     function checkOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-      if (isPortrait) {
+      if (isPortrait && window.innerWidth <= 768) { // Aplica a móviles y tablets
         rotationMessage.style.display = "flex";
         mainContent.style.display = "none";
       } else {
