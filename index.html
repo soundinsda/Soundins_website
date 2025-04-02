@@ -149,6 +149,98 @@
         .submenu-item:hover {
             background-color: #555;
         }
+
+        /* Media queries para móviles */
+        @media only screen and (max-width: 768px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px;
+                overflow-y: auto;
+            }
+            h1 {
+                position: static;
+                font-size: 18px;
+                margin: 10px 0;
+            }
+            #menu-bar {
+                position: static;
+                height: 40px;
+                margin: 10px 0;
+            }
+            #menu {
+                position: static;
+                left: 0;
+                width: 100%;
+            }
+            #menu-title {
+                font-size: 18px;
+                padding: 8px;
+            }
+            #menu-content {
+                top: 100%;
+                width: 100%;
+                left: 0;
+            }
+            #dither-submenu {
+                position: static;
+                width: 100%;
+                left: 0;
+            }
+            img {
+                max-width: 60%;
+                margin: 20px 0;
+            }
+            #credit {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+            #email {
+                font-size: 20px;
+                margin: 10px 0;
+            }
+        }
+
+        /* Ajustes para orientación horizontal en móviles */
+        @media only screen and (max-width: 768px) and (orientation: landscape) {
+            img {
+                margin-top: 100px; /* Desplaza la imagen hacia abajo en horizontal */
+            }
+        }
+
+        /* Ajustes para orientación vertical en móviles */
+        @media only screen and (max-width: 768px) and (orientation: portrait) {
+            body {
+                padding: 0; /* Reset padding para vertical */
+            }
+            h1 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                margin: 5px 0;
+                font-size: 18px;
+            }
+            #menu-bar {
+                position: absolute;
+                top: 50px; /* Justo debajo del h1 */
+                height: 40px;
+                margin: 0;
+            }
+            #menu {
+                position: absolute;
+                top: 50px; /* Sobre la barra */
+                left: 0; /* Contra el margen izquierdo */
+                width: auto;
+            }
+            #menu-title {
+                font-size: 18px;
+                padding: 5px 10px;
+            }
+            img {
+                margin-top: -30px; /* Espacio para que la imagen no se superponga con los elementos superiores */
+            }
+        }
     </style>
 </head>
 <body>
