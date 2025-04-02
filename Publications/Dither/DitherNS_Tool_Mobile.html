@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v4.4 -->
+<!DOCTYPE html><!--Mobile_v4.7 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -15,22 +15,22 @@
     }
     body {
       font-family: Arial, sans-serif;
-      background-color: #EEEEF2;
+      background-color: #EEEEF2; /* Fondo claro por defecto */
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       transition: background-color 0.3s, color 0.3s;
     }
-    /* Header background */
+    /* Header background - Fijo y siempre negro */
     #header-background {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 60px;
-      background-color: black;
-      z-index: -1;
+      background-color: black; /* Siempre negro */
+      z-index: 0; /* Detrás de los elementos interactivos */
     }
     /* Logo */
     #logo {
@@ -125,9 +125,15 @@
       height: 32px;
     }
     /* Contenedor principal */
+    #main-content {
+      width: 100%;
+      padding-bottom: 40px;
+      position: relative;
+      z-index: 1; /* Encima de header-background */
+      margin-top: 60px; /* Desplaza el contenido debajo del encabezado fijo */
+    }
     #main-row {
       width: 90%;
-      margin-top: 60px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -272,7 +278,7 @@
       width: 0%;
       height: 100%;
       background-color: #4CAF50;
-      transition: width 5s linear; /* Llenado continuo en 5 segundos */
+      transition: width 5s linear;
     }
     #progress-text {
       margin-top: -21px;
@@ -310,12 +316,6 @@
       50% { opacity: 0.1; }
       100% { opacity: 1; }
     }
-    /* Contenedor principal */
-    #main-content {
-      width: 100%;
-      padding-bottom: 40px;
-      position: relative;
-    }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
       #main-row {
@@ -337,7 +337,7 @@
     /* Media Query para tablets en posición horizontal */
     @media (min-width: 1024px) and (max-width: 2732px) and (orientation: landscape) {
       #table-container table td > .rect {
-        transform: translateX(30px);/*antes 15px*/
+        transform: translateX(30px);
       }
     }
     /* Media Query para tablets en cualquier orientación */
@@ -368,12 +368,6 @@
     body.dark-mode {
       background-color: #121212;
       color: #ffffff;
-    }
-    body.dark-mode #main-content {
-      background-color: #121212;
-    }
-    body.dark-mode #header-background {
-      background-color: #1f1f1f;
     }
     body.dark-mode h1 {
       color: #ffffff;
@@ -442,22 +436,31 @@
   </style>
 </head>
 <body>
+  <!-- Header background fuera de main-content -->
+  <div id="header-background"></div>
+  <!-- Elementos del encabezado directamente en el body -->
+  <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
+  <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+  <div id="language-menu">
+    <button onclick="openInstructions('en')">English</button>
+    <button onclick="openInstructions('es')">Español</button>
+  </div>
+  <a href="http://www.soundins.com.ar">
+    <img src="Soundins.png" id="logo" alt="Logo de Soundins">
+  </a>
+  <h1>Dither & NS Benchmark Tool</h1>
+  <div id="version-text">v4.7Mobile</div>
+  <div id="mode-toggle-container">
+    <button id="mode-toggle-btn">
+      <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
+    </button>
+  </div>
+  <!-- Mensaje de rotación -->
   <div id="rotation-message">
     <div id="rotation-text">Por favor, rote el dispositivo a la posición horizontal<br><br>Please rotate the device to horizontal position</div>
   </div>
+  <!-- Contenido principal -->
   <div id="main-content">
-    <div id="header-background"></div>
-    <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
-    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
-    <div id="language-menu">
-      <button onclick="openInstructions('en')">English</button>
-      <button onclick="openInstructions('es')">Español</button>
-    </div>
-    <a href="http://www.soundins.com.ar">
-      <img src="Soundins.png" id="logo" alt="Logo de Soundins">
-    </a>
-    <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v4.4Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -474,11 +477,6 @@
       <div class="rect" id="rect-main">16 bits No Dither</div>
       <button id="toggle-btn">997Hz</button>
       <button id="stop-btn"></button>
-    </div>
-    <div id="mode-toggle-container">
-      <button id="mode-toggle-btn">
-        <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
-      </button>
     </div>
     <div id="table-container">
       <table>
@@ -856,24 +854,20 @@
     }
 
     function showProgressBar() {
-      progressContainer.style.display = "block"; // Muestra la barra
-      progressFill.style.width = "0%"; // Reinicia a.ConcurrentLinkedQueue 0%
-      
-      // Forzar un reflow para reiniciar la transición
+      progressContainer.style.display = "block";
+      progressFill.style.width = "0%";
       void progressFill.offsetWidth;
-      
-      progressFill.style.width = "100%"; // Inicia la transición a 100% en 5 segundos
-
+      progressFill.style.width = "100%";
       setTimeout(() => {
         preloadPromise.then(() => {
-          completeProgressBar(); // Oculta la barra después de 5 segundos
+          completeProgressBar();
         });
       }, 5000);
     }
 
     function completeProgressBar() {
-      progressContainer.style.display = "none"; // Oculta la barra
-      progressFill.style.width = "0%"; // Reinicia para el próximo uso
+      progressContainer.style.display = "none";
+      progressFill.style.width = "0%";
     }
 
     toggleBtn.addEventListener("click", () => {
