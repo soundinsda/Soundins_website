@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v3.9 -->
+<!DOCTYPE html><!--Mobile_v4.0 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -56,7 +56,7 @@
     /* Versión */
     #version-text {
       position: absolute;
-      top: 10px;/*antes 46*/
+      top: 10px;
       right: 10px;
       font-size: clamp(8px, 2vw, 10px);
       color: #888;
@@ -107,11 +107,11 @@
       cursor: pointer;
       z-index: 2;
     }
-    /* Contenedor de toggle de modo (modificado) */
+    /* Contenedor de toggle de modo */
     #mode-toggle-container {
       position: absolute;
-      top: 27px; /* Misma altura vertical que el botón de maximización */
-      right: calc(3px + 32px + 10px); /* A la izquierda del botón de maximización */
+      top: 27px;
+      right: calc(3px + 32px + 10px);
       z-index: 2;
     }
     #mode-toggle-btn {
@@ -301,7 +301,6 @@
       z-index: 1000;
       display: none;
     }
-    /* Texto con animación de parpadeo */
     #rotation-text {
       margin-top: 220px;
       animation: blink-message 1s infinite;
@@ -314,8 +313,8 @@
     /* Contenedor principal */
     #main-content {
       width: 100%;
-      padding-bottom: 40px; /* Incrementado para permitir más desplazamiento vertical */
-      position: relative; /* Para que los elementos absolutos se posicionen respecto a este contenedor */
+      padding-bottom: 40px;
+      position: relative;
     }
     /* Media Queries para pantallas pequeñas */
     @media (max-width: 400px) {
@@ -335,13 +334,19 @@
         box-sizing: border-box;
       }
     }
-    /* Media Query para tablets en posición horizontal, excluyendo celulares */
+    /* Media Query para tablets en posición horizontal (desplazamiento horizontal de rectángulos) */
     @media (min-width: 1024px) and (max-width: 2732px) and (orientation: landscape) {
       #table-container table td > .rect {
         transform: translateX(15px); /* Desplaza los rectángulos a la derecha solo en tablets horizontal */
       }
     }
-    /* Estilos para dark mode (modificados) */
+    /* Media Query para tablets en cualquier orientación (desplazamiento vertical de la matriz principal) */
+    @media (min-width: 1024px) and (max-width: 2732px) {
+      #table-container {
+        transform: translateY(20px); /* Desplaza la matriz principal hacia abajo en tablets */
+      }
+    }
+    /* Estilos para dark mode */
     body.dark-mode {
       background-color: #121212;
       color: #ffffff;
@@ -411,10 +416,10 @@
       height: 7px;
     }
     #table-container::-webkit-scrollbar-thumb {
-      background-color: #000; /* Negro para modo bright */
+      background-color: #000;
     }
     body.dark-mode #table-container::-webkit-scrollbar-thumb {
-      background-color: #fff; /* Blanco para modo dark */
+      background-color: #fff;
     }
   </style>
 </head>
@@ -434,7 +439,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v3.9Mobile</div>
+    <div id="version-text">v4.0Mobile</div>
     <div id="progress-container">
       <div id="progress-bar">
         <div id="progress-fill"></div>
@@ -645,27 +650,19 @@
       "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
     ];
 
-    // Función para alternar la visibilidad del menú de idiomas y centrarlo debajo de "Readme"
     function toggleLanguageMenu() {
       const menu = document.getElementById("language-menu");
       const readmeLink = document.getElementById("readme-link");
       const rect = readmeLink.getBoundingClientRect();
 
-      // Mostrar el menú temporalmente para calcular su ancho
       menu.style.display = "block";
       const menuWidth = menu.offsetWidth;
-
-      // Calcular el centro del elemento "Readme"
       const readmeCenterX = rect.left + rect.width / 2;
-
-      // Calcular la posición izquierda del menú para centrarlo
       const menuLeft = readmeCenterX - menuWidth / 2 + window.scrollX;
 
-      // Aplicar las posiciones
-      menu.style.top = `${rect.bottom + window.scrollY}px`; // Justo debajo de "Readme"
-      menu.style.left = `${menuLeft}px`; // Centrado horizontalmente
+      menu.style.top = `${rect.bottom + window.scrollY}px`;
+      menu.style.left = `${menuLeft}px`;
 
-      // Alternar visibilidad
       if (menu.dataset.isVisible === "true") {
         menu.style.display = "none";
         menu.dataset.isVisible = "false";
@@ -675,14 +672,12 @@
       }
     }
 
-    // Función para abrir las instrucciones según el idioma seleccionado
     function openInstructions(lang) {
       const url = lang === "en" ? "instructionsmobile_en.html" : "instructionsmobile_es.html";
       window.open(url, "_blank");
       toggleLanguageMenu();
     }
 
-    // Función para alternar el modo de pantalla completa
     document.getElementById('fullscreen-btn').addEventListener('click', function() {
       if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
         var elem = document.documentElement;
@@ -708,7 +703,6 @@
       }
     });
 
-    // Función para actualizar el ícono del modo
     function updateModeIcon() {
       const isDarkMode = document.body.classList.contains('dark-mode');
       const modeIcon = document.getElementById('mode-icon');
@@ -721,20 +715,17 @@
       }
     }
 
-    // Evento para alternar el modo y actualizar el ícono
     document.getElementById('mode-toggle-btn').addEventListener('click', function() {
       document.body.classList.toggle('dark-mode');
       updateModeIcon();
       localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
 
-    // Inicializar el modo oscuro basado en el almacenamiento local
     if (localStorage.getItem('darkMode') === 'true') {
       document.body.classList.add('dark-mode');
     }
     updateModeIcon();
 
-    // Listener para actualizar el modo al regresar a la página
     window.addEventListener('focus', function() {
       if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
@@ -901,18 +892,16 @@
       });
     });
 
-    // Ocultar el botón de maximización en iOS
     if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
       document.getElementById('fullscreen-btn').style.display = 'none';
     }
 
-    // Lógica para manejar la orientación
     const rotationMessage = document.getElementById("rotation-message");
     const mainContent = document.getElementById("main-content");
 
     function checkOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-      if (isPortrait && window.innerWidth <= 768) { // Aplica a móviles y tablets
+      if (isPortrait && window.innerWidth <= 768) {
         rotationMessage.style.display = "flex";
         mainContent.style.display = "none";
       } else {
