@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v4.7 -->
+<!DOCTYPE html><!--Mobile_v4.5 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -94,18 +94,6 @@
     }
     #language-menu button:hover {
       background-color: #f0f0f0;
-    }
-    /* Botón de maximización */
-    #fullscreen-btn {
-      position: absolute;
-      top: 23px;
-      right: 3px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 27px;
-      cursor: pointer;
-      z-index: 2;
     }
     /* Contenedor de toggle de modo */
     #mode-toggle-container {
@@ -439,7 +427,6 @@
   <!-- Header background fuera de main-content -->
   <div id="header-background"></div>
   <!-- Elementos del encabezado directamente en el body -->
-  <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
   <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
   <div id="language-menu">
     <button onclick="openInstructions('en')">English</button>
@@ -449,7 +436,7 @@
     <img src="Soundins.png" id="logo" alt="Logo de Soundins">
   </a>
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v4.7Mobile</div>
+  <div id="version-text">v4.5Mobile</div>
   <div id="mode-toggle-container">
     <button id="mode-toggle-btn">
       <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
@@ -606,7 +593,7 @@
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publicateness/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
       },
       "rect-34": {
         "Sine": {
@@ -692,31 +679,6 @@
       window.open(url, "_blank");
       toggleLanguageMenu();
     }
-
-    document.getElementById('fullscreen-btn').addEventListener('click', function() {
-      if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
-        var elem = document.documentElement;
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      }
-    });
 
     function updateModeIcon() {
       const isDarkMode = document.body.classList.contains('dark-mode');
@@ -894,15 +856,10 @@
       });
     });
 
-    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-      document.getElementById('fullscreen-btn').style.display = 'none';
-    }
-
     const rotationMessage = document.getElementById("rotation-message");
     const mainContent = document.getElementById("main-content");
     const headerBackground = document.getElementById("header-background");
     const headerElements = [
-      document.getElementById("fullscreen-btn"),
       document.getElementById("readme-link"),
       document.getElementById("language-menu"),
       document.getElementById("logo"),
