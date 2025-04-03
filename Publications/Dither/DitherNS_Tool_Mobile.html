@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v4.9 -->
+<!DOCTYPE html><!--Mobile_v4.7 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -95,7 +95,7 @@
     #language-menu button:hover {
       background-color: #f0f0f0;
     }
-    /* Botón de maximización - Por defecto visible */
+    /* Botón de maximización */
     #fullscreen-btn {
       position: absolute;
       top: 23px;
@@ -106,13 +106,6 @@
       font-size: 27px;
       cursor: pointer;
       z-index: 2;
-      display: block;
-    }
-    /* Ocultar en móviles (teléfonos) */
-    @media only screen and (max-width: 991px) {
-      #fullscreen-btn {
-        display: none !important;
-      }
     }
     /* Contenedor de toggle de modo */
     #mode-toggle-container {
@@ -334,7 +327,7 @@
       }
     }
     /* Media Query para tablets intermedios */
-    @media (min-width: 401px) and (max-width: 767px) {
+    @media (min-width: 401px) and (max-width: 768px) {
       #main-row {
         width: 100%;
         padding: 0 10px;
@@ -348,7 +341,7 @@
       }
     }
     /* Media Query para tablets en cualquier orientación */
-    @media (min-width: 768px) {
+    @media (min-width: 800px) {
       #table-container {
         transform: translateY(55px);
       }
@@ -456,7 +449,7 @@
     <img src="Soundins.png" id="logo" alt="Logo de Soundins">
   </a>
   <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v4.9Mobile</div>
+  <div id="version-text">v4.7Mobile</div>
   <div id="mode-toggle-container">
     <button id="mode-toggle-btn">
       <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
@@ -613,7 +606,7 @@
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publicateness/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
       },
       "rect-34": {
         "Sine": {
@@ -700,40 +693,28 @@
       toggleLanguageMenu();
     }
 
-    // Solo agregar el event listener si el botón existe
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    if (fullscreenBtn) {
-      fullscreenBtn.addEventListener('click', function() {
-        if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
-          var elem = document.documentElement;
-          if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-          } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-          } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-          } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-          }
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
+    document.getElementById('fullscreen-btn').addEventListener('click', function() {
+      if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
+        var elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
         }
-      });
-    }
-
-    // Respaldo en JavaScript para eliminar el botón en móviles
-    window.addEventListener('load', function() {
-      const fullscreenBtn = document.getElementById('fullscreen-btn');
-      if (fullscreenBtn && window.innerWidth <= 767) {
-        fullscreenBtn.remove(); // Elimina el botón del DOM en móviles
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
       }
     });
 
@@ -913,6 +894,10 @@
       });
     });
 
+    if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+      document.getElementById('fullscreen-btn').style.display = 'none';
+    }
+
     const rotationMessage = document.getElementById("rotation-message");
     const mainContent = document.getElementById("main-content");
     const headerBackground = document.getElementById("header-background");
@@ -928,7 +913,7 @@
 
     function checkOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-      if (isPortrait && window.innerWidth <= 767) {
+      if (isPortrait && window.innerWidth <= 768) {
         rotationMessage.style.display = "flex";
         mainContent.style.display = "none";
         headerBackground.style.display = "none"; /* Ocultar header-background */
