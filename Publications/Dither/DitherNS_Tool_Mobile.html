@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v4.7 -->
+<!DOCTYPE html><!--Mobile_v4.8 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -22,12 +22,18 @@
       align-items: center;
       transition: background-color 0.3s, color 0.3s;
     }
-    /* Header background - Fijo y siempre negro */
+    /* Contenedor del encabezado que se mueve con el scroll */
+    #header-container {
+      position: relative;
+      width: 100vw;
+      height: 60px;
+    }
+    /* Header background - Ahora dentro del contenedor */
     #header-background {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
-      width: 100vw;
+      width: 100%;
       height: 60px;
       background-color: black; /* Siempre negro */
       z-index: 0; /* Detrás de los elementos interactivos */
@@ -130,7 +136,6 @@
       padding-bottom: 40px;
       position: relative;
       z-index: 1; /* Encima de header-background */
-      margin-top: 60px; /* Desplaza el contenido debajo del encabezado fijo */
     }
     #main-row {
       width: 90%;
@@ -436,24 +441,25 @@
   </style>
 </head>
 <body>
-  <!-- Header background fuera de main-content -->
-  <div id="header-background"></div>
-  <!-- Elementos del encabezado directamente en el body -->
-  <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
-  <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
-  <div id="language-menu">
-    <button onclick="openInstructions('en')">English</button>
-    <button onclick="openInstructions('es')">Español</button>
-  </div>
-  <a href="http://www.soundins.com.ar">
-    <img src="Soundins.png" id="logo" alt="Logo de Soundins">
-  </a>
-  <h1>Dither & NS Benchmark Tool</h1>
-  <div id="version-text">v4.7Mobile</div>
-  <div id="mode-toggle-container">
-    <button id="mode-toggle-btn">
-      <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
-    </button>
+  <!-- Contenedor del encabezado que se mueve con el scroll -->
+  <div id="header-container">
+    <div id="header-background"></div>
+    <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
+    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+    <div id="language-menu">
+      <button onclick W="openInstructions('en')">English</button>
+      <button onclick="openInstructions('es')">Español</button>
+    </div>
+    <a href="http://www.soundins.com.ar">
+      <img src="Soundins.png" id="logo" alt="Logo de Soundins">
+    </a>
+    <h1>Dither & NS Benchmark Tool</h1>
+    <div id="version-text">v4.8Mobile</div>
+    <div id="mode-toggle-container">
+      <button id="mode-toggle-btn">
+        <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
+      </button>
+    </div>
   </div>
   <!-- Mensaje de rotación -->
   <div id="rotation-message">
@@ -606,7 +612,7 @@
           "997_act": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
           "997_no": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
         },
-        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publicateness/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
       },
       "rect-34": {
         "Sine": {
@@ -900,33 +906,18 @@
 
     const rotationMessage = document.getElementById("rotation-message");
     const mainContent = document.getElementById("main-content");
-    const headerBackground = document.getElementById("header-background");
-    const headerElements = [
-      document.getElementById("fullscreen-btn"),
-      document.getElementById("readme-link"),
-      document.getElementById("language-menu"),
-      document.getElementById("logo"),
-      document.querySelector("h1"),
-      document.getElementById("version-text"),
-      document.getElementById("mode-toggle-container")
-    ];
+    const headerContainer = document.getElementById("header-container");
 
     function checkOrientation() {
       const isPortrait = window.matchMedia("(orientation: portrait)").matches;
       if (isPortrait && window.innerWidth <= 768) {
         rotationMessage.style.display = "flex";
         mainContent.style.display = "none";
-        headerBackground.style.display = "none"; /* Ocultar header-background */
-        headerElements.forEach(element => {
-          if (element) element.style.display = "none"; /* Ocultar elementos del encabezado */
-        });
+        headerContainer.style.display = "none"; /* Ocultar el contenedor del encabezado */
       } else {
         rotationMessage.style.display = "none";
         mainContent.style.display = "block";
-        headerBackground.style.display = "block"; /* Mostrar header-background */
-        headerElements.forEach(element => {
-          if (element) element.style.display = ""; /* Restaurar visibilidad */
-        });
+        headerContainer.style.display = "block"; /* Mostrar el contenedor del encabezado */
       }
     }
 
