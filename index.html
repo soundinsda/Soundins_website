@@ -29,18 +29,10 @@
             animation: wave 2s infinite ease-in-out;
         }
         @keyframes wave {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(2deg);
-            }
-            50% {
-                transform: rotate(-2deg);
-            }
-            75% {
-                transform: rotate(2deg);
-            }
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(2deg); }
+            50% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
         }
         #credit {
             color: white;
@@ -62,7 +54,6 @@
         #email a:hover {
             text-decoration: underline;
         }
-        /* Banda gris plomo */
         #menu-bar {
             position: absolute;
             top: 50px;
@@ -72,7 +63,6 @@
             background-color: #1a2b5f;
             z-index: 1;
         }
-        /* Estilos para el menú */
         #menu {
             position: absolute;
             top: 50px;
@@ -204,24 +194,53 @@
         /* Ajustes para orientación horizontal en móviles */
         @media only screen and (max-width: 1024px) and (orientation: landscape) {
             body {
-                height: auto; /* Permite que el contenido crezca más allá de la pantalla */
-                overflow-y: auto; /* Habilita el scroll vertical */
+                height: auto;
+                overflow-y: auto;
+            }
+            h1 {
+                position: absolute;
+                top: 5px; /* Fijo en la parte superior */
+                left: 0;
+                width: 100%;
+                font-size: 18px;
+                margin: 0; /* Sin márgenes variables */
+            }
+            #menu-bar {
+                position: absolute;
+                top: 30px; /* Debajo de h1, consistente */
+                left: 0;
+                width: 100%;
+                height: 40px;
+            }
+            #menu {
+                position: absolute;
+                top: 30px; /* Alineado con #menu-bar */
+                left: 10px; /* A la izquierda con margen fijo */
+                width: auto;
+            }
+            #menu-title {
+                font-size: 18px; /* Tamaño consistente */
+                padding: 10px;
+            }
+            #menu-content {
+                top: 40px; /* Debajo del título */
+                left: 0;
+                width: 200px;
+            }
+            #dither-submenu {
+                left: 100%;
+                top: 0;
+                width: 200px;
             }
             img {
-                margin-top: 80px; /* Desplaza la imagen hacia abajo */
-            }
-            #credit {
-                margin-top: -10vh; /* Desplazamiento relativo basado en la altura de la pantalla */
-            }
-            #email {
-                margin-top: -5vh; /* Desplazamiento relativo basado en la altura de la pantalla */
+                margin-top: 80px; /* Espacio fijo para evitar superposición */
             }
         }
 
         /* Ajustes para orientación vertical en móviles */
         @media only screen and (max-width: 768px) and (orientation: portrait) {
             body {
-                padding: 0; /* Reset padding para vertical */
+                padding: 0;
             }
             h1 {
                 position: absolute;
@@ -233,14 +252,14 @@
             }
             #menu-bar {
                 position: absolute;
-                top: 50px; /* Justo debajo del h1 */
+                top: 50px;
                 height: 40px;
                 margin: 0;
             }
             #menu {
                 position: absolute;
-                top: 50px; /* Sobre la barra */
-                left: 0; /* Contra el margen izquierdo */
+                top: 50px;
+                left: 0;
                 width: auto;
             }
             #menu-title {
@@ -248,16 +267,14 @@
                 padding: 5px 10px;
             }
             img {
-                margin-top: -30px; /* Espacio para que la imagen no se superponga con los elementos superiores */
+                margin-top: -30px;
             }
         }
     </style>
 </head>
 <body>
     <h1>Site under construction</h1>
-    <!-- Banda gris plomo -->
     <div id="menu-bar"></div>
-    <!-- Menú agregado -->
     <div id="menu">
         <div id="menu-title">Publications</div>
         <div id="menu-content">
@@ -277,8 +294,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var logo = document.getElementById("logo");
-
-            // Intenta diferentes rutas para cargar la imagen
             var possiblePaths = [
                 "Soundins.png",
                 "./Soundins.png",
@@ -311,11 +326,9 @@
 
             findValidImage(possiblePaths);
 
-            // Funcionalidad del menú
             var ditherArticleBtn = document.getElementById("dither-article");
             var ditherToolBtn = document.getElementById("dither-tool");
 
-            // Redirigir al hacer clic en las opciones del submenú
             ditherArticleBtn.addEventListener("click", function() {
                 window.location.href = "https://soundins.com.ar/Publications//Dither_Article/DitherNS_Article.html";
             });
