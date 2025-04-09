@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---version 2.5--->
+<!DOCTYPE html><!---version 2.6--->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -122,34 +122,6 @@
 }
 
 @media (max-width: 768px) {
-    /* Reducción del tamaño de imágenes de ecuaciones específicas */
-    .figure img[src*="Eq2.png"],
-    .figure img[src*="Eq2b.png"] {
-        max-width: 80%;
-        height: auto;
-    }
-
-    /* Mejora de tooltips para móviles (simulación de tooltip persistente debajo del enlace) */
-    .tooltip::after {
-        left: 0;
-        top: 100%;
-        width: 90vw;
-        transform: translateY(10px);
-        font-size: 14px;
-        background-color: #f8f8f8;
-    }
-
-    /* En móviles desactivamos el salto de página al hacer click */
-    .tooltip {
-        pointer-events: none;
-    }
-
-    .tooltip sup a {
-        pointer-events: auto;
-        text-decoration: none;
-        color: inherit;
-    }
-
     body {
         font-size: 16px;
         padding: 10px;
@@ -177,6 +149,13 @@
         height: auto;
     }
 
+    /* Reducción del tamaño de imágenes específicas de ecuaciones */
+    .figure img[src*="Eq2.png"],
+    .figure img[src*="Eq2b.png"] {
+        width: 60%;
+        height: auto;
+    }
+
     .button-container {
         flex-direction: column;
         gap: 10px;
@@ -191,11 +170,25 @@
         padding-left: 10px;
     }
 
+    /* Tooltip accesible para móviles */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
     .tooltip::after {
-        left: 0;
-        top: 100%;
-        width: 90vw;
-        transform: translateY(10px);
+        content: attr(data-tooltip);
+        display: block;
+        position: static;
+        background-color: #eee;
+        color: #000;
+        padding: 6px 8px;
+        border-radius: 5px;
+        box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        margin-top: 8px;
+        font-size: 14px;
+        white-space: pre-wrap;
     }
 }
 
@@ -204,7 +197,7 @@
 <body>
 
 <div class="titu">Efecto de Batido en Señales sub Nyquist</div>
-<div class="titu"><span style="font-size: 30px;">Pablo Panitta v2.5</span></div>
+<div class="titu"><span style="font-size: 30px;">Pablo Panitta v2.6</span></div>
 
 <h1>Introducción</h1>
 <p> El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre
