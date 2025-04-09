@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---version 2.4 responsive--->
+<!DOCTYPE html><!---version 2.5--->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -122,6 +122,34 @@
 }
 
 @media (max-width: 768px) {
+    /* Reducción del tamaño de imágenes de ecuaciones específicas */
+    .figure img[src*="Eq2.png"],
+    .figure img[src*="Eq2b.png"] {
+        max-width: 80%;
+        height: auto;
+    }
+
+    /* Mejora de tooltips para móviles (simulación de tooltip persistente debajo del enlace) */
+    .tooltip::after {
+        left: 0;
+        top: 100%;
+        width: 90vw;
+        transform: translateY(10px);
+        font-size: 14px;
+        background-color: #f8f8f8;
+    }
+
+    /* En móviles desactivamos el salto de página al hacer click */
+    .tooltip {
+        pointer-events: none;
+    }
+
+    .tooltip sup a {
+        pointer-events: auto;
+        text-decoration: none;
+        color: inherit;
+    }
+
     body {
         font-size: 16px;
         padding: 10px;
@@ -175,8 +203,8 @@
 </head>
 <body>
 
-<div class="titu">Efecto de Batido en Señales sub Nyquist 2.4</div>
-<div class="titu"><span style="font-size: 30px;">Pablo Panitta</span></div>
+<div class="titu">Efecto de Batido en Señales sub Nyquist</div>
+<div class="titu"><span style="font-size: 30px;">Pablo Panitta v2.5</span></div>
 
 <h1>Introducción</h1>
 <p> El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre
