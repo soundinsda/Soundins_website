@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---version 2.3--->
+<!DOCTYPE html><!---version 2.4 responsive--->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -120,6 +120,57 @@
 .tooltip:hover::after {
     opacity: 1;
 }
+
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+        padding: 10px;
+        margin: 0 5px;
+    }
+
+    .titu {
+        font-size: 28px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    st {
+        font-size: 14px;
+    }
+
+    .figure img {
+        width: 100%;
+        height: auto;
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .speaker-button {
+        font-size: 18px;
+    }
+
+    ul {
+        margin-left: 15px;
+        padding-left: 10px;
+    }
+
+    .tooltip::after {
+        left: 0;
+        top: 100%;
+        width: 90vw;
+        transform: translateY(10px);
+    }
+}
+
 </style>
 </head>
 <body>
