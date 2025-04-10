@@ -204,7 +204,7 @@
 <body>
 
 <div class="titu">Efecto de Batido en Señales sub Nyquist</div>
-<div class="titu"><span style="font-size: 30px;">Pablo Panitta v2.6e</span></div>
+<div class="titu"><span style="font-size: 30px;">Pablo Panitta v2.6f</span></div>
 
 <h1>Introducción</h1>
 <p> El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre
@@ -337,9 +337,9 @@ implicancias en la representación gráfica de las señales y su impacto en la c
         <img src="Pictures/Eq3.png"><br>
     </div>
 
-   <p>¿Qué logro con esta modificación? Alterar la característica de obtener exactamente n muestras cada m ciclos de la señal. Vale decir, ahora las n muestras <i><u>ya no caerán en la misma fase de la señal cada m ciclos</i></u>, sino que irán variando su posición.</p>
+   <p>¿Qué logro con esta modificación? <i><u>Anular la característica de invariabilidad</i></u> de las posiciones de las muestras dentro de ciclo de la señal. Aunque seguirá habiendo una cantidad de n muestras cada m ciclos, la ubicación de las mismas dentro de la señal irá variando.</p>
   
-   <p>Y ¿en algún momento volverán las muestras a caer en la misma fase de la onda? O sea ¿Existirá una frecuencia a la cual se repite el ciclo? Si, y justamente ese es el valor ε.</p>
+   <p>Y ¿en algún momento volverán las muestras a caer en la misma fase de la onda? O sea ¿Existirá una frecuencia a la cual se repite el ciclo? La respuesta es sí, y justamente ese es el valor <span style="font-size: 28px;">ε</span>.</p>
     <div class="figure">
         <img src="Pictures/fig13a.png"><br>
         <img src="Pictures/fig13b.png"><br>
@@ -348,7 +348,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
     </div>
     <p>En la Fig 13 podemos observar la distribución de las muestras <strong>“formando” ondas senoidales cuya cantidad corresponde con el valor del factor “<em>n</em>” y de una frecuencia de valor <em>ε</strong></em>.</p>
     <p>O sea, en la fórmula <em>F= Fs/2 - 20</em> se formarán 2 ondas, en la <em>Fs/F = Fs/3 - 20</em>, 3 ondas y en la <em>F = Fs/5 - 20</em>, 5 ondas entrelazadas. Todas ellas tienen una frecuencia de 20 Hz (tal como es el valor <em>ε</em>).</p>
-    <p>Notar que estas ondas son productos de una distribución gráfica las muestras de la señal y todas poseen una frecuencia de <em>ε</em> Hz. Quiere decir que <em>ε</em>, es la <i><u>frecuencia a la cual las muestras vuelven a producirse en la misma fase</i></u> del ciclo de la señal. En los ejemplos de la sección anterior (muestreo entero), las muestras siempre caían en la misma fase del ciclo de onda (<em>ε = 0</em>), mientras que ahora esas mismas <strong>fases se repiten a una frecuencia <em>ε</strong></em>.<sup><a href="#nota4" class="tooltip" data-tooltip="Recordar que el valor debe ser siempre m/n < 0.5 para satisfacer el criterio de Nyquist.">[4]</a></sup></p>
+    <p>Notar que estas ondas son productos de una distribución gráfica las muestras de la señal y todas poseen una frecuencia de <em>ε</em> Hz. Quiere decir que <em>ε</em>, es la <i><u>frecuencia a la cual las muestras vuelven a producirse en la misma fase</i></u> del ciclo de la señal. Es fácil notar que si ε=0, la frecuencia de variación es 0 y, por lo tanto, las muestras ocurren siempre en la misma fase de la señal.</p>
 
     <h1>6. Proceso de reconstrucción</h1>
     <p>Llama la atención el hecho que, si quisiera reconstruir la señal a través de la unión de las muestras, no estaría obteniendo la misma señal original. Tal como se observa en la Fig 14, si aplico el proceso de muestreo a una 
@@ -361,11 +361,12 @@ implicancias en la representación gráfica de las señales y su impacto en la c
     <p>Sin embargo, el método teórico para recuperar totalmente una señal analógica (léase sin pérdidas), es a través de un proceso de convolución entre las muestras y la función SINC. Está totalmente fuera del alcance de este trabajo, explicar detalladamente el proceso de reconstrucción (interpolación), pero lo podemos pensar de la siguiente manera. Si, a una señal limitada en frecuencia (y que cumpla con los requerimientos de Nyquist) la quisiera recuperar, podría filtrarla con un filtro pasa bajo, de manera de quedarme con la banda de frecuencias por debajo de <em>Fs/2</em> y rechazar toda su componente espectral que esté por arriba de la misma. En la Fig 15 podemos ver el proceso.</p>
     <div class="figure">
         <img src="Pictures/fig15.png" alt="Reconstrucción en dominio de la frecuencia">
-        <p><st>Fig 15. Proceso de reconstrucción de la señal en la dimensión frecuencial</st></p>
+        <p><st>Fig 15. Proceso de reconstrucción de la señal en ldominio de la frecuencia</st></p>
     </div>
     <p>El mecanismo de este proceso de filtrado, pero visto desde el dominio del tiempo (recordar siempre la dualidad frecuencia – tiempo), significaría una convolución entre cada una de las muestras y la función SINC, que es la representación en el tiempo de una respuesta ideal de pasa bajo.</p>
     <div class="figure">
-        <img src="Pictures/fig16.png" alt="Reconstrucción en el dominio del tiempo</st></p>
+        <img src="Pictures/fig16.png" alt="Reconstrucción en el dominio del tiempo">
+        <p><st>Fig 16. Proceso de reconstrucción de la señal en dominio del tiempo</st></p>
     </div>
     <p>El problema es que en la teoría este proceso posee una reconstrucción perfecta, pero en la práctica no es realizable ya que la función SINC se extiende desde -∞ a +∞. Como esto no es posible a los fines prácticos, debemos acotarla temporalmente y aplicarle una ventana. Este recorte temporal de la función, tendrá su impacto en el dominio de la frecuencia en que la respuesta del <u><i>filtro pasa bajo ya no será la ideal y eso traerá “distorsiones” en la reconstrucción de la señal analógica</u></i>. Y son precisamente esos errores lo que hacen que la señal reconstruida sea en mayor o menor medida, igual a la original.</p>
 
@@ -432,7 +433,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
     <h1><br>8. Impacto en el audio digital</h1>
     <p>Pero si esto es así… <i>¿cómo no es un completo desastre todo lo que escuchamos a través del audio digital?</i></p>
     <p>Bueno, hay que tener en cuenta dos aspectos importantes que se aplican al proceso explicado:</p>
-    <p> 1) Esto, si bien no es exclusivo, <strong>es más notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 5).</p>
+    <p> 1) Esto, si bien no es exclusivo, <strong>es  notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 5).</p>
     <p> 2) El efecto es extremadamente notorio en <strong>frecuencias muy próximas a Nyquist</strong> y va perdiendo impacto a medida que me alejo de la misma. Si mi frecuencia de Nyquist es de 22050 Hz, <i><u>el efecto empieza a desvanecerse a partir de los 20 kHz hacia abajo</i></u>. O sea, son frecuencias elevadas para una audición promedio del humano.<sup><a href="#nota7" class="tooltip" data-tooltip="Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz).">[7]</a></sup></p>
     <p>En la Fig 17 podemos evidenciar el impacto en relación con la frecuencia analógica a muestrear. A medida que la frecuencia <em>F</em> se aleja de <em>Fs/2</em>, el efecto se va diluyendo (el batido va perdiendo intensidad).</p>
     <div class="figure">
