@@ -270,7 +270,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 </div>
 <p>En la Fig 7 podemos claramente apreciar un efecto de batido sobre la señal de 20kHz. Esto se ve muy parecido al efecto descripto en la sección anterior con 2 frecuencias analógicas. Pero si aquí estamos trabajando solo con 1 frecuencia… ¿cómo puede estar ocurriendo esto?</p>
 <p>Tratemos de entender qué está pasando en este caso. Tengo una señal analógica a la entrada de 20kHz que al muestrearla a una tasa de 44.1kHz y que luego, al volver a convertirla a analógica<sup><span class="only-desktop"><a class="tooltip" data-tooltip="El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras." href="#nota2">[2]</a></span><span class="only-mobile"><a href="#nota2">[2]</a></span></sup>, se presenta como una señal de 20kHz pero modulada en amplitud a 4.1kHz.
-    Todo daría a pensar que, por lo visto anteriormente, debería existir otra señal tal que “module” a la de entrada para dar como resultado, la señal modulada. Pues confirmemos esto en un analizador de espectro.</p>
+    Todo daría a pensar que, por lo visto anteriormente, debería existir otra señal que interactúe con ella para dar como resultado este efecto de batido. Pues confirmemos esto en un analizador de espectro.</p>
 <div class="figure">
 <img alt="Espectro de señal 20kHz muestreada a 44kHz" src="Pictures/fig9.png"/>
 <p><st>Fig 8. Espectro de señal de 20kHz muestreada a 44kHz</st></p>
