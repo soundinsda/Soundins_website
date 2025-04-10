@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <!---version 2.9--->
 <html lang="es">
 <head>
@@ -123,6 +124,11 @@
 }
 
 @media (max-width: 768px) {
+
+.pablo span {
+    font-size: 20px !important;
+}
+
     body {
         font-size: 16px;
         padding: 10px;
@@ -200,11 +206,20 @@
     }
 }
 
+
+
+.only-desktop { display: inline; }
+.only-mobile { display: none; }
+
+@media (max-width: 768px) {
+    .only-desktop { display: none; }
+    .only-mobile { display: inline; }
+}
 </style>
 </head>
 <body>
 <div class="titu">Efecto de Batido en Señales sub Nyquist</div>
-<div class="titu"><span style="font-size: 30px;">Pablo Panitta</span></div>
+<div class="titu pablo"><span>Pablo Panitta</span></div>
 <h1>Introducción</h1>
 <p> El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre
 dos señales analógicas y los efectos que se presentan. Luego analizaremos lo que ocurre en el ámbito digital entre una señal y su cercanía con la frecuencia de Nyquist. Se abordará las
@@ -230,7 +245,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p><st>Fig 4. Resultado de la suma de 2 señales senoidales de 1000Hz y 1100Hz</st></p><br/>
 </div>
 <p>Notar el efecto que tiene la fase en la suma de señales para ambas combinaciones. Mientras la misma no juega un papel importante cuando la diferencia de frecuencias es grande, sí lo hace cuando son frecuencias cercanas, produciendo cancelaciones o refuerzos en la magnitud de la suma.</p>
-<p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><a class="tooltip" data-tooltip="La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará importancia más adelante cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido." href="#nota1">[1]</a></sup></p>
+<p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará importancia más adelante cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
 <p>En ambos casos, en un análisis espectral, veré las dos frecuencias senoidales puras y nada más.</p>
 <div class="figure">
 <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5a.png"/>
@@ -254,7 +269,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p><st>Fig 7. Muestreo de señal analógica con frecuencia cercana a Nyquist</st></p>
 </div>
 <p>En la Fig 7 podemos claramente apreciar un efecto de batido sobre la señal de 20kHz. Esto se ve muy parecido al efecto descripto en la sección anterior con 2 frecuencias analógicas. Pero si aquí estamos trabajando solo con 1 frecuencia… ¿cómo puede estar ocurriendo esto?</p>
-<p>Tratemos de entender qué está pasando en este caso. Tengo una señal analógica a la entrada de 20kHz que al muestrearla a una tasa de 44.1kHz y que luego, al volver a convertirla a analógica<sup><a class="tooltip" data-tooltip="El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras." href="#nota2">[2]</a></sup>, se presenta como una señal de 20kHz pero modulada en amplitud a 4.1kHz.
+<p>Tratemos de entender qué está pasando en este caso. Tengo una señal analógica a la entrada de 20kHz que al muestrearla a una tasa de 44.1kHz y que luego, al volver a convertirla a analógica<sup><span class="only-desktop"><a class="tooltip" data-tooltip="El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras." href="#nota2">[2]</a></span><span class="only-mobile"><a href="#nota2">[2]</a></span></sup>, se presenta como una señal de 20kHz pero modulada en amplitud a 4.1kHz.
     Todo daría a pensar que, por lo visto anteriormente, debería existir otra señal tal que “module” a la de entrada para dar como resultado, la señal modulada. Pues confirmemos esto en un analizador de espectro.</p>
 <div class="figure">
 <img alt="Espectro de señal 20kHz muestreada a 44kHz" src="Pictures/fig9.png"/>
@@ -286,7 +301,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <div class="figure">
 <img src="Pictures/Eq2b.png"/><br/>
 </div>
-<p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese 2/5 significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras<sup><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre m/n &lt; 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></sup>. </p>
+<p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese 2/5 significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre m/n &lt; 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup>. </p>
 <p>Esta característica tiene una consecuencia muy importante y es que, no solo existen la misma cantidad de muestras n en cada m ciclo(s), sino que se además <strong>se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
 <p>Pero ¿a dónde queremos llegar con esto? ¿Qué tiene que ver con lo que veo en la pantalla? Un poco más de paciencia que ya estamos más cerca.</p>
 <h1>5. Patrones cíclicos.</h1>
@@ -313,7 +328,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <img alt="Proceso de reconstrucción con batido" src="Pictures/fig14.png"/>
 <p><st>Fig 13. a) Señal analógica b) Muestras de la señal analógica c) Proceso de reconstrucción. Se puede observar que a) y c) son distintas</st></p>
 </div>
-<p>La explicación viene por el lado de cómo se realiza la reconstrucción de la señal analógica a partir de sus muestras. El proceso de interpolación consiste en reconstruir el valor de la señal entre muestras, y eso <strong>no se logra simplemente “uniendo” las muestras entre sí de manera gráfica</strong>. Existen diversas maneras de “unir” (interpolar) gráficamente las muestras. Por ejemplo, una podría ser la de hacerlo de forma lineal (línea recta), a través de un polinomio de orden N (curva), o algún otro tipo.<sup><a class="tooltip" data-tooltip="Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc." href="#nota4">[4]</a></sup><sup><a class="tooltip" data-tooltip="Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)" href="#nota5">[5]</a></sup></p>
+<p>La explicación viene por el lado de cómo se realiza la reconstrucción de la señal analógica a partir de sus muestras. El proceso de interpolación consiste en reconstruir el valor de la señal entre muestras, y eso <strong>no se logra simplemente “uniendo” las muestras entre sí de manera gráfica</strong>. Existen diversas maneras de “unir” (interpolar) gráficamente las muestras. Por ejemplo, una podría ser la de hacerlo de forma lineal (línea recta), a través de un polinomio de orden N (curva), o algún otro tipo.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc." href="#nota4">[4]</a></span><span class="only-mobile"><a href="#nota4">[4]</a></span></sup><sup><span class="only-desktop"><a class="tooltip" data-tooltip="Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)" href="#nota5">[5]</a></span><span class="only-mobile"><a href="#nota5">[5]</a></span></sup></p>
 <p>Sin embargo, el método teórico para recuperar totalmente una señal analógica (léase sin pérdidas), es a través de un proceso de convolución entre las muestras y la función SINC. Está totalmente fuera del alcance de este trabajo, explicar detalladamente el proceso de reconstrucción (interpolación), pero lo podemos pensar de la siguiente manera. Si, a una señal limitada en frecuencia (y que cumpla con los requerimientos de Nyquist) la quisiera recuperar, podría filtrarla con un filtro pasa bajo, de manera de quedarme con la banda de frecuencias por debajo de <em>Fs/2</em> y rechazar toda su componente espectral que esté por arriba de la misma. En la Fig 14 podemos ver el proceso.</p>
 <div class="figure">
 <img alt="Reconstrucción en el dominio de la frecuencia" src="Pictures/fig15.png"/>
@@ -386,7 +401,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p>Pero si esto es así… <i>¿cómo no es un completo desastre todo lo que escuchamos a través del audio digital?</i></p>
 <p>Bueno, hay que tener en cuenta dos aspectos importantes que se aplican al proceso explicado:</p>
 <p> 1) Esto, si bien no es exclusivo, <strong>es  notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 5).</p>
-<p> 2) El efecto es extremadamente notorio en <strong>frecuencias muy próximas a Nyquist</strong> y va perdiendo impacto a medida que me alejo de la misma. Si mi frecuencia de Nyquist es de 22050 Hz, <i><u>el efecto empieza a desvanecerse a partir de los 20 kHz hacia abajo</u></i>. O sea, son frecuencias elevadas para una audición promedio del humano.<sup><a class="tooltip" data-tooltip="Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz)." href="#nota6">[6]</a></sup></p>
+<p> 2) El efecto es extremadamente notorio en <strong>frecuencias muy próximas a Nyquist</strong> y va perdiendo impacto a medida que me alejo de la misma. Si mi frecuencia de Nyquist es de 22050 Hz, <i><u>el efecto empieza a desvanecerse a partir de los 20 kHz hacia abajo</u></i>. O sea, son frecuencias elevadas para una audición promedio del humano.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz)." href="#nota6">[6]</a></span><span class="only-mobile"><a href="#nota6">[6]</a></span></sup></p>
 <p>En la Fig 16 podemos evidenciar el impacto en relación con la frecuencia analógica a muestrear. A medida que la frecuencia <em>F</em> se aleja de <em>Fs/2</em>, el efecto se va diluyendo (el batido va perdiendo intensidad).</p>
 <div class="figure">
 <img alt="Batido a distintas frecuencias" src="Pictures/fig17.png"/>
@@ -418,8 +433,8 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p>Según la identidad trigonométrica:</p>
 <div class="figure">
 <img src="Pictures/Eq1.png"/><br/>
-</div class="figure">
-<p>podemos crear el mismo efecto de batido, pero <i><u>multiplicando señales senoidales</u></i> (en vez de sumarlas) modificando las frecuencias para cumplir con dicha identidad.<sup><a class="tooltip" data-tooltip="Este es el método utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión." href="#nota7">[7]</a></sup>  En nuestro ejemplo de A=1000Hz y B=1100Hz, las nuevas frecuencias para lograr el mismo efecto serían:</p>
+</div>
+<p>podemos crear el mismo efecto de batido, pero <i><u>multiplicando señales senoidales</u></i> (en vez de sumarlas) modificando las frecuencias para cumplir con dicha identidad.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Este es el método utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup>  En nuestro ejemplo de A=1000Hz y B=1100Hz, las nuevas frecuencias para lograr el mismo efecto serían:</p>
 <div class="equation-center">
 <p>F1 = (A+B)/2 = 1050Hz</p>
 <p>F2 = (A-B)/2 = 50Hz</p>
@@ -429,7 +444,6 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p>Fig 21. Efecto de batido a través del producto de señales</p>
 </div>
 <p>Notar que la frecuencia del batido, sigue siendo 50Hz (tal como en el ejemplo de la suma) que es, precisamente, la frecuencia de la moduladora.</p>
-</div>
 
 <h1>Referencias</h1>
 <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará importancia más adelante cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido.</p>
@@ -442,7 +456,6 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p>Las simulaciones realizadas en el presente trabajo se han desarrollado en MATLAB™.</p>
 <p>Placa de Sonido Universal Audio, Apollo Twin™.</p>
 <p>Instrumento de medición Tektronix™ TBS 1052B.</p>
-
 <h1>Bibliografía</h1>
 <ul>
 <li>“Sub-Nyquist artefacts and sampling moiré effects” - Isaac Amidror, Ecole Polytechnique Fédérale de Lausanne (EPFL), Feb.Concurrent2015</li>
