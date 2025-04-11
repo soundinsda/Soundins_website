@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<!---version 3.0--->
+<!---version 3.1--->
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -226,7 +226,7 @@ dos señales analógicas y los efectos que se presentan. Luego analizaremos lo q
 implicancias en la representación gráfica de las señales y su impacto en la conversión D/A para su reproducción.</p>
 <h1>1. Suma de dos señales analógicas</h1>
 <p>Supongamos que tenemos 2 señales senoidales analógicas y las sumamos. ¿Qué resultado veremos en la pantalla de un osciloscopio? Si la diferencia entre ambas frecuencias es grande (digamos superior a 10 veces), veremos que la senoidal de mayor frecuencia se encontrará superpuesta sobre la de baja frecuencia.</p>
-<p>Pero a medida que dicha diferencia de frecuencias se achica, comenzaremos a apreciar cada vez mas, que la senoide de mayor frecuencia se encuentra <strong>“batida”</strong> por la de menor frecuencia.</p>
+<p>Pero a medida que dicha diferencia  se achica, comenzaremos a apreciar cada vez mas, que la senoide de mayor frecuencia se encuentra <strong>“batida”</strong> por la de menor frecuencia.</p>
 <p>En las Fig 1, Fig 2, Fig 3 y Fig 4 se pueden apreciar los efectos recién mencionados.</p>
 <div class="figure">
 <img alt="Dos señales senoidales de 1000Hz y 50 Hz" src="Pictures/fig1.png"/>
@@ -244,15 +244,14 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <img alt="Resultado de la suma de 1000Hz y 1100Hz" src="Pictures/fig4.png"/>
 <p><st>Fig 4. Resultado de la suma de 2 señales senoidales de 1000Hz y 1100Hz</st></p><br/>
 </div>
-<p>Notar el efecto que tiene la fase en la suma de señales para ambas combinaciones. Mientras la misma no juega un papel importante cuando la diferencia de frecuencias es grande, sí lo hace cuando son frecuencias cercanas, produciendo cancelaciones o refuerzos en la magnitud de la suma.</p>
-<p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará importancia más adelante cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
+<p>Interesante notar el efecto que tiene la fase en la suma de señales para ambas combinaciones. Mientras la misma no juega un papel importante cuando la diferencia de frecuencias es grande, sí lo hace cuando son frecuencias cercanas, produciendo cancelaciones o refuerzos en la magnitud de la suma.</p>
+<p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará relevancia cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido en las próximas secciones." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
 <p>En ambos casos, en un análisis espectral, veré las dos frecuencias senoidales puras y nada más.</p>
 <div class="figure">
 <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5a.png"/>
 <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5b.png"/>
 <p>Fig 5. Espectro de señales a) Escenario1 , b) Escenario2</p>
 </div>
-
 <h1>2. Batido en ámbito digital</h1>
 <p>Supongamos ahora, que tenemos una señal analógica y procedemos a muestrearla para su digitación. A los fines de la demostración, tomemos los siguientes valores:</p>
 <div class="equation-left">
@@ -268,14 +267,14 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <img alt="Muestreo de señal analógica cercana a Nyquist" src="Pictures/fig8.png"/>
 <p><st>Fig 7. Muestreo de señal analógica con frecuencia cercana a Nyquist</st></p>
 </div>
-<p>En la Fig 7 podemos claramente apreciar un efecto de batido sobre la señal de 20kHz. Esto se ve muy parecido al efecto descripto en la sección anterior con 2 frecuencias analógicas. Pero si aquí estamos trabajando solo con 1 frecuencia… ¿cómo puede estar ocurriendo esto?</p>
-<p>Tratemos de entender qué está pasando en este caso. Tengo una señal analógica a la entrada de 20kHz que al muestrearla a una tasa de 44.1kHz y que luego, al volver a convertirla a analógica<sup><span class="only-desktop"><a class="tooltip" data-tooltip="El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras." href="#nota2">[2]</a></span><span class="only-mobile"><a href="#nota2">[2]</a></span></sup>, se presenta como una señal de 20kHz pero modulada en amplitud a 4.1kHz.
-    Todo daría a pensar que, por lo visto anteriormente, debería existir otra señal que interactúe con ella para dar como resultado este efecto de batido. Pues confirmemos esto en un analizador de espectro.</p>
+<p>En la Fig 7 podemos apreciar claramente un efecto de batido sobre la señal de 20kHz. Esto se ve muy parecido al efecto descripto en la sección anterior con 2 frecuencias analógicas. Pero si aquí estamos trabajando solo con 1 frecuencia… ¿cómo puede estar ocurriendo esto?</p>
+<p>Tratemos de entender qué está pasando en este caso. Tengo una señal analógica a la entrada de 20kHz que al muestrearla a una tasa de 44.1kHz y que luego, al volver a convertirla a analógica<sup><span class="only-desktop"><a class="tooltip" data-tooltip="El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras." href="#nota2">[2]</a></span><span class="only-mobile"><a href="#nota2">[2]</a></span></sup>, se presenta como una señal de 20kHz pero con un batimento a 4.1kHz.
+    Todo daría a pensar que, por lo visto anteriormente, debería existir otra señal tal que “module” a la de entrada para dar como resultado, la señal modulada. Pues confirmemos esto en un analizador de espectro.</p>
 <div class="figure">
 <img alt="Espectro de señal 20kHz muestreada a 44kHz" src="Pictures/fig9.png"/>
 <p><st>Fig 8. Espectro de señal de 20kHz muestreada a 44kHz</st></p>
 </div>
-<p>Sin lugar a dudas, la Fig 9 <strong>solo evidencia la existencia de 1 sola señal!</strong> Esto no parece tener mucho sentido. Existe una sola señal muestreada presente en el espectro pero que, sin embargo, en el dominio del tiempo muestra síntomas claros de una modulación en amplitud (batido) que solo podrían darse cuando existiese otra señal interactuando.</p>
+<p>Sin lugar a dudas, la Fig 9 <strong>solo evidencia la existencia de 1 sola señal!</strong> Esto no parece tener mucho sentido. Existe una sola señal presente en el espectro pero que, sin embargo, en el dominio del tiempo muestra síntomas claros de una modulación en amplitud (batido) que solo podrían darse cuando existiese otra señal interactuando.</p>
 <p>¿Y entonces?</p>
 <h1>3. Distribución de las muestras en una señal.</h1>
 <p>Supongamos que muestreo una señal de frecuencia <em>F</em> a una tasa de muestreo <em>Fs</em>. Si <em>Fs = 2F</em>, tendré 2 muestras por ciclo de señal, con lo cual no estoy cumpliendo con el teorema de Nyquist, y estaría tendiendo aliasing (un aliasing muy particular porque es DC, o sea 0 Hz).</p>
@@ -297,12 +296,12 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <div class="figure">
 <img src="Pictures/Eq2.png"/><br/>
 </div>
-<p>Nuevamente, esto significa que, <strong>cada 1 ciclo</strong>, voy a tener “n” (2, 3, 4, etc) y <strong>solo “n” muestras</strong>. No más, no menos.<br/>Podemos generalizar la fórmula y reescribirla como:</p>
+<p>Nuevamente, esto significa que <strong>cada 1 ciclo</strong>, voy a tener “n” (2, 3, 4, etc) y <strong>solo “n” muestras</strong>. No más, no menos.<br/>Podemos generalizar la fórmula y reescribirla como:</p>
 <div class="figure">
 <img src="Pictures/Eq2b.png"/><br/>
 </div>
 <p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese 2/5 significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre m/n &lt; 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup>. </p>
-<p>Esta característica tiene una consecuencia muy importante y es que, no solo existen la misma cantidad de muestras n en cada m ciclo(s), sino que se además <strong>se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
+<p>Pero existe otra característica que tiene una consecuencia muy importante y es la siguiente: : esas<strong> n muestras se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
 <p>Pero ¿a dónde queremos llegar con esto? ¿Qué tiene que ver con lo que veo en la pantalla? Un poco más de paciencia que ya estamos más cerca.</p>
 <h1>4. Patrones cíclicos.</h1>
 <p>Adicionemos ahora un último parámetro a fórmula, llamado ε, de manera que resulte como indica la siguiente ecuación:</p>
@@ -320,7 +319,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 </div>
 <p>En la Fig 12 podemos observar la distribución de las muestras <strong>“formando” ondas senoidales cuya cantidad corresponde con el valor del factor “<em>n</em>” y de una frecuencia de valor <em>ε</em></strong>.</p>
 <p>O sea, en la fórmula <em>F= Fs/2 - 20</em> se formarán 2 ondas, en la <em>Fs/F = Fs/3 - 20</em>, 3 ondas y en la <em>F = Fs/5 - 20</em>, 5 ondas entrelazadas. Todas ellas tienen una frecuencia de 20 Hz (tal como es el valor <em>ε</em>).</p>
-<p>Notar que estas ondas son productos de una distribución gráfica las muestras de la señal y todas poseen una frecuencia de <em>ε</em> Hz. Quiere decir que <em>ε</em>, es la <i><u>frecuencia a la cual las muestras vuelven a producirse en la misma fase</u></i> del ciclo de la señal. Es fácil notar que si ε=0, la frecuencia de variación es 0 y, por lo tanto, las muestras ocurren siempre en la misma fase de la señal.</p>
+<p>Notar que estas ondas son productos de una distribución gráfica las muestras de la señal y todas poseen una frecuencia de <em>ε</em> Hz. Quiere decir que <em>ε</em>, es la <i><u>frecuencia a la cual las muestras vuelven a producirse en la misma fase</u></i> de la señal. Es fácil notar que si ε=0, la frecuencia de variación es 0 y, por lo tanto, las muestras ocurren siempre en la misma fase de la señal.</p>
 <h1>5. Proceso de reconstrucción</h1>
 <p>Llama la atención el hecho que, si quisiera reconstruir la señal a través de la unión de las muestras, no estaría obteniendo la misma señal original. Tal como se observa en la Fig 13, si aplico el proceso de muestreo a una 
     señal senoidal pura (A/D) y luego, a partir de esas muestras, reconstruyo la señal (D/A) uniendo las muestras, estaría llegando a una señal senoidal pero con batido, lo cual obviamente no es la misma señal original. Pero esto es una directa contradicción con el teorema de Nyquist, el cual afirma que, si cumplo la condición de muestrear a una tasa superior al doble de la máxima frecuencia presente, podría reconstruir la señal original de manera exacta.</p>
@@ -328,8 +327,8 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <img alt="Proceso de reconstrucción con batido" src="Pictures/fig14.png"/>
 <p><st>Fig 13. a) Señal analógica b) Muestras de la señal analógica c) Proceso de reconstrucción. Se puede observar que a) y c) son distintas</st></p>
 </div>
-<p>La explicación viene por el lado de cómo se realiza la reconstrucción de la señal analógica a partir de sus muestras. El proceso de interpolación consiste en reconstruir el valor de la señal entre muestras, y eso <strong>no se logra simplemente “uniendo” las muestras entre sí de manera gráfica</strong>. Existen diversas maneras de “unir” (interpolar) gráficamente las muestras. Por ejemplo, una podría ser la de hacerlo de forma lineal (línea recta), a través de un polinomio de orden N (curva), o algún otro tipo.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc." href="#nota4">[4]</a></span><span class="only-mobile"><a href="#nota4">[4]</a></span></sup><sup><span class="only-desktop"><a class="tooltip" data-tooltip="Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)" href="#nota5">[5]</a></span><span class="only-mobile"><a href="#nota5">[5]</a></span></sup></p>
-<p>Sin embargo, el método teórico para recuperar totalmente una señal analógica (léase sin pérdidas), es a través de un proceso de convolución entre las muestras y la función SINC. Está totalmente fuera del alcance de este trabajo, explicar detalladamente el proceso de reconstrucción (interpolación), pero lo podemos pensar de la siguiente manera. Si, a una señal limitada en frecuencia (y que cumpla con los requerimientos de Nyquist) la quisiera recuperar, podría filtrarla con un filtro pasa bajo, de manera de quedarme con la banda de frecuencias por debajo de <em>Fs/2</em> y rechazar toda su componente espectral que esté por arriba de la misma. En la Fig 14 podemos ver el proceso.</p>
+<p>La explicación viene por el lado de cómo se realiza la reconstrucción de la señal analógica a partir de sus muestras. El proceso de interpolación consiste en reconstruir el valor de la señal entre muestras, y eso <strong>no se logra simplemente “uniendo” las muestras entre sí de manera gráfica</strong>. Existen diversas maneras de “unir” (interpolar) gráficamente las muestras. Por ejemplo, una podría ser la de hacerlo de forma lineal (línea recta), a través de un polinomio de orden N (curva), o algún otro tipo.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc." href="#nota4">[4]</a></span><span class="only-mobile"><a href="#nota4">[4]</a></span></sup><sup><span class="only-desktop"><a class="tooltip" data-tooltip="Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)" href="#nota5">[5]</a></span><span class="only-mobile"><a href="#nota5">[5]</a></span></sup>Pero esos métodos no me reconstruyen la señal original.</p>
+<p>El método teórico para recuperar totalmente una señal analógica (léase sin pérdidas), es a través de un proceso de convolución entre las muestras y la función SINC. Está totalmente fuera del alcance de este trabajo, explicar detalladamente el proceso de reconstrucción (interpolación), pero lo podemos pensar de la siguiente manera. Si, a una señal limitada en frecuencia (y que cumpla con los requerimientos de Nyquist) la quisiera recuperar, podría filtrarla con un filtro pasa bajo, de manera de quedarme con la banda de frecuencias por debajo de <em>Fs/2</em> y rechazar toda su componente espectral que esté por arriba de la misma. En la Fig 14 podemos ver el proceso.</p>
 <div class="figure">
 <img alt="Reconstrucción en el dominio de la frecuencia" src="Pictures/fig15.png"/>
 <p><st>Fig 14. Proceso de reconstrucción de la señal en el dominio de la frecuencia</st></p>
@@ -339,10 +338,10 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <img alt="Reconstrucción en el dominio del tiempo" src="Pictures/fig16.png"/>
 <p><st>Fig 15. Proceso de reconstrucción de la señal en el dominio del tiempo</st></p>
 </div>
-<p>El problema es que en la teoría este proceso posee una reconstrucción perfecta, pero en la práctica no es realizable ya que la función SINC se extiende desde -∞ a +∞. Como esto no es posible a los fines prácticos, debemos acotarla temporalmente y aplicarle una ventana. Este recorte temporal de la función, tendrá su impacto en el dominio de la frecuencia en que la respuesta del <u><i>filtro pasa bajo ya no será la ideal y eso traerá “distorsiones” en la reconstrucción de la señal analógica</i></u>. Y son precisamente esos errores lo que hacen que la señal reconstruida sea en mayor o menor medida, igual a la original.</p>
+<p>En la teoría, este proceso posee una reconstrucción perfecta. Pero el inconveniente se presenta en la imposibilidad de su implementación, ya que la función SINC se extiende desde -∞ a +∞. Como esto no es posible a los fines prácticos, debemos acotarla en el tiempo. Este recorte temporal de la función, tendrá su impacto en el dominio de la frecuencia y será en que la respuesta del <u><i>filtro pasa bajo ya no será la ideal y eso traerá “distorsiones” en la reconstrucción de la señal analógica</i></u>. Y son precisamente esos errores lo que hacen que la señal reconstruida sea en mayor o menor medida, igual a la original.</p>
 <h1>6. ¿Es real el efecto?</h1>
-<p>Habiendo entendido el motivo de las formas “raras” que vemos en la reconstrucción de determinadas frecuencias, nos cabe preguntarnos si este es un efecto real o es simplemente un efecto visual. La respuesta es que este efecto es tan real como el mismo audio digital, por lo que <strong>no es solamente una percepción visual, sino también auditiva</strong>.</p>
-<p>Y comprobar esto no es nada difícil. Simplemente se puede crear una sesión en alguna frecuencia de Nyquist que sea audible, generar una señal senoidal (o cualquier señal periódica) y escuchar lo que nos devuelve a través de los parlantes. Por ejemplo, podemos hacer la prueba con una <em>Fs = 8000Hz</em> y con un generador crear senoidales a una <em>F = 3998 Hz y F=3999Hz</em>.</p>
+<p>Habiendo entendido el motivo de las formas “raras” que vemos en la reconstrucción de determinadas frecuencias, cabe preguntarnos si este es un efecto real o es simplemente un efecto visual. La respuesta es que este efecto es tan real como el mismo audio digital, por lo que <strong>no es solamente una percepción visual, sino también auditiva</strong>.</p>
+<p>Y comprobar esto no es nada difícil. Simplemente se puede crear una sesión en alguna frecuencia de Nyquist que sea audible, generar una señal senoidal (o cualquier señal periódica) y escuchar. Por ejemplo, podemos hacer la prueba con una <em>Fs = 8000Hz</em> y con un generador crear senoidales a una <em>F = 3998 Hz y F=3999Hz</em>.</p>
 <p>Habiendo llegado hasta aquí (y ojalá comprendido la explicación) … ¿qué esperarías escuchar? (audios de 4 seg, cuidado con el volmen)</p><br/>
 <div class="button-container">
 <button class="speaker-button" id="playButton1" onclick="playAudio('audioElement1')">🔊 F=3998Hz @ Fs=8kHz</button>
@@ -400,7 +399,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <h1><br/>7. Impacto en el audio digital</h1>
 <p>Pero si esto es así… <i>¿cómo no es un completo desastre todo lo que escuchamos a través del audio digital?</i></p>
 <p>Bueno, hay que tener en cuenta dos aspectos importantes que se aplican al proceso explicado:</p>
-<p> 1) Esto, si bien no es exclusivo, <strong>es  notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 5).</p>
+<p> 1) Esto, si bien no es exclusivo, <strong>es  notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 4).</p>
 <p> 2) El efecto es extremadamente notorio en <strong>frecuencias muy próximas a Nyquist</strong> y va perdiendo impacto a medida que me alejo de la misma. Si mi frecuencia de Nyquist es de 22050 Hz, <i><u>el efecto empieza a desvanecerse a partir de los 20 kHz hacia abajo</u></i>. O sea, son frecuencias elevadas para una audición promedio del humano.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz)." href="#nota6">[6]</a></span><span class="only-mobile"><a href="#nota6">[6]</a></span></sup></p>
 <p>En la Fig 16 podemos evidenciar el impacto en relación con la frecuencia analógica a muestrear. A medida que la frecuencia <em>F</em> se aleja de <em>Fs/2</em>, el efecto se va diluyendo (el batido va perdiendo intensidad).</p>
 <div class="figure">
@@ -444,9 +443,8 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 <p>Fig 21. Efecto de batido a través del producto de señales</p>
 </div>
 <p>Notar que la frecuencia del batido, sigue siendo 50Hz (tal como en el ejemplo de la suma) que es, precisamente, la frecuencia de la moduladora.</p>
-
 <h1>Referencias</h1>
-<p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará importancia más adelante cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido.</p>
+<p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará relevancia cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido en las próximas secciones.</p>
 <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
 <p id="nota3">[3] Recordar que el valor debe ser siempre m/n &lt; 0.5 para satisfacer el criterio de Nyquist.</p>
 <p id="nota4">[4] Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc.</p>
