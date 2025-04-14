@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <!-- VERSION laptop_v9.3 -->
+ <!-- VERSION laptop_v9.4 -->
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -485,7 +485,7 @@
 <img alt="Logo de Soundins" id="logo" src="Soundins.png"/>
 </a>
 <h1>Dither & NS Benchmark Tool</h1>
-<div id="version-text">laptop_v9.3</div>
+<div id="version-text">laptop_v9.4</div>
 <div id="top-right-container">
 <div id="mode-help-container">
 <img alt="Toggle Bright/Dark Mode" id="mode-toggle" src="dark_mode.png"/>
@@ -1327,10 +1327,18 @@ helpToggle.addEventListener("click", () => {
   }
 });
 
-instructionsLink.addEventListener("click", () => {
-  window.open("https://www.soundins.com.ar/dither/instructions", "_blank");
-});
+  instructionsLink.addEventListener("click", () => {
+      const windowWidth = 1200;
+      const windowHeight = 720;
+      const left = (screen.width - windowWidth) / 2;
+      const top = 100;
 
+      if (currentLanguage === "English") {
+        window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+      } else {
+        window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+      }
+    });
 languageToggle.addEventListener("click", () => {
   currentLanguage = currentLanguage === "Español" ? "English" : "Español";
   languageToggle.textContent = currentLanguage === "Español" ? "English" : "Español";
