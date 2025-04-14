@@ -489,7 +489,7 @@
 <div id="top-right-container">
 <div id="mode-help-container">
 <img alt="Toggle Bright/Dark Mode" id="mode-toggle" src="dark_mode.png"/>
-<div id="help-toggle">Ayuda Act</div>
+<div id="help-toggle">Ayuda On</div>
 </div>
 <div id="instructions-link">  Léeme</div>
 <div id="language-toggle">English</div>
@@ -1321,9 +1321,9 @@ document.getElementById("pause-btn").addEventListener("click", stopAllAudio);
 helpToggle.addEventListener("click", () => {
   isHelpEnabled = !isHelpEnabled;
   if (currentLanguage === "Español") {
-    helpToggle.textContent = isHelpEnabled ? "Ayuda act" : "Ayuda des";
+    helpToggle.textContent = isHelpEnabled ? "Ayuda On" : "Ayuda Off";
   } else {
-    helpToggle.textContent = isHelpEnabled ? "Help on" : "Help Off";
+    helpToggle.textContent = isHelpEnabled ? "Help On" : "Help Off";
   }
 });
 
@@ -1362,7 +1362,7 @@ function updateUIForLanguage() {
   document.getElementById("spectrum-title").textContent = currentLanguage === "Español" ? "Analizador de Espectro" : "Spectrum Analyzer";
  
   document.getElementById("instructions-link").childNodes[0].textContent = currentLanguage === "Español" ? "Léeme" : "Readme";
-  document.getElementById("help-toggle").textContent = currentLanguage === "Español" ? (isHelpEnabled ? "Ayuda act" : "Ayuda des") : (isHelpEnabled ? "Help on" : "Help Off");
+  document.getElementById("help-toggle").textContent = currentLanguage === "Español" ? (isHelpEnabled ? "Ayuda On" : "Ayuda Off") : (isHelpEnabled ? "Help On" : "Help Off");
 
 
 }
