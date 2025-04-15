@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
   <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
@@ -73,6 +73,9 @@ h1 {
   text-decoration: none;
   z-index: 2;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
 }
 #language-menu {
   position: absolute;
@@ -327,7 +330,7 @@ th {
 }
 @media (min-width: 668px) {
   #table-container {
-    margin-top: 30px; /* Ajusta la matriz hacia arriba */
+    margin-top: 30px;
   }
   .source-label {
     transform: translate(-120px, 6px);
@@ -491,7 +494,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
   <div id="header-container">
     <div id="header-background"></div>
     <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
-    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+    <button id="readme-link" type="button">Readme</button>
     <div id="language-menu">
       <button onclick="openInstructions('en')">English</button>
       <button onclick="openInstructions('es')">Español</button>
@@ -566,16 +569,16 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         </tbody>
       </table>
     </div>
-<div id="spectrum-container" class="minimized">
-  <div id="spectrum-header">
-    <span id="spectrum-title">Spectrum Analyzer</span>
-    <div id="spectrum-buttons">
-      <button id="minimize-btn"></button>
-      <button id="maximize-btn"></button>
+    <div id="spectrum-container" class="minimized">
+      <div id="spectrum-header">
+        <span id="spectrum-title">Spectrum Analyzer</span>
+        <div id="spectrum-buttons">
+          <button id="minimize-btn"></button>
+          <button id="maximize-btn"></button>
+        </div>
+      </div>
+      <canvas id="spectrumCanvas"></canvas>
     </div>
-  </div>
-  <canvas id="spectrumCanvas"></canvas>
-</div>
   </div>
 
   <script>
@@ -677,7 +680,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       },
       "rect-35": {
         "Sine": {
-          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra.flac",
+          "997(act)": "https://raw.githubusercontent.com Soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra.flac",
           "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra_no997.flac"
         },
         "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2_Ultra.flac" }
@@ -705,405 +708,471 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       }
     };
 
- let isToggleEnabled = true;
-  let currentActiveRect = null;
-  let lastActiveRect = null;
-  let currentSource = "Sine";
-  const audioPlayers = {};
-  let firstClick = true;
-  let preloadPromise = null;
-  let isPlaying = false; // Para rastrear si hay reproducción activa
-  let currentPlayPromise = null; // Para manejar operaciones asincrónicas
+    let isToggleEnabled = true;
+    let currentActiveRect = null;
+    let lastActiveRect = null;
+    let currentSource = "Sine";
+    const audioPlayers = {};
+    let firstClick = true;
+    let preloadPromise = null;
+    let isPlaying = false;
+    let currentPlayPromise = null;
 
-  const sourceSine = document.getElementById("source-Sine");
-  const sourceFlaute = document.getElementById("source-flaute");
-  const toggleBtn = document.getElementById("toggle-btn");
-  const stopBtn = document.getElementById("stop-btn");
-  const progressContainer = document.getElementById("progress-container");
-  const progressFill = document.getElementById("progress-fill");
+    const sourceSine = document.getElementById("source-Sine");
+    const sourceFlaute = document.getElementById("source-flaute");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const stopBtn = document.getElementById("stop-btn");
+    const progressContainer = document.getElementById("progress-container");
+    const progressFill = document.getElementById("progress-fill");
 
-  const rectsToLoad = [
-    "rect-24bits", "rect-main",
-    "rect-1", "rect-2", "rect-3", "rect-4", "rect-5", "rect-8", "rect-9", "rect-10",
-    "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
-  ];
+    const rectsToLoad = [
+      "rect-24bits", "rect-main",
+      "rect-1", "rect-2", "rect-3", "rect-4", "rect-5", "rect-8", "rect-9", "rect-10",
+      "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
+    ];
 
-  let audioContext = null;
-  let analyser = null;
-  let sourceNode = null;
-  const canvas = document.getElementById("spectrumCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = 385;
-  canvas.height = 50;
-  let smoothedData = null;
-  const smoothingWindow = 50;
-  let dataHistory = [];
+    let audioContext = null;
+    let analyser = null;
+    let sourceNode = null;
+    const canvas = document.getElementById("spectrumCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 385;
+    canvas.height = 50;
+    let smoothedData = null;
+    const smoothingWindow = 50;
+    let dataHistory = [];
 
-  // Inicialización del AudioContext con reanudación
-  function initializeAudioContext() {
-    if (!audioContext) {
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 16384;
-        analyser.smoothingTimeConstant = 0.1;
-        analyser.minDecibels = -110;
-        analyser.maxDecibels = -30; // Ajustado para mejor visualización
-        smoothedData = new Float32Array(analyser.frequencyBinCount);
-        console.log("AudioContext y Analyser inicializados.");
-        if (!window.isDrawing) {
-          window.isDrawing = true;
-          drawSpectrum();
+    function showError(message) {
+      const errorDiv = document.createElement("div");
+      errorDiv.style.position = "fixed";
+      errorDiv.style.top = "10px";
+      errorDiv.style.left = "50%";
+      errorDiv.style.transform = "translateX(-50%)";
+      errorDiv.style.backgroundColor = "red";
+      errorDiv.style.color = "white";
+      errorDiv.style.padding = "10px";
+      errorDiv.style.zIndex = "1000";
+      errorDiv.textContent = message;
+      document.body.appendChild(errorDiv);
+      setTimeout(() => errorDiv.remove(), 3000);
+    }
+
+    function initializeAudioContext() {
+      if (!audioContext) {
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 16384;
+          analyser.smoothingTimeConstant = 0.1;
+          analyser.minDecibels = -110;
+          analyser.maxDecibels = -30;
+          smoothedData = new Float32Array(analyser.frequencyBinCount);
+          console.log("AudioContext y Analyser inicializados.");
+          if (!window.isDrawing) {
+            window.isDrawing = true;
+            drawSpectrum();
+          }
+        } catch (e) {
+          console.error("Error al inicializar AudioContext:", e);
+          showError("Error inicializando audio.");
         }
-      } catch (e) {
-        console.error("Error al inicializar AudioContext:", e);
       }
-    }
-    if (audioContext.state === "suspended") {
-      audioContext.resume().then(() => {
-        console.log("AudioContext reanudado.");
-      });
-    }
-  }
-
-  // Dibujo del espectro (sin cambios significativos)
-  function drawSpectrum() {
-    if (!analyser) {
-      console.error("Analyser no está definido.");
-      return;
-    }
-
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    analyser.getByteFrequencyData(dataArray);
-
-    dataHistory.push(new Uint8Array(dataArray));
-    if (dataHistory.length > smoothingWindow) {
-      dataHistory.shift();
-    }
-
-    for (let i = 0; i < bufferLength; i++) {
-      let sum = 0;
-      for (let j = 0; j < dataHistory.length; j++) {
-        sum += dataHistory[j][i];
+      if (audioContext.state === "suspended") {
+        return audioContext.resume().then(() => {
+          console.log("AudioContext reanudado.");
+        }).catch(e => {
+          console.error("Error al reanudar AudioContext:", e);
+          showError("Error reanudando audio.");
+        });
       }
-      smoothedData[i] = sum / dataHistory.length;
+      return Promise.resolve();
     }
 
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function drawSpectrum() {
+      if (!analyser) return;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      analyser.getByteFrequencyData(dataArray);
 
-    if (sourceNode) {
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "rgb(0, 255, 0)";
-      ctx.beginPath();
-
-      const sampleRate = audioContext.sampleRate;
-      const freqMax = sampleRate / 2;
-      const freqStep = freqMax / bufferLength;
-
-      const minFreq = 20;
-      const maxFreq = 20000;
-      const logMin = Math.log10(minFreq);
-      const logMax = Math.log10(maxFreq);
-      const logRange = logMax - logMin;
-
-      let hasData = false;
-      ctx.moveTo(0, canvas.height);
+      dataHistory.push(new Uint8Array(dataArray));
+      if (dataHistory.length > smoothingWindow) dataHistory.shift();
 
       for (let i = 0; i < bufferLength; i++) {
-        const freq = i * freqStep;
-        if (freq < minFreq || freq > maxFreq) continue;
-
-        const logFreq = Math.log10(freq);
-        const x = canvas.width * (logFreq - logMin) / logRange;
-        const value = smoothedData[i] / 255;
-        const y = canvas.height * (1 - value);
-
-        if (smoothedData[i] > 0) hasData = true;
-        ctx.lineTo(x, y);
-      }
-
-      ctx.stroke();
-      console.log("Datos en analyser:", hasData ? "Sí" : "No");
-    }
-
-    requestAnimationFrame(drawSpectrum);
-  }
-
-  // Detención robusta del audio
-  function stopAudio() {
-    if (sourceNode) {
-      try {
-        sourceNode.stop();
-      } catch (e) {
-        console.log("El nodo ya estaba detenido:", e);
-      }
-      sourceNode.disconnect();
-      sourceNode = null;
-    }
-    if (analyser && analyser.context.state !== "closed") {
-      analyser.disconnect();
-    }
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    dataHistory = [];
-    isPlaying = false;
-    console.log("Audio detenido y recursos liberados.");
-  }
-
-  // Reproducción de audio con manejo de asincronía
-  async function playAudioFromMemory(audioData, rect) {
-    if (!audioContext) initializeAudioContext();
-    if (!audioContext || !analyser) {
-      console.error("AudioContext o Analyser no inicializados.");
-      return;
-    }
-
-    try {
-      console.log("Decodificando audio...");
-      const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
-      console.log("Audio decodificado, duración:", audioBuffer.duration);
-      sourceNode = audioContext.createBufferSource();
-      sourceNode.buffer = audioBuffer;
-      sourceNode.connect(analyser);
-      analyser.connect(audioContext.destination);
-
-      sourceNode.start();
-      isPlaying = true;
-      console.log("Audio reproduciéndose.");
-
-      sourceNode.onended = () => {
-        if (rect) {
-          rect.classList.remove("green");
-          stopAudio();
+        let sum = 0;
+        for (let j = 0; j < dataHistory.length; j++) {
+          sum += dataHistory[j][i];
         }
-      };
-    } catch (e) {
-      console.error("Error al decodificar o reproducir audio:", e);
-      if (rect) rect.classList.remove("green");
+        smoothedData[i] = sum / dataHistory.length;
+      }
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (sourceNode) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgb(0, 255, 0)";
+        ctx.beginPath();
+
+        const sampleRate = audioContext.sampleRate;
+        const freqMax = sampleRate / 2;
+        const freqStep = freqMax / bufferLength;
+
+        const minFreq = 20;
+        const maxFreq = 20000;
+        const logMin = Math.log10(minFreq);
+        const logMax = Math.log10(maxFreq);
+        const logRange = logMax - logMin;
+
+        let hasData = false;
+        ctx.moveTo(0, canvas.height);
+
+        for (let i = 0; i < bufferLength; i++) {
+          const freq = i * freqStep;
+          if (freq < minFreq || freq > maxFreq) continue;
+
+          const logFreq = Math.log10(freq);
+          const x = canvas.width * (logFreq - logMin) / logRange;
+          const value = smoothedData[i] / 255;
+          const y = canvas.height * (1 - value);
+
+          if (smoothedData[i] > 0) hasData = true;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(drawSpectrum);
     }
-  }
 
-  // Función principal de reproducción con control de promesas
-  async function playAudio(rect) {
-    if (currentPlayPromise) {
-      currentPlayPromise.cancel = true; // Marcar para cancelar operación en curso
+    function stopAudio() {
+      if (sourceNode) {
+        try {
+          sourceNode.stop();
+        } catch (e) {
+          console.log("El nodo ya estaba detenido:", e);
+        }
+        sourceNode.disconnect();
+        sourceNode = null;
+      }
+      if (analyser && analyser.context.state !== "closed") {
+        analyser.disconnect();
+      }
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      dataHistory = [];
+      isPlaying = false;
     }
 
-    const rectId = rect.id;
-    const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
-    const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
+    async function playAudioFromMemory(audioData, rect) {
+      try {
+        await initializeAudioContext();
+        if (!audioContext || !analyser) {
+          throw new Error("AudioContext o Analyser no inicializados.");
+        }
 
-    if (audioData) {
+        console.log("Decodificando audio...");
+        const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
+        console.log("Audio decodificado, duración:", audioBuffer.duration);
+
+        sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = audioBuffer;
+        sourceNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        sourceNode.start();
+        isPlaying = true;
+        console.log("Audio reproduciéndose.");
+
+        sourceNode.onended = () => {
+          if (rect) {
+            rect.classList.remove("green");
+            stopAudio();
+          }
+        };
+      } catch (e) {
+        console.error("Error al decodificar o reproducir audio:", e);
+        if (rect) rect.classList.remove("green");
+        showError("Error al reproducir audio.");
+      }
+    }
+
+    async function playAudio(rect) {
+      if (currentPlayPromise) {
+        currentPlayPromise.cancel = true;
+      }
+
+      const rectId = rect.id;
+      const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
+      const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
+
+      if (audioData) {
+        stopAudio();
+        rect.classList.add("green");
+        currentActiveRect = rect;
+
+        const playPromise = playAudioFromMemory(audioData, rect);
+        currentPlayPromise = playPromise;
+        playPromise.cancel = false;
+
+        try {
+          await playPromise;
+          if (playPromise.cancel) {
+            stopAudio();
+            rect.classList.remove("green");
+            currentActiveRect = null;
+          }
+        } catch (e) {
+          console.error("Error en reproducción:", e);
+        }
+      } else {
+        console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
+        showError("Audio no cargado. Espera a que se complete la carga.");
+      }
+    }
+
+    function stopAllAudio() {
       stopAudio();
-      rect.classList.add("green");
-      currentActiveRect = rect;
-
-      const playPromise = playAudioFromMemory(audioData, rect);
-      currentPlayPromise = playPromise;
-      playPromise.cancel = false;
-
-      try {
-        await playPromise;
-        if (playPromise.cancel) {
-          stopAudio();
-          rect.classList.remove("green");
-          currentActiveRect = null;
-        }
-      } catch (e) {
-        console.error("Error en reproducción:", e);
-      }
-    } else {
-      console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
+      document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
+      currentActiveRect = null;
     }
-  }
 
-  function stopAllAudio() {
-    stopAudio();
-    document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
-    currentActiveRect = null;
-  }
+    async function preloadAllAudio() {
+      const totalFiles = Object.values(audioMapping).reduce((sum, sources) => sum + Object.values(sources).reduce((subSum, states) => subSum + Object.keys(states).length, 0), 0);
+      let loadedFiles = 0;
 
-  async function preloadAllAudio() {
-    const totalFiles = Object.values(audioMapping).reduce((sum, sources) => sum + Object.values(sources).reduce((subSum, states) => subSum + Object.keys(states).length, 0), 0);
-    let loadedFiles = 0;
-
-    const loadPromises = [];
-    for (const rectId in audioMapping) {
-      audioPlayers[rectId] = {};
-      for (const source in audioMapping[rectId]) {
-        audioPlayers[rectId][source] = {};
-        for (const state in audioMapping[rectId][source]) {
-          const url = audioMapping[rectId][source][state];
-          loadPromises.push(
-            fetch(url)
-              .then(response => {
-                if (!response.ok) throw new Error(`Error fetching ${url}: ${response.statusText}`);
-                return response.arrayBuffer();
-              })
-              .then(arrayBuffer => {
-                audioPlayers[rectId][source][state] = { buffer: arrayBuffer };
-                loadedFiles++;
-                const progressPercentage = (loadedFiles / totalFiles) * 100;
-                progressFill.style.width = `${progressPercentage}%`;
-              })
-              .catch(error => {
-                console.error(`Error al precargar ${url}:`, error);
-                loadedFiles++;
-                const progressPercentage = (loadedFiles / totalFiles) * 100;
-                progressFill.style.width = `${progressPercentage}%`;
-              })
-          );
+      const loadPromises = [];
+      for (const rectId in audioMapping) {
+        audioPlayers[rectId] = {};
+        for (const source in audioMapping[rectId]) {
+          audioPlayers[rectId][source] = {};
+          for (const state in audioMapping[rectId][source]) {
+            const url = audioMapping[rectId][source][state];
+            loadPromises.push(
+              fetch(url)
+                .then(response => {
+                  if (!response.ok) throw new Error(`Error fetching ${url}: ${response.statusText}`);
+                  return response.arrayBuffer();
+                })
+                .then(arrayBuffer => {
+                  audioPlayers[rectId][source][state] = { buffer: arrayBuffer };
+                  loadedFiles++;
+                  const progressPercentage = (loadedFiles / totalFiles) * 100;
+                  progressFill.style.width = `${progressPercentage}%`;
+                  console.log(`Cargado ${url} (${loadedFiles}/${totalFiles})`);
+                })
+                .catch(error => {
+                  console.error(`Error al precargar ${url}:`, error);
+                  loadedFiles++;
+                  const progressPercentage = (loadedFiles / totalFiles) * 100;
+                  progressFill.style.width = `${progressPercentage}%`;
+                })
+            );
+          }
         }
       }
+
+      await Promise.all(loadPromises);
+      console.log("Precarga de audio completada.");
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 200);
     }
 
-    await Promise.all(loadPromises);
-    setTimeout(() => {
-      progressContainer.style.display = "none";
-    }, 200);
-  }
-
-  function setActiveSource(source) {
-    stopAllAudio();
-    currentSource = source;
-    sourceSine.classList.toggle("active", source === "Sine");
-    sourceFlaute.classList.toggle("active", source === "Flaute");
-    updateToggleButtonState();
-    if (currentActiveRect) {
-      playAudio(currentActiveRect);
-    }
-  }
-
-  sourceSine.addEventListener("click", () => {
-    setActiveSource("Sine");
-    toggleBtn.disabled = false;
-    toggleBtn.classList.remove("red");
-    toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
-    toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
-  });
-
-  sourceFlaute.addEventListener("click", () => {
-    setActiveSource("Flaute");
-    toggleBtn.disabled = true;
-    toggleBtn.classList.add("red");
-    toggleBtn.textContent = "N/A";
-    isToggleEnabled = false;
-  });
-
-  function updateToggleButtonState() {
-    toggleBtn.disabled = (currentSource === "Flaute" || (currentActiveRect && currentActiveRect.id === "rect-24bits"));
-    toggleBtn.classList.remove("red", "green");
-    if (toggleBtn.disabled) {
-      toggleBtn.classList.add("red");
-      toggleBtn.textContent = "N/A";
-      if (currentActiveRect && currentActiveRect.id === "rect-24bits") {
-        isToggleEnabled = true;
-      }
-    } else {
-      toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
-      toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
-    }
-  }
-
-  function showProgressBar() {
-    progressContainer.style.display = "block";
-    progressFill.style.width = "0%";
-    void progressFill.offsetWidth;
-    progressFill.style.width = "100%";
-    setTimeout(() => {
-      preloadPromise.then(() => {
-        completeProgressBar();
-      });
-    }, 5000);
-  }
-
-  function completeProgressBar() {
-    progressContainer.style.display = "none";
-    progressFill.style.width = "0%";
-  }
-
-  toggleBtn.addEventListener("click", () => {
-    if (!toggleBtn.disabled) {
-      isToggleEnabled = !isToggleEnabled;
+    function setActiveSource(source) {
+      stopAllAudio();
+      currentSource = source;
+      sourceSine.classList.toggle("active", source === "Sine");
+      sourceFlaute.classList.toggle("active", source === "Flaute");
       updateToggleButtonState();
       if (currentActiveRect) {
         playAudio(currentActiveRect);
       }
     }
-  });
 
-  stopBtn.addEventListener("click", () => {
-    stopAllAudio();
-    updateToggleButtonState();
-  });
-
-  rectsToLoad.forEach(rectId => {
-    const rectElem = document.getElementById(rectId);
-    rectElem.addEventListener("click", () => {
-      if (currentActiveRect === rectElem) {
-        stopAllAudio();
-        updateToggleButtonState();
-        return;
-      }
-      if (firstClick) {
-        firstClick = false;
-        showProgressBar();
-      }
-      stopAllAudio();
-      currentActiveRect = rectElem;
-      lastActiveRect = rectElem;
-      rectElem.classList.add("green");
-      if (rectId === "rect-24bits" && currentSource === "Sine") {
-        isToggleEnabled = false;
-      }
-      updateToggleButtonState();
-      playAudio(rectElem);
+    sourceSine.addEventListener("click", () => {
+      setActiveSource("Sine");
+      toggleBtn.disabled = false;
+      toggleBtn.classList.remove("red");
+      toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
+      toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
     });
-  });
 
-  const minimizeBtn = document.getElementById("minimize-btn");
-  const maximizeBtn = document.getElementById("maximize-btn");
-  const spectrumContainer = document.getElementById("spectrum-container");
-  const spectrumTitle = document.getElementById("spectrum-title");
+    sourceFlaute.addEventListener("click", () => {
+      setActiveSource("Flaute");
+      toggleBtn.disabled = true;
+      toggleBtn.classList.add("red");
+      toggleBtn.textContent = "N/A";
+      isToggleEnabled = false;
+    });
 
-  minimizeBtn.addEventListener("click", () => {
-    spectrumContainer.classList.add("minimized");
-    spectrumTitle.style.color = "#1ff909";
-  });
-
-  maximizeBtn.addEventListener("click", () => {
-    spectrumContainer.classList.remove("minimized");
-    spectrumTitle.style.color = "green";
-  });
-
-  if (!navigator.userAgent.match(/Android/i)) {
-    document.getElementById('fullscreen-btn').style.display = 'none';
-  }
-
-  const rotationMessage = document.getElementById("rotation-message");
-  const mainContent = document.getElementById("main-content");
-  const headerContainer = document.getElementById("header-container");
-
-  function checkOrientation() {
-    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-    if (isPortrait && window.innerWidth <= 768) {
-      rotationMessage.style.display = "flex";
-      mainContent.style.display = "none";
-      headerContainer.style.display = "none";
-    } else {
-      rotationMessage.style.display = "none";
-      mainContent.style.display = "block";
-      headerContainer.style.display = "block";
+    function updateToggleButtonState() {
+      toggleBtn.disabled = (currentSource === "Flaute" || (currentActiveRect && currentActiveRect.id === "rect-24bits"));
+      toggleBtn.classList.remove("red", "green");
+      if (toggleBtn.disabled) {
+        toggleBtn.classList.add("red");
+        toggleBtn.textContent = "N/A";
+        if (currentActiveRect && currentActiveRect.id === "rect-24bits") {
+          isToggleEnabled = true;
+        }
+      } else {
+        toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
+        toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+      }
     }
-  }
 
-  checkOrientation();
-  window.addEventListener("orientationchange", checkOrientation);
-  window.addEventListener("resize", checkOrientation);
+    function showProgressBar() {
+      progressContainer.style.display = "block";
+      progressFill.style.width = "0%";
+      void progressFill.offsetWidth;
+      progressFill.style.width = "100%";
+      setTimeout(() => {
+        preloadPromise.then(() => {
+          progressContainer.style.display = "none";
+          progressFill.style.width = "0%";
+        });
+      }, 5000);
+    }
 
-  preloadPromise = preloadAllAudio();
-</script>
+    toggleBtn.addEventListener("click", () => {
+      if (!toggleBtn.disabled) {
+        isToggleEnabled = !isToggleEnabled;
+        updateToggleButtonState();
+        if (currentActiveRect) {
+          playAudio(currentActiveRect);
+        }
+      }
+    });
+
+    stopBtn.addEventListener("click", () => {
+      stopAllAudio();
+      updateToggleButtonState();
+    });
+
+    rectsToLoad.forEach(rectId => {
+      const rectElem = document.getElementById(rectId);
+      const handleRectInteraction = () => {
+        if (currentActiveRect === rectElem) {
+          stopAllAudio();
+          updateToggleButtonState();
+          return;
+        }
+        if (firstClick) {
+          firstClick = false;
+          showProgressBar();
+        }
+        stopAllAudio();
+        currentActiveRect = rectElem;
+        lastActiveRect = rectElem;
+        rectElem.classList.add("green");
+        if (rectId === "rect-24bits" && currentSource === "Sine") {
+          isToggleEnabled = false;
+        }
+        updateToggleButtonState();
+        playAudio(rectElem);
+      };
+      rectElem.addEventListener("click", handleRectInteraction);
+      rectElem.addEventListener("touchend", handleRectInteraction);
+    });
+
+    const minimizeBtn = document.getElementById("minimize-btn");
+    const maximizeBtn = document.getElementById("maximize-btn");
+    const spectrumContainer = document.getElementById("spectrum-container");
+    const spectrumTitle = document.getElementById("spectrum-title");
+
+    minimizeBtn.addEventListener("click", () => {
+      spectrumContainer.classList.add("minimized");
+      spectrumTitle.style.color = "#1ff909";
+    });
+
+    maximizeBtn.addEventListener("click", () => {
+      spectrumContainer.classList.remove("minimized");
+      spectrumTitle.style.color = "green";
+    });
+
+    if (!navigator.userAgent.match(/Android/i)) {
+      document.getElementById('fullscreen-btn').style.display = 'none';
+    }
+
+    const rotationMessage = document.getElementById("rotation-message");
+    const mainContent = document.getElementById("main-content");
+    const headerContainer = document.getElementById("header-container");
+
+    function checkOrientation() {
+      const isPortrait = window.matchMedia("(orientation: portrait)").matches || 
+                         (window.innerHeight > window.innerWidth);
+      const isMobile = window.innerWidth <= 1024;
+      if (isPortrait && isMobile) {
+        rotationMessage.style.display = "flex";
+        mainContent.style.display = "none";
+        headerContainer.style.display = "none";
+      } else {
+        rotationMessage.style.display = "none";
+        mainContent.style.display = "block";
+        headerContainer.style.display = "block";
+      }
+      rotationMessage.offsetHeight;
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    const debouncedCheckOrientation = debounce(checkOrientation, 100);
+    window.addEventListener("orientationchange", debouncedCheckOrientation);
+    window.addEventListener("resize", debouncedCheckOrientation);
+
+    checkOrientation();
+
+    const readmeLink = document.getElementBy原来如此
+
+    document.getElementById("readme-link");
+    const modeToggleBtn = document.getElementById("mode-toggle-btn");
+
+    function toggleLanguageMenu(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const languageMenu = document.getElementById("language-menu");
+      languageMenu.style.display = languageMenu.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleDarkMode(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      document.body.classList.toggle("dark-mode");
+      const modeIcon = document.getElementById("mode-icon");
+      modeIcon.src = document.body.classList.contains("dark-mode") ? "light_mode.png" : "dark_mode.png";
+      modeIcon.alt = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
+    }
+
+    readmeLink.addEventListener("click", toggleLanguageMenu);
+    readmeLink.addEventListener("touchstart", toggleLanguageMenu);
+    modeToggleBtn.addEventListener("click", toggleDarkMode);
+    modeToggleBtn.addEventListener("touchstart", toggleDarkMode);
+
+    document.addEventListener("click", (event) => {
+      const languageMenu = document.getElementById("language-menu");
+      if (!readmeLink.contains(event.target) && !languageMenu.contains(event.target)) {
+        languageMenu.style.display = "none";
+      }
+    });
+    document.addEventListener("touchstart", (event) => {
+      const languageMenu = document.getElementById("language-menu");
+      if (!readmeLink.contains(event.target) && !languageMenu.contains(event.target)) {
+        languageMenu.style.display = "none";
+      }
+    });
+
+    function openInstructions(lang) {
+      const url = lang === "en" ? "https://www.soundins.com.ar/readme_en.html" : "https://www.soundins.com.ar/readme_es.html";
+      window.open(url, "_blank");
+    }
+
+    preloadPromise = preloadAllAudio();
+  </script>
 </body>
 </html>
