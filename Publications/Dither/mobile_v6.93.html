@@ -1075,7 +1075,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         toggleBtn.classList.add("red");
         toggleBtn.textContent = "N/A";
         if (currentActiveRect && currentActiveRect.id === "rect-24bits") {
-          isToggleEnabled = false;
+          isToggleEnabled = true;
         }
       } else {
         toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
