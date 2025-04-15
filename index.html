@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---v3.5-->
+<!DOCTYPE html><!---v3.6-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -291,6 +291,7 @@
                     <button class="submenu-item" id="dither-tool">Dither & NS Benchmark Tool</button>
                 </div>
             </div>
+            <button class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</button> <!-- New menu item -->
         </div>
     </div>
     <img id="logo" alt="Soundins Logo">
@@ -334,6 +335,7 @@
 
             var ditherArticleBtn = document.getElementById("dither-article");
             var ditherToolBtn = document.getElementById("dither-tool");
+            var subNyquistBtn = document.getElementById("sub-nyquist-btn"); // Reference to new button
 
             ditherArticleBtn.addEventListener("click", function() {
                 window.location.href = "https://soundins.com.ar/Publications//Dither_Article/DitherNS_Article.html";
@@ -341,6 +343,10 @@
 
             ditherToolBtn.addEventListener("click", function() {
                 window.location.href = "https://soundins.com.ar/Publications/Dither/DitherNS_Tool_Main.html";
+            });
+
+            subNyquistBtn.addEventListener("click", function() {
+                window.location.href = "https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html"; // Redirect to the specified URL
             });
         });
     </script>
