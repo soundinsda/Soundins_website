@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v6.92 -->
+<!DOCTYPE html><!--Mobile_v6.93 -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -500,7 +500,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v6.92iMobile</div>
+    <div id="version-text">v6.92JMobile</div>
     <div id="mode-toggle-container">
       <button id="mode-toggle-btn">
         <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
@@ -758,62 +758,69 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       }
     }
 
-    function drawSpectrum() {
-      if (!analyser) return;
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-      analyser.getByteFrequencyData(dataArray);
+ function drawSpectrum() {
+  if (!analyser) {
+    console.error("Analyser no está definido.");
+    return;
+  }
 
-      dataHistory.push(new Uint8Array(dataArray));
-      if (dataHistory.length > smoothingWindow) {
-        dataHistory.shift();
-      }
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  analyser.getByteFrequencyData(dataArray);
 
-      for (let i = 0; i < bufferLength; i++) {
-        let sum = 0;
-        for (let j = 0; j < dataHistory.length; j++) {
-          sum += dataHistory[j][i];
-        }
-        smoothedData[i] = sum / dataHistory.length;
-      }
+  dataHistory.push(new Uint8Array(dataArray));
+  if (dataHistory.length > smoothingWindow) {
+    dataHistory.shift();
+  }
 
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      if (sourceNode) {
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "rgb(0, 255, 0)";
-        ctx.beginPath();
-
-        const sampleRate = audioContext.sampleRate;
-        const freqMax = sampleRate / 2;
-        const freqStep = freqMax / bufferLength;
-
-        const minFreq = 20;
-        const maxFreq = 22000;
-        const logMin = Math.log10(minFreq);
-        const logMax = Math.log10(maxFreq);
-        const logRange = logMax - logMin;
-
-        ctx.moveTo(0, canvas.height);
-
-        for (let i = 0; i < bufferLength; i++) {
-          const freq = i * freqStep;
-          if (freq < minFreq || freq > maxFreq) continue;
-
-          const logFreq = Math.log10(freq);
-          const x = canvas.width * (logFreq - logMin) / logRange;
-          const value = smoothedData[i] / 255;
-          const y = canvas.height * (1 - value);
-
-          ctx.lineTo(x, y);
-        }
-
-        ctx.stroke();
-      }
-
-      requestAnimationFrame(drawSpectrum);
+  for (let i = 0; i < bufferLength; i++) {
+    let sum = 0;
+    for (let j = 0; j < dataHistory.length; j++) {
+      sum += dataHistory[j][i];
     }
+    smoothedData[i] = sum / dataHistory.length;
+  }
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (sourceNode) {
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgb(0, 255, 0)";
+    ctx.beginPath();
+
+    const sampleRate = audioContext.sampleRate;
+    const freqMax = sampleRate / 2;
+    const freqStep = freqMax / bufferLength;
+
+    const minFreq = 20;
+    const maxFreq = 20000; // Ajustado a 20 kHz para coincidir con el escritorio
+    const logMin = Math.log10(minFreq);
+    const logMax = Math.log10(maxFreq);
+    const logRange = logMax - logMin;
+
+    let hasData = false;
+    ctx.moveTo(0, canvas.height);
+
+    for (let i = 0; i < bufferLength; i++) {
+      const freq = i * freqStep;
+      if (freq < minFreq || freq > maxFreq) continue;
+
+      const logFreq = Math.log10(freq);
+      const x = canvas.width * (logFreq - logMin) / logRange;
+      const value = smoothedData[i] / 255;
+      const y = canvas.height * (1 - value);
+
+      if (smoothedData[i] > 0) hasData = true;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+    console.log("Datos en analyser:", hasData ? "Sí" : "No");
+  }
+
+  requestAnimationFrame(drawSpectrum);
+}
 
     function toggleLanguageMenu() {
       const menu = document.getElementById("language-menu");
