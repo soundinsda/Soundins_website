@@ -500,7 +500,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v6.92hMobile</div>
+    <div id="version-text">v6.92iMobile</div>
     <div id="mode-toggle-container">
       <button id="mode-toggle-btn">
         <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
@@ -790,7 +790,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         const freqStep = freqMax / bufferLength;
 
         const minFreq = 20;
-        const maxFreq = 20000;
+        const maxFreq = 22000;
         const logMin = Math.log10(minFreq);
         const logMax = Math.log10(maxFreq);
         const logRange = logMax - logMin;
@@ -1039,17 +1039,20 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       }
     }
 
-    function updateToggleButtonState() {
-      toggleBtn.disabled = (currentSource === "Flaute" || (currentActiveRect && currentActiveRect.id === "rect-24bits"));
-      toggleBtn.classList.remove("red", "green");
-      if (toggleBtn.disabled) {
-        toggleBtn.classList.add("red");
-        toggleBtn.textContent = "N/A";
-      } else {
-        toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
-        toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
-      }
+ function updateToggleButtonState() {
+  toggleBtn.disabled = (currentSource === "Flaute" || (currentActiveRect && currentActiveRect.id === "rect-24bits"));
+  toggleBtn.classList.remove("red", "green");
+  if (toggleBtn.disabled) {
+    toggleBtn.classList.add("red");
+    toggleBtn.textContent = "N/A";
+    if (currentActiveRect && currentActiveRect.id === "rect-24bits") {
+      isToggleEnabled = true; // Forzar isToggleEnabled a false para rect-24bits
     }
+  } else {
+    toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
+    toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+  }
+}
 
     function showProgressBar() {
       progressContainer.style.display = "block";
