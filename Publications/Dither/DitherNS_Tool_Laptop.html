@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <!-- VERSION laptop_v9.4 -->
+ <!-- VERSION laptop_v9.5 -->
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -485,7 +485,7 @@
 <img alt="Logo de Soundins" id="logo" src="Soundins.png"/>
 </a>
 <h1>Dither & NS Benchmark Tool</h1>
-<div id="version-text">laptop_v9.4</div>
+<div id="version-text">laptop_v9.5</div>
 <div id="top-right-container">
 <div id="mode-help-container">
 <img alt="Toggle Bright/Dark Mode" id="mode-toggle" src="dark_mode.png"/>
@@ -882,10 +882,17 @@ let analyser = null;
 let sourceNode = null;
 const canvas = document.getElementById("spectrumCanvas");
 const ctx = canvas.getContext("2d");
-
 canvas.width = 385;
 canvas.height = 70;
 
+let smoothedData = null;
+const smoothingWindow = 50;
+let dataHistory = [];
+
+let currentPlayPromise = null; // Para manejar operaciones asincrónicas
+let isPlaying = false; // Para rastrear si hay reproducción activa
+
+// Inicialización del AudioContext con reanudación
 function initializeAudioContext() {
   if (!audioContext) {
     try {
@@ -895,6 +902,7 @@ function initializeAudioContext() {
       analyser.smoothingTimeConstant = 0.1;
       analyser.minDecibels = -110;
       analyser.maxDecibels = -30;
+      smoothedData = new Float32Array(analyser.frequencyBinCount);
       console.log("AudioContext y Analyser inicializados.");
       if (!window.isDrawing) {
         window.isDrawing = true;
@@ -904,12 +912,14 @@ function initializeAudioContext() {
       console.error("Error al inicializar AudioContext:", e);
     }
   }
+  if (audioContext.state === "suspended") {
+    audioContext.resume().then(() => {
+      console.log("AudioContext reanudado.");
+    });
+  }
 }
 
-let smoothedData = new Float32Array(analyser ? analyser.frequencyBinCount : 16384);
-const smoothingWindow = 50;
-let dataHistory = [];
-
+// Dibujo del espectro (sin cambios significativos)
 function drawSpectrum() {
   if (!analyser) {
     console.error("Analyser no está definido.");
@@ -974,14 +984,34 @@ function drawSpectrum() {
   requestAnimationFrame(drawSpectrum);
 }
 
+// Detención robusta del audio
+function stopAudio() {
+  if (sourceNode) {
+    try {
+      sourceNode.stop();
+    } catch (e) {
+      console.log("El nodo ya estaba detenido:", e);
+    }
+    sourceNode.disconnect();
+    sourceNode = null;
+  }
+  if (analyser && analyser.context.state !== "closed") {
+    analyser.disconnect();
+  }
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  dataHistory = [];
+  isPlaying = false;
+  console.log("Audio detenido y recursos liberados.");
+}
+
+// Reproducción de audio con manejo de asincronía y progreso
 async function playAudioFromMemory(audioData, loop = false, rect) {
   if (!audioContext) initializeAudioContext();
   if (!audioContext || !analyser) {
     console.error("AudioContext o Analyser no inicializados.");
     return;
   }
-
-  stopAudio();
 
   try {
     console.log("Decodificando audio...");
@@ -991,9 +1021,9 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
     sourceNode.buffer = audioBuffer;
     sourceNode.connect(analyser);
     analyser.connect(audioContext.destination);
-
     sourceNode.loop = loop;
     sourceNode.start();
+    isPlaying = true;
     console.log("Audio reproduciéndose.");
 
     const startTime = audioContext.currentTime;
@@ -1003,7 +1033,9 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
       const elapsed = audioContext.currentTime - startTime;
       const progress = (elapsed / duration) * 100;
       const loadingBar = document.getElementById(`loading-bar-${rect.id.split('-')[1]}`);
-      loadingBar.style.width = `${Math.min(progress, 100)}%`;
+      if (loadingBar) {
+        loadingBar.style.width = `${Math.min(progress, 100)}%`;
+      }
       if (progress < 100 || loop) requestAnimationFrame(updateProgress);
     };
     requestAnimationFrame(updateProgress);
@@ -1021,32 +1053,49 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
   }
 }
 
-function stopAudio() {
-  if (sourceNode) {
+// Función principal de reproducción con control de promesas
+async function playAudio(rect) {
+  if (currentPlayPromise) {
+    currentPlayPromise.cancel = true; // Marcar para cancelar operación en curso
+  }
+
+  const rectId = rect.id;
+  const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
+  const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
+
+  if (audioData) {
+    stopAudio();
+    rect.classList.add("green");
+    currentActiveRect = rect;
+
+    const playPromise = playAudioFromMemory(audioData, isLoopEnabled, rect);
+    currentPlayPromise = playPromise;
+    playPromise.cancel = false;
+
     try {
-      sourceNode.stop();
+      await playPromise;
+      if (playPromise.cancel) {
+        stopAudio();
+        rect.classList.remove("green");
+        currentActiveRect = null;
+      }
     } catch (e) {
-      console.log("El nodo ya estaba detenido:", e);
+      console.error("Error en reproducción:", e);
     }
-    sourceNode.disconnect();
-    sourceNode = null;
+  } else {
+    console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
   }
-  if (analyser && analyser.context.state !== "closed") {
-    analyser.disconnect();
-  }
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  dataHistory = [];
-  console.log("Audio detenido y recursos liberados.");
 }
 
+// Detener todo el audio y limpiar estados
 function stopAllAudio() {
   stopAudio();
   document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
-  currentActiveRect = null;
   document.querySelectorAll(".loading-bar").forEach(bar => bar.style.width = "0%");
+  currentActiveRect = null;
 }
 
+// Precarga de todos los archivos de audio
 async function preloadAllAudio() {
   const loadingOverlay = document.getElementById("loading-overlay");
   const progressBar = document.getElementById("progress");
@@ -1088,6 +1137,7 @@ async function preloadAllAudio() {
   }, 200);
 }
 
+// Elementos del DOM
 const sourceSine = document.getElementById("source-Sine");
 const sourceFlaute = document.getElementById("source-flaute");
 const toggleBtn = document.getElementById("toggle-btn");
@@ -1102,125 +1152,7 @@ const instructionsLink = document.getElementById("instructions-link");
 const languageToggle = document.getElementById("language-toggle");
 const modeToggle = document.getElementById("mode-toggle");
 
-const minimizeBtn = document.getElementById("minimize-btn");
-const maximizeBtn = document.getElementById("maximize-btn");
-const spectrumContainer = document.getElementById("spectrum-container");
-const spectrumTitle = document.getElementById("spectrum-title");
-spectrumTitle.style.color = "#1ff909";
-
-minimizeBtn.addEventListener("click", () => {
-  spectrumContainer.classList.add("minimized");
-  spectrumTitle.style.color = "#1ff909";
-});
-
-maximizeBtn.addEventListener("click", () => {
-  spectrumContainer.classList.remove("minimized");
-  spectrumTitle.style.color = "green";
-});
-
-const tooltipElements = {
-  "source-Sine": "Sine 997Hz source",
-  "source-flaute": "Instrument source",
-  "rect-24bits": "Source rendered at 24 bit depth",
-  "rect-main": "Source rendered at 16 bits depth\nwith no dither (truncated)",
-  "toggle-btn": "Enable / disable Sine tone.\nUse this button to discern distortion & noise shape",
-  "rect-1": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Off",
-  "rect-11": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Low",
-  "rect-21": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: High",
-  "rect-31": "Signal rendered with\nIzotope Ozone 11\nDither: Low\nNoise Shaping: Max",
-  "rect-2": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Off",
-  "rect-12": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Low",
-  "rect-22": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: High",
-  "rect-32": "Signal rendered with\nIzotope Ozone 11\nDither: Strong\nNoise Shaping: Max",
-  "rect-3": "Signal rendered with\nFabFilter ProL2\nDither: On\nNoise Shaping: Off",
-  "rect-13": "Signal rendered with\nFabFilter ProL2\nDither: On\nNoise Shaping: Basic",
-  "rect-23": "Signal rendered with\nFabFilter ProL2\nDither: On\nNoise Shaping: Optimized",
-  "rect-33": "Signal rendered with\nFabFilter ProL2\nDither: On\nNoise Shaping: Weighted",
-  "rect-4": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Off",
-  "rect-14": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Moderate",
-  "rect-24": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-  "rect-34": "Signal rendered with\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
-  "rect-5": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Off",
-  "rect-15": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Moderate",
-  "rect-25": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-  "rect-35": "Signal rendered with\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
-  "rect-6": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Off",
-  "rect-26": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Equal",
-  "rect-36": "Signal rendered with\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Classic",
-  "rect-7": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: Off",
-  "rect-17": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 50%",
-  "rect-27": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 100%",
-  "rect-37": "Signal rendered with\nDMG Limitless\nDither: On\nNoise Shaping: 200%",
-  "rect-8": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: Off",
-  "rect-38": "Signal rendered with\nReaper\nDither: On\nNoise Shaping: On",
-  "rect-9": "Signal rendered with\nLive\nDither: On\nNoise Shaping: Off",
-  "rect-19": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr1",
-  "rect-29": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr2",
-  "rect-39": "Signal rendered with\nLive\nDither: On\nNoise Shaping: POWr3",
-  "rect-10": "Signal rendered with\nProTools Maxim\nDither: On\nNoise Shaping: Off",
-  "rect-20": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 1",
-  "rect-30": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 2",
-  "rect-40": "Signal rendered with\nProTools Dither\nDither: On\nNoise Shaping: Type 3",
-  "pause-btn": "Stop audio playback",
-  "loop-btn": "Audio looping",
-  "instructions-link": "Open instructions",
-  "language-toggle": "Switch language",
-  "help-toggle": "Help tooltips",
-  "mode-toggle": "Dark / Bright mode"
-};
-
-const tooltipElementsEs = {
-  "source-Sine": "Tono senoidal 997Hz",
-  "source-flaute": "Instrumento",
-  "rect-24bits": "Fuente renderizada a 24 bits",
-  "rect-main": "Fuente renderizada a 16 bits \nsin dither (truncado)",
-  "toggle-btn": "Habilita / deshabilita tono senoidal\nUsa este botón para percibir distorsiones y perfil de ruido",
-  "rect-1": "Señal renderizada con\nIzotope Ozone 11\nDither: Bajo\nNoise Shaping: Inactivo",
-  "rect-11": "Señal renderizada con\nIzotope Ozone 11\nDither: Bajo\nNoise Shaping: Bajo",
-  "rect-21": "Señal renderizada con\nIzotope Ozone 11\nDither: Bajo\nNoise Shaping: Alto",
-  "rect-31": "Señal renderizada con\nIzotope Ozone 11\nDither: Bajo\nNoise Shaping: Máximo",
-  "rect-2": "Señal renderizada con\nIzotope Ozone 11\nDither: Fuerte\nNoise Shaping: Inactivo",
-  "rect-12": "Señal renderizada con\nIzotope Ozone 11\nDither: Fuerte\nNoise Shaping: Bajo",
-  "rect-22": "Señal renderizada con\nIzotope Ozone 11\nDither: Fuerte\nNoise Shaping: Alto",
-  "rect-32": "Señal renderizada con\nIzotope Ozone 11\nDither: Fuerte\nNoise Shaping: Máximo",
-  "rect-3": "Señal renderizada con\nFabFilter ProL2\nDither: Activo\nNoise Shaping: Inactivo",
-  "rect-13": "Señal renderizada con\nFabFilter ProL2\nDither: Activo\nNoise Shaping: Básico",
-  "rect-23": "Señal renderizada con\nFabFilter ProL2\nDither: Activo\nNoise Shaping: Optimizado",
-  "rect-33": "Señal renderizada con\nFabFilter ProL2\nDither: Activo\nNoise Shaping: Ponderado",
-  "rect-4": "Señal renderizada con\nWaves L2\nDither: T1\nNoise Shaping: Inactivo",
-  "rect-14": "Señal renderizada con\nWaves L2\nDither: T1\nNoise Shaping: Moderado",
-  "rect-24": "Señal renderizada con\nWaves L2\nDither: T1\nNoise Shaping: Normal",
-  "rect-34": "Señal renderizada con\nWaves L2\nDither: T1\nNoise Shaping: Ultra",
-  "rect-5": "Señal renderizada con\nWaves L2\nDither: T2\nNoise Shaping: Inactivo",
-  "rect-15": "Señal renderizada con\nWaves L2\nDither: T2\nNoise Shaping: Moderado",
-  "rect-25": "Señal renderizada con\nWaves L2\nDither: T2\nNoise Shaping: Normal",
-  "rect-35": "Señal renderizada con\nWaves L2\nDither: T2\nNoise Shaping: Ultra",
-  "rect-6": "Señal renderizada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Inactivo",
-  "rect-26": "Señal renderizada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Igual",
-  "rect-36": "Señal renderizada con\nVoxengo Elephant\nDither: TPDF\nNoise Shaping: Clásico",
-  "rect-7": "Señal renderizada con\nDMG Limitless\nDither: Activo\nNoise Shaping: Inactivo",
-  "rect-17": "Señal renderizada con\nDMG Limitless\nDither: Activo\nNoise Shaping: 50%",
-  "rect-27": "Señal renderizada con\nDMG Limitless\nDither: Activo\nNoise Shaping: 100%",
-  "rect-37": "Señal renderizada con\nDMG Limitless\nDither: Activo\nNoise Shaping: 200%",
-  "rect-8": "Señal renderizada con\nReaper\nDither: Activo\nNoise Shaping: Inactivo",
-  "rect-38": "Señal renderizada con\nReaper\nDither: Activo\nNoise Shaping: Activo",
-  "rect-9": "Señal renderizada con\nLive\nDither: Activo\nNoise Shaping: Inactivo",
-  "rect-19": "Señal renderizada con\nLive\nDither: Activo\nNoise Shaping: POWr1",
-  "rect-29": "Señal renderizada con\nLive\nDither: Activo\nNoise Shaping: POWr2",
-  "rect-39": "Señal renderizada con\nLive\nDither: Activo\nNoise Shaping: POWr3",
-  "rect-10": "Señal renderizada con\nProTools Maxim\nDither: Activo\nNoise Shaping: Inactivo",
-  "rect-20": "Señal renderizada con\nProTools Dither\nDither: Activo\nNoise Shaping: Tipo 1",
-  "rect-30": "Señal renderizada con\nProTools Dither\nDither: Activo\nNoise Shaping: Tipo 2",
-  "rect-40": "Señal renderizada con\nProTools Dither\nDither: Activo\nNoise Shaping: Tipo 3",
-
-  "pause-btn": "Detener  audio",
-  "loop-btn": "Bucle de audio",
-  "instructions-link": "Abrir instrucciones",
-  "language-toggle": "Cambiar idioma",
-  "help-toggle": "Tooltips de ayuda",
-  "mode-toggle": "Modo Oscuro / Claro",
-};
-
+// Eventos para cambiar la fuente
 sourceSine.addEventListener("click", () => {
   sourceSine.classList.add("active");
   sourceFlaute.classList.remove("active");
@@ -1244,8 +1176,9 @@ sourceFlaute.addEventListener("click", () => {
   stopAllAudio();
 });
 
+// Evento para el botón de toggle
 toggleBtn.addEventListener("click", () => {
-  if (currentSource !== "Sine") return; // Only allow toggling when Sine is selected
+  if (currentSource !== "Sine") return;
   isToggleEnabled = !isToggleEnabled;
   toggleBtn.classList.toggle("red");
   toggleBtn.style.backgroundColor = isToggleEnabled ? "green" : "red";
@@ -1259,6 +1192,7 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
+// Eventos para los rectángulos
 document.querySelectorAll(".rect:not(.no-data):not(.source-btn)").forEach(rect => {
   rect.addEventListener("click", () => {
     if (rect.classList.contains("no-data")) return;
@@ -1273,8 +1207,8 @@ document.querySelectorAll(".rect:not(.no-data):not(.source-btn)").forEach(rect =
     rect.classList.add("green");
     if (rect.id === "rect-24bits" && currentSource === "Sine") {
       toggleBtn.classList.add("disabled");
-      toggleBtn.classList.remove("red"); // Ensure red is cleared
-      toggleBtn.style.backgroundColor = "red"; // Explicitly set red
+      toggleBtn.classList.remove("red");
+      toggleBtn.style.backgroundColor = "red";
       toggleBtn.textContent = "N/A";
       isToggleEnabled = false;
     } else if (currentSource === "Sine") {
@@ -1295,19 +1229,7 @@ document.querySelectorAll(".rect:not(.no-data):not(.source-btn)").forEach(rect =
   });
 });
 
-async function playAudio(rect) {
-  const rectId = rect.id;
-  const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
-  const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
-  if (audioData) {
-    stopAllAudio(); // Detener cualquier audio previo y limpiar estados
-    rect.classList.add("green"); // Asegurar que el nuevo rectángulo se ponga verde
-    currentActiveRect = rect; // Actualizar el rectángulo activo
-    await playAudioFromMemory(audioData, isLoopEnabled, rect);
-  } else {
-    console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
-  }
-}
+// Evento para el botón de loop
 loopBtn.addEventListener("click", () => {
   isLoopEnabled = !isLoopEnabled;
   loopBtn.classList.toggle("selected");
@@ -1316,8 +1238,10 @@ loopBtn.addEventListener("click", () => {
   }
 });
 
+// Evento para el botón de pausa
 document.getElementById("pause-btn").addEventListener("click", stopAllAudio);
 
+// Eventos para el toggle de ayuda
 helpToggle.addEventListener("click", () => {
   isHelpEnabled = !isHelpEnabled;
   if (currentLanguage === "Español") {
@@ -1327,30 +1251,35 @@ helpToggle.addEventListener("click", () => {
   }
 });
 
-  instructionsLink.addEventListener("click", () => {
-      const windowWidth = 1200;
-      const windowHeight = 720;
-      const left = (screen.width - windowWidth) / 2;
-      const top = 100;
+// Evento para abrir instrucciones
+instructionsLink.addEventListener("click", () => {
+  const windowWidth = 1200;
+  const windowHeight = 720;
+  const left = (screen.width - windowWidth) / 2;
+  const top = 100;
 
-      if (currentLanguage === "English") {
-        window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
-      } else {
-        window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
-      }
-    });
+  if (currentLanguage === "English") {
+    window.open("instructions_en.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+  } else {
+    window.open("instructions_es.html", "_blank", `width=${windowWidth},height=${windowHeight},left=${left},top=${top}`);
+  }
+});
+
+// Evento para cambiar idioma
 languageToggle.addEventListener("click", () => {
   currentLanguage = currentLanguage === "Español" ? "English" : "Español";
   languageToggle.textContent = currentLanguage === "Español" ? "English" : "Español";
   updateUIForLanguage();
 });
 
+// Evento para cambiar modo claro/oscuro
 modeToggle.addEventListener("click", () => {
   isDarkMode = !isDarkMode;
   document.body.classList.toggle("dark-mode");
   modeToggle.src = isDarkMode ? "bright_mode.png" : "dark_mode.png";
 });
 
+// Función para actualizar la interfaz según el idioma
 function updateUIForLanguage() {
   document.querySelector("h1").textContent = currentLanguage === "Español" ? "Dither & NS Benchmark Tool" : "Dither & NS Benchmark Tool";
   document.querySelector(".source-label").textContent = currentLanguage === "Español" ? "Fuente" : "Source";
@@ -1360,13 +1289,11 @@ function updateUIForLanguage() {
   document.getElementById("rect-main").childNodes[0].textContent = currentLanguage === "Español" ? "16 bits no Dither" : "16 bits no Dither";
   document.querySelector(".loading-text").textContent = currentLanguage === "Español" ? "Cargando Archivos de Audio" : "Loading Audio Files";
   document.getElementById("spectrum-title").textContent = currentLanguage === "Español" ? "Analizador de Espectro" : "Spectrum Analyzer";
- 
   document.getElementById("instructions-link").childNodes[0].textContent = currentLanguage === "Español" ? "Léeme" : "Readme";
   document.getElementById("help-toggle").textContent = currentLanguage === "Español" ? (isHelpEnabled ? "Ayuda On" : "Ayuda Off") : (isHelpEnabled ? "Help On" : "Help Off");
-
-
 }
 
+// Tooltips para ayuda
 const tooltip = document.getElementById("custom-tooltip");
 const tooltipTopRight = document.getElementById("custom-tooltip-top-right");
 
@@ -1381,8 +1308,8 @@ document.querySelectorAll(".rect, #toggle-btn, #pause-btn, #loop-btn, #instructi
       targetTooltip.style.display = "block";
       const rect = element.getBoundingClientRect();
       if (isTopRight) {
-        targetTooltip.style.top = `${rect.top - 50}px`; // Arriba del botón
-        targetTooltip.style.left = `${rect.right + 5}px`; // A la derecha del botón
+        targetTooltip.style.top = `${rect.top - 50}px`;
+        targetTooltip.style.left = `${rect.right + 5}px`;
       } else {
         targetTooltip.style.top = `${rect.bottom + 5}px`;
         targetTooltip.style.left = `${rect.left + rect.width / 2 - 50}px`;
@@ -1396,6 +1323,24 @@ document.querySelectorAll(".rect, #toggle-btn, #pause-btn, #loop-btn, #instructi
   });
 });
 
+// Eventos para minimizar/maximizar el analizador de espectro
+const minimizeBtn = document.getElementById("minimize-btn");
+const maximizeBtn = document.getElementById("maximize-btn");
+const spectrumContainer = document.getElementById("spectrum-container");
+const spectrumTitle = document.getElementById("spectrum-title");
+spectrumTitle.style.color = "#1ff909";
+
+minimizeBtn.addEventListener("click", () => {
+  spectrumContainer.classList.add("minimized");
+  spectrumTitle.style.color = "#1ff909";
+});
+
+maximizeBtn.addEventListener("click", () => {
+  spectrumContainer.classList.remove("minimized");
+  spectrumTitle.style.color = "green";
+});
+
+// Iniciar precarga de audio
 preloadAllAudio();
 </script>
 </body>
