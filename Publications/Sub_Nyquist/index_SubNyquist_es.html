@@ -50,6 +50,19 @@
             max-width: 100%;
             height: auto;
         }
+
+.fig15-image {
+    margin-left: 90px; /* Margen para pantallas grandes */
+}
+
+@media (max-width: 768px) {
+    .fig15-image {
+        margin-left: 0; /* Elimina el margen en móviles */
+        margin: 0 auto; /* Centra la imagen */
+    }
+}
+
+
         .figure p {
             margin-top: 5px;
         }
@@ -257,7 +270,7 @@
 
 @media (max-width: 768px) {
     .language-button {
-        top: 150px;
+        top: 140px;
         right: 8px;
     }
     .english-button {
@@ -393,7 +406,7 @@ implicancias en la representación gráfica de las señales y su impacto en la c
 </div>
 <p>El mecanismo de este proceso de filtrado, pero visto desde el dominio del tiempo (recordar siempre la dualidad frecuencia – tiempo), significaría una convolución entre cada una de las muestras y la función SINC, que es la representación en el tiempo de una respuesta ideal de pasa bajo.</p>
 <div class="figure">
-<img img style="margin-left: 90px";alt="Reconstrucción en el dominio del tiempo" src="Pictures/fig16.png"/>
+<img alt="Reconstrucción en el dominio del tiempo" src="Pictures/fig16.png"/>
 <p><st>Fig 15. Proceso de reconstrucción de la señal en el dominio del tiempo</st></p>
 </div>
 <p>En la teoría, este proceso posee una reconstrucción perfecta. Pero el inconveniente se presenta en la imposibilidad de su implementación, ya que la función SINC se extiende desde -∞ a +∞. Como esto no es posible a los fines prácticos, debemos acotarla en el tiempo. Este recorte temporal de la función, tendrá su impacto en el dominio de la frecuencia y será en que la respuesta del <u><i>filtro pasa bajo ya no será la ideal y eso traerá “distorsiones” en la reconstrucción de la señal analógica</i></u>. Y son precisamente esos errores lo que hacen que la señal reconstruida sea en mayor o menor medida, igual a la original.</p>

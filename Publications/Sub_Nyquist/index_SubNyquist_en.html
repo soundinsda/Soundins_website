@@ -256,7 +256,7 @@
 
 @media (max-width: 768px) {
     .language-button {
-        top: 150px;
+        top: 140px;
         right: 8px;
     }
     .espanol-button {
@@ -264,11 +264,6 @@
         padding: 6px 12px;
     }
 }
-
-
-
-
-
 
 
 
@@ -395,7 +390,7 @@
 </div>
 <p>The mechanism of this filtering process, when viewed from the time domain (always remembering the frequency-time duality), would mean a convolution between each sample and the SINC function, which is the time-domain representation of an ideal low-pass response.</p>
 <div class="figure">
-<img img style="margin-left: 90px";alt="Reconstruction in the time domain" src="Pictures/fig16.png"/>
+<img alt="Reconstruction in the time domain" src="Pictures/fig16.png"/>
 <p><st>Fig 15. Signal reconstruction process in the time domain</st></p>
 </div>
 <p>In theory, this process achieves perfect reconstruction. But the problem arises in the impossibility of its implementation, as the SINC function extends from -∞ to +∞. Since this is not practical, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, causing the low-pass filter’s response to no longer be ideal, which introduces “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less similar to the original.</p>
