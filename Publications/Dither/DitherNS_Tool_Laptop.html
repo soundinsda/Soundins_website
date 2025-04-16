@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <!-- VERSION laptop_v9.5 -->
+ <!-- VERSION laptop_v9.8 -->
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -485,7 +485,7 @@
 <img alt="Logo de Soundins" id="logo" src="Soundins.png"/>
 </a>
 <h1>Dither & NS Benchmark Tool</h1>
-<div id="version-text">laptop_v9.5</div>
+<div id="version-text">laptop_v9.8</div>
 <div id="top-right-container">
 <div id="mode-help-container">
 <img alt="Toggle Bright/Dark Mode" id="mode-toggle" src="dark_mode.png"/>
@@ -865,6 +865,10 @@ const audioMapping = {
   }
 };
 
+
+
+// Insert your const audioMapping here
+
 let isToggleEnabled = true;
 let currentActiveRect = null;
 let lastActiveRect = null;
@@ -880,6 +884,7 @@ let isDarkMode = false;
 let audioContext = null;
 let analyser = null;
 let sourceNode = null;
+let gainNode = null;
 const canvas = document.getElementById("spectrumCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 385;
@@ -889,12 +894,118 @@ let smoothedData = null;
 const smoothingWindow = 50;
 let dataHistory = [];
 
-let currentPlayPromise = null; // Para manejar operaciones asincrónicas
-let isPlaying = false; // Para rastrear si hay reproducción activa
+let currentPlayPromise = null;
+let isPlaying = false;
+let isStopping = false;
+let audioContextState = "uninitialized";
 
-// Inicialización del AudioContext con reanudación
+const tooltipElements = {
+  "source-Sine": "Sine wave at 997Hz source",
+  "source-flaute": "Instrument source",
+  "rect-24bits": "24-bits rendered audio file",
+  "rect-main": "16-bits rendered without dithering",
+  "toggle-btn": "Activate / Deactivate 997Hz tone",
+  "pause-btn": "Stops all audio playback.",
+  "loop-btn": "Audio loop",
+  "instructions-link": "Opens the instructions page.",
+  "language-toggle": "Switches between English and Spanish.",
+  "help-toggle": "Enables or disables help tooltips.",
+  "mode-toggle": "Switches between bright and dark mode.",
+  "rect-1": "Ozone 11 with Dither: Low / Noise Shaping: Off",
+  "rect-2": "Ozone 11 with Dither: Strong, Noise Shaping: Off",
+  "rect-3": "FabFilter Pro L2 with Dither On, Noise Shaping: Off",
+  "rect-4": "Waves L2 with Dither: Type 1, Noise Shaping: Off",
+  "rect-5": "Waves L2 with Dither: Type 2,  Noise Shaping: Off.",
+  "rect-6": "Voxengo Elephant with TPDF Dither, Noise Shaping: Off",
+  "rect-7": "DMG Limitless with Dither On, Noise Shaping: Off",
+  "rect-8": "Reaper with Dither On, Noise Shaping: Off",
+  "rect-9": "Ableton Live with TPDF Dither, Noise Shaping: Off",
+  "rect-10": "ProTools Maxim with Dither On, Noise Shaping: Off",
+  "rect-11": "Ozone 11 with Dither: Low, Noise Shaping: Low",
+  "rect-12": "Ozone 11 with Dither: Strong, Noise Shaping: Low",
+  "rect-13": "FabFilter Pro L2 with Dither: On, Noise Shaping: Basic",
+  "rect-14": "Waves L2 with Dither: Type 1, Noise Shaping: Moderate",
+  "rect-15": "Waves L2 with Dither: Type 2, Noise Shaping: Moderate ",
+  "rect-17": "DMG Limitless with Dither: On, Noise Shaping: 50%",
+  "rect-19": "Ableton Live with Dither: TPDF, Noise Shaping: POWr1",
+  "rect-20": "ProTools Dither with Dither: On, Noise Shaping: Type 1.",
+  "rect-21": "Ozone 11 with Dither: Low, Noise Shaping: Mid",
+  "rect-22": "Ozone 11 with Dither: Strong, Noise Shaping: Mid",
+  "rect-23": "FabFilter Pro L2 with Dither On, Noise Shaping: Optimized",
+  "rect-24": "Waves L2 with Dither: Type 1, Noise Shaping: Normal",
+  "rect-25": "Waves L2 with Dither: Type 2, Noise Shaping: Normal",
+  "rect-26": "Voxengo Elephant with Dither: TPDF, Noise Shaping: Equal",
+  "rect-27": "DMG Limitless with Dither: On, Noise Shaping: 100%",
+  "rect-29": "Ableton Live with Dither: TPDF, Noise Shaping: POWr2",
+  "rect-30": "ProTools Dither with Dither: On, Noise Shaping: Type 2",
+  "rect-31": "Ozone 11 with Dither: Low, Noise Shaping: Max",
+  "rect-32": "Ozone 11 with Dither: Strong, Noise Shaping: Max ",
+  "rect-33": "FabFilter Pro L2 with Dither: On, Noise Shaping: Weighted",
+  "rect-34": "Waves L2 with Dither: Type 1, Noise Shaping: Ultra",
+  "rect-35": "Waves L2 with Dither: Type 2, Noise Shaping: Ultra",
+  "rect-36": "Voxengo Elephant with Dither: TPDF, Noise Shaping: Classic ",
+  "rect-37": "DMG Limitless with Dither: On, Noise Shaping: 200%.",
+  "rect-38": "Reaper with Dither: On, Noise Shaping: On.",
+  "rect-39": "Ableton Live with Dither: TPDF, Noise Shaping: POWr3.",
+  "rect-40": "ProTools Dither with Dither: On, Noise Shaping: Type 3."
+
+};
+
+const tooltipElementsEs = {
+  "source-Sine": "Fuente: Senoidal a 997Hz ",
+  "source-flaute": " Fuente : Instrumento",
+  "rect-24bits": "Audio a 24-bits ",
+  "rect-main": "Audio a 16-bits sin dithering",
+  "toggle-btn": "997Hz tono Activado / Desactivado",
+  "pause-btn": "Detención de reporducción",
+  "loop-btn": "Bucle de audio",
+  "instructions-link": "Página de instrucciones",
+  "language-toggle": "Seleccionar idioma",
+  "help-toggle": "Habilita / Deshabilita tooltips",
+  "mode-toggle": "Modo Oscuro / Brillante",
+  "rect-1": "Ozone 11 with Dither: Low / Noise Shaping: Off",
+  "rect-2": "Ozone 11 with Dither: Strong, Noise Shaping: Off",
+  "rect-3": "FabFilter Pro L2 with Dither On, Noise Shaping: Off",
+  "rect-4": "Waves L2 with Dither: Type 1, Noise Shaping: Off",
+  "rect-5": "Waves L2 with Dither: Type 2,  Noise Shaping: Off.",
+  "rect-6": "Voxengo Elephant with TPDF Dither, Noise Shaping: Off",
+  "rect-7": "DMG Limitless with Dither On, Noise Shaping: Off",
+  "rect-8": "Reaper with Dither On, Noise Shaping: Off",
+  "rect-9": "Ableton Live with TPDF Dither, Noise Shaping: Off",
+  "rect-10": "ProTools Maxim with Dither On, Noise Shaping: Off",
+  "rect-11": "Ozone 11 with Dither: Low, Noise Shaping: Low",
+  "rect-12": "Ozone 11 with Dither: Strong, Noise Shaping: Low",
+  "rect-13": "FabFilter Pro L2 with Dither: On, Noise Shaping: Basic",
+  "rect-14": "Waves L2 with Dither: Type 1, Noise Shaping: Moderate",
+  "rect-15": "Waves L2 with Dither: Type 2, Noise Shaping: Moderate ",
+  "rect-17": "DMG Limitless with Dither: On, Noise Shaping: 50%",
+  "rect-19": "Ableton Live with Dither: TPDF, Noise Shaping: POWr1",
+  "rect-20": "ProTools Dither with Dither: On, Noise Shaping: Type 1.",
+  "rect-21": "Ozone 11 with Dither: Low, Noise Shaping: Mid",
+  "rect-22": "Ozone 11 with Dither: Strong, Noise Shaping: Mid",
+  "rect-23": "FabFilter Pro L2 with Dither On, Noise Shaping: Optimized",
+  "rect-24": "Waves L2 with Dither: Type 1, Noise Shaping: Normal",
+  "rect-25": "Waves L2 with Dither: Type 2, Noise Shaping: Normal",
+  "rect-26": "Voxengo Elephant with Dither: TPDF, Noise Shaping: Equal",
+  "rect-27": "DMG Limitless with Dither: On, Noise Shaping: 100%",
+  "rect-29": "Ableton Live with Dither: TPDF, Noise Shaping: POWr2",
+  "rect-30": "ProTools Dither with Dither: On, Noise Shaping: Type 2",
+  "rect-31": "Ozone 11 with Dither: Low, Noise Shaping: Max",
+  "rect-32": "Ozone 11 with Dither: Strong, Noise Shaping: Max ",
+  "rect-33": "FabFilter Pro L2 with Dither: On, Noise Shaping: Weighted",
+  "rect-34": "Waves L2 with Dither: Type 1, Noise Shaping: Ultra",
+  "rect-35": "Waves L2 with Dither: Type 2, Noise Shaping: Ultra",
+  "rect-36": "Voxengo Elephant with Dither: TPDF, Noise Shaping: Classic ",
+  "rect-37": "DMG Limitless with Dither: On, Noise Shaping: 200%.",
+  "rect-38": "Reaper with Dither: On, Noise Shaping: On.",
+  "rect-39": "Ableton Live with Dither: TPDF, Noise Shaping: POWr3.",
+  "rect-40": "ProTools Dither with Dither: On, Noise Shaping: Type 3."
+
+};
+
+// Inicialización del AudioContext con reanudación robusta
 function initializeAudioContext() {
-  if (!audioContext) {
+  if (!audioContext || audioContext.state === "closed") {
     try {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
       analyser = audioContext.createAnalyser();
@@ -902,24 +1013,37 @@ function initializeAudioContext() {
       analyser.smoothingTimeConstant = 0.1;
       analyser.minDecibels = -110;
       analyser.maxDecibels = -30;
+      gainNode = audioContext.createGain();
+      gainNode.gain.setValueAtTime(1, audioContext.currentTime);
       smoothedData = new Float32Array(analyser.frequencyBinCount);
-      console.log("AudioContext y Analyser inicializados.");
+      audioContextState = audioContext.state;
+      console.log("AudioContext inicializado, estado:", audioContext.state);
       if (!window.isDrawing) {
         window.isDrawing = true;
         drawSpectrum();
       }
     } catch (e) {
       console.error("Error al inicializar AudioContext:", e);
+      audioContextState = "error";
+      return Promise.resolve(false);
     }
   }
   if (audioContext.state === "suspended") {
-    audioContext.resume().then(() => {
+    return audioContext.resume().then(() => {
+      audioContextState = "running";
       console.log("AudioContext reanudado.");
+      return true;
+    }).catch(e => {
+      console.error("Error al reanudar AudioContext:", e);
+      audioContextState = "suspended";
+      return false;
     });
   }
+  audioContextState = audioContext.state;
+  return Promise.resolve(true);
 }
 
-// Dibujo del espectro (sin cambios significativos)
+// Dibujo del espectro
 function drawSpectrum() {
   if (!analyser) {
     console.error("Analyser no está definido.");
@@ -946,7 +1070,7 @@ function drawSpectrum() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if (sourceNode) {
+  if (sourceNode && isPlaying) {
     ctx.lineWidth = 2;
     ctx.strokeStyle = "rgb(0, 255, 0)";
     ctx.beginPath();
@@ -984,32 +1108,54 @@ function drawSpectrum() {
   requestAnimationFrame(drawSpectrum);
 }
 
-// Detención robusta del audio
-function stopAudio() {
-  if (sourceNode) {
-    try {
-      sourceNode.stop();
-    } catch (e) {
-      console.log("El nodo ya estaba detenido:", e);
-    }
-    sourceNode.disconnect();
-    sourceNode = null;
+// Detención robusta del audio con fade-out
+async function stopAudio() {
+  if (isStopping) {
+    console.log("stopAudio ya en curso, esperando...");
+    return;
   }
-  if (analyser && analyser.context.state !== "closed") {
-    analyser.disconnect();
-  }
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  dataHistory = [];
+  isStopping = true;
   isPlaying = false;
-  console.log("Audio detenido y recursos liberados.");
+
+  try {
+    if (sourceNode && gainNode) {
+      try {
+        gainNode.gain.setValueAtTime(gainNode.gain.value, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.02);
+        await new Promise(resolve => setTimeout(resolve, 50));
+        sourceNode.stop();
+      } catch (e) {
+        console.log("El nodo ya estaba detenido:", e);
+      }
+      sourceNode.disconnect();
+      sourceNode = null;
+    }
+    if (analyser && analyser.context.state !== "closed") {
+      analyser.disconnect();
+    }
+    if (gainNode) {
+      gainNode.disconnect();
+      gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+    }
+    if (audioContext && audioContext.state !== "closed") {
+      await audioContext.suspend();
+      console.log("AudioContext suspendido.");
+    }
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    dataHistory = [];
+    console.log("Audio detenido y recursos liberados.");
+  } catch (e) {
+    console.error("Error al detener audio:", e);
+  } finally {
+    isStopping = false;
+  }
 }
 
-// Reproducción de audio con manejo de asincronía y progreso
+// Reproducción de audio con manejo de asincronía, progreso y fade-in
 async function playAudioFromMemory(audioData, loop = false, rect) {
-  if (!audioContext) initializeAudioContext();
-  if (!audioContext || !analyser) {
-    console.error("AudioContext o Analyser no inicializados.");
+  if (!audioContext || !analyser || !gainNode) {
+    console.error("AudioContext, Analyser o GainNode no inicializados.");
     return;
   }
 
@@ -1017,11 +1163,18 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
     console.log("Decodificando audio...");
     const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
     console.log("Audio decodificado, duración:", audioBuffer.duration);
+
     sourceNode = audioContext.createBufferSource();
     sourceNode.buffer = audioBuffer;
-    sourceNode.connect(analyser);
-    analyser.connect(audioContext.destination);
     sourceNode.loop = loop;
+
+    sourceNode.connect(gainNode);
+    gainNode.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.02);
+
     sourceNode.start();
     isPlaying = true;
     console.log("Audio reproduciéndose.");
@@ -1029,7 +1182,7 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
     const startTime = audioContext.currentTime;
     const duration = audioBuffer.duration;
     const updateProgress = () => {
-      if (!sourceNode || !rect) return;
+      if (!sourceNode || !rect || !isPlaying) return;
       const elapsed = audioContext.currentTime - startTime;
       const progress = (elapsed / duration) * 100;
       const loadingBar = document.getElementById(`loading-bar-${rect.id.split('-')[1]}`);
@@ -1041,7 +1194,7 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
     requestAnimationFrame(updateProgress);
 
     sourceNode.onended = () => {
-      if (!loop && rect) {
+      if (!loop && rect && isPlaying) {
         rect.classList.remove("green");
         if (currentActiveRect === rect) currentActiveRect = null;
         stopAudio();
@@ -1050,46 +1203,76 @@ async function playAudioFromMemory(audioData, loop = false, rect) {
   } catch (e) {
     console.error("Error al decodificar o reproducir audio:", e);
     if (rect) rect.classList.remove("green");
+    isPlaying = false;
   }
 }
 
 // Función principal de reproducción con control de promesas
 async function playAudio(rect) {
+  if (isStopping) {
+    console.log("Esperando a que stopAudio termine...");
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
   if (currentPlayPromise) {
-    currentPlayPromise.cancel = true; // Marcar para cancelar operación en curso
+    currentPlayPromise.cancel = true;
   }
 
   const rectId = rect.id;
   const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
   const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
 
-  if (audioData) {
-    stopAudio();
+  if (!audioData) {
+    console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
+    return;
+  }
+
+  const playPromise = (async () => {
+    const contextReady = await initializeAudioContext();
+    if (!contextReady) {
+      console.error("AudioContext no está listo.");
+      return;
+    }
+
+    await stopAudio();
+
+    document.querySelectorAll(".loading-bar").forEach(bar => bar.style.width = "0%");
+    document.querySelectorAll(".rect.green").forEach(r => r.classList.remove("green"));
     rect.classList.add("green");
     currentActiveRect = rect;
 
-    const playPromise = playAudioFromMemory(audioData, isLoopEnabled, rect);
-    currentPlayPromise = playPromise;
-    playPromise.cancel = false;
-
-    try {
-      await playPromise;
-      if (playPromise.cancel) {
-        stopAudio();
-        rect.classList.remove("green");
-        currentActiveRect = null;
-      }
-    } catch (e) {
-      console.error("Error en reproducción:", e);
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+      audioContextState = "running";
+      console.log("AudioContext reanudado para reproducción.");
     }
-  } else {
-    console.error(`No se encontró audio para ${rectId}, fuente: ${currentSource}, estado: ${state}`);
+
+    await playAudioFromMemory(audioData, isLoopEnabled, rect);
+  })();
+
+  currentPlayPromise = playPromise;
+  playPromise.cancel = false;
+
+  try {
+    await playPromise;
+    if (playPromise.cancel) {
+      await stopAudio();
+      rect.classList.remove("green");
+      currentActiveRect = null;
+    }
+  } catch (e) {
+    console.error("Error en reproducción:", e);
+    rect.classList.remove("green");
+    currentActiveRect = null;
   }
 }
 
 // Detener todo el audio y limpiar estados
-function stopAllAudio() {
-  stopAudio();
+async function stopAllAudio() {
+  if (currentPlayPromise) {
+    currentPlayPromise.cancel = true;
+  }
+  await stopAudio();
   document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
   document.querySelectorAll(".loading-bar").forEach(bar => bar.style.width = "0%");
   currentActiveRect = null;
@@ -1192,40 +1375,43 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
-// Eventos para los rectángulos
+// Eventos para los rectángulos con debouncing
+let isClickLocked = false;
 document.querySelectorAll(".rect:not(.no-data):not(.source-btn)").forEach(rect => {
-  rect.addEventListener("click", () => {
-    if (rect.classList.contains("no-data")) return;
-    if (currentActiveRect === rect) {
-      stopAllAudio();
-      return;
-    }
-    stopAllAudio();
-    const from24Bits = lastActiveRect && lastActiveRect.id === "rect-24bits";
-    currentActiveRect = rect;
-    lastActiveRect = rect;
-    rect.classList.add("green");
-    if (rect.id === "rect-24bits" && currentSource === "Sine") {
-      toggleBtn.classList.add("disabled");
-      toggleBtn.classList.remove("red");
-      toggleBtn.style.backgroundColor = "red";
-      toggleBtn.textContent = "N/A";
-      isToggleEnabled = false;
-    } else if (currentSource === "Sine") {
-      if (from24Bits) {
-        isToggleEnabled = true;
-        toggleBtn.classList.remove("disabled");
-        toggleBtn.classList.remove("red");
-        toggleBtn.style.backgroundColor = "green";
-        toggleBtn.textContent = "997Hz";
+  rect.addEventListener("click", async () => {
+    if (isClickLocked || rect.classList.contains("no-data")) return;
+    isClickLocked = true;
+    try {
+      if (currentActiveRect === rect) {
+        await stopAllAudio();
       } else {
-        toggleBtn.classList.remove("disabled");
-        toggleBtn.classList.remove("red");
-        toggleBtn.style.backgroundColor = isToggleEnabled ? "green" : "red";
-        toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+        const from24Bits = lastActiveRect && lastActiveRect.id === "rect-24bits";
+        lastActiveRect = rect;
+        if (rect.id === "rect-24bits" && currentSource === "Sine") {
+          toggleBtn.classList.add("disabled");
+          toggleBtn.classList.remove("red");
+          toggleBtn.style.backgroundColor = "red";
+          toggleBtn.textContent = "N/A";
+          isToggleEnabled = false;
+        } else if (currentSource === "Sine") {
+          if (from24Bits) {
+            isToggleEnabled = true;
+            toggleBtn.classList.remove("disabled");
+            toggleBtn.classList.remove("red");
+            toggleBtn.style.backgroundColor = "green";
+            toggleBtn.textContent = "997Hz";
+          } else {
+            toggleBtn.classList.remove("disabled");
+            toggleBtn.classList.remove("red");
+            toggleBtn.style.backgroundColor = isToggleEnabled ? "green" : "red";
+            toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+          }
+        }
+        await playAudio(rect);
       }
+    } finally {
+      setTimeout(() => { isClickLocked = false; }, 200);
     }
-    playAudio(rect);
   });
 });
 
@@ -1342,22 +1528,7 @@ maximizeBtn.addEventListener("click", () => {
 
 // Iniciar precarga de audio
 preloadAllAudio();
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
