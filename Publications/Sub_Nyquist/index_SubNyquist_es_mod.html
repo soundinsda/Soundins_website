@@ -8,14 +8,14 @@
 <meta content="Pablo Panitta" name="author"/>
 <title>Efecto de Batido en Señales Sub Nyquist - Versión 2.7</title>
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            max-width: 1300px;
-            padding: 10px;
-            font-size: 20px;
-        }
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 1300px;
+    padding: 10px;
+    font-size: 20px;
+}
 
 .titu {
     font-size: 36px;
@@ -24,95 +24,106 @@
     background-color: black;
     color: white;
     padding: 10px;
-    width: 100vw; /* Ocupa el ancho completo de la pantalla */
-    position: relative; /* Asegura que no se desplace incorrectamente */
-    left: 50%; /* Centra el elemento */
-    transform: translateX(-50%); /* Compensa el desplazamiento para centrarlo */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
-        h1 {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        h2 {
-            font-size: 20px;
-            margin-top: 15px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        .figure {
-            text-align: center;
-            margin: 20px 0;
-            margin-left: 0;
-            font-style: italic;
-        }
-        .figure img {
-            max-width: 100%;
-            height: auto;
-        }
+
+h1 {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.figure {
+    text-align: center;
+    margin: 20px 0;
+    margin-left: 0;
+    font-style: italic;
+}
+
+.figure img {
+    max-width: 100%;
+    height: auto;
+}
 
 .fig15-image {
-    margin-left: 90px; /* Margen para pantallas grandes */
+    margin-left: 90px;
 }
 
 @media (max-width: 768px) {
     .fig15-image {
-        margin-left: 0; /* Elimina el margen en móviles */
-        margin: 0 auto; /* Centra la imagen */
+        margin-left: 0;
+        margin: 0 auto;
     }
 }
 
+.figure p {
+    margin-top: 5px;
+}
 
-        .figure p {
-            margin-top: 5px;
-        }
-        .equation-left {
-            text-align: left;
-            font-style: italic;    
-            margin-left: 0;
-        }
-        .equation-center {
-            text-align: center;
-            font-style: italic;
-            margin: 15px 0;
-        }
-        strong {
-            font-weight: bold;
-        }
-        em {
-            font-style: italic;
-        }
-        ul {
-            margin: 10px 0 10px 20px;
-        }
-        st {
-            font-style: italic;
-            font-size: 16px;
-        }
-        .speaker-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 22px;
-            padding: 5px;
-        }
-        .speaker-button:hover {
-            opacity: 0.7;
-        }
-        .speaker-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+.equation-left {
+    text-align: left;
+    font-style: italic;
+    margin-left: 0;
+}
 
-      .button-container {
-      display: flex;
-      justify-content: center; /* Centra los botones horizontalmente */
-      gap: 40px; /* Separación de 20px entre los botones */
-      margin: 20px 0; /* Espacio vertical opcional arriba y abajo */
-      }
+.equation-center {
+    text-align: center;
+    font-style: italic;
+    margin: 15px 0;
+}
 
+strong {
+    font-weight: bold;
+}
 
-    
+em {
+    font-style: italic;
+}
+
+ul {
+    margin: 10px 0 10px 20px;
+}
+
+st {
+    font-style: italic;
+    font-size: 16px;
+}
+
+.speaker-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    padding: 5px;
+}
+
+.speaker-button:hover {
+    opacity: 0.7;
+}
+
+.speaker-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+}
+
 .tooltip {
     position: relative;
     cursor: pointer;
@@ -142,29 +153,95 @@
     opacity: 1;
 }
 
-@media (max-width: 768px) {
-
-.pablo span {
-    font-size: 20px !important;
+.only-desktop {
+    display: inline;
 }
+
+.only-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .only-desktop {
+        display: none;
+    }
+    .only-mobile {
+        display: inline;
+    }
+}
+
+.language-button {
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    z-index: 100;
+}
+
+.english-button {
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.english-button:hover {
+    background-color: #0056b3;
+}
+
+/* Media query para tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        max-width: 100%;
+        padding: 10px;
+        margin: 0;
+    }
+
+    .titu {
+        font-size: 32px;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .figure img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .fig15-image {
+        margin-left: 0;
+        margin: 0 auto;
+    }
+}
+
+/* Media query para móviles (máximo 768px) */
+@media (max-width: 768px) {
+    .pablo span {
+        font-size: 20px !important;
+    }
 
     body {
         font-size: 16px;
         padding: 10px;
-        margin: 0 5px;
+        margin: 0;
+        max-width: 100%;
     }
-@media (max-width: 768px) {
+
     .titu {
         font-size: 28px;
         background-color: black;
         color: white;
         padding: 8px;
-        width: 100vw; /* Mantiene el ancho completo en móviles */
+        width: 100vw;
         position: relative;
         left: 50%;
         transform: translateX(-50%);
     }
-}
 
     h1 {
         font-size: 20px;
@@ -183,19 +260,20 @@
         height: auto;
     }
 
-    /* Reducción del tamaño de imágenes específicas de ecuaciones */
-    .figure img[src*="Eq2.png"]{width: 30%;
-        height: auto;
-    }
-    .figure img[src*="Eq2b.png"]{
-        width: 35%;
-        height: auto;
-    }
-    .figure img[src*="Eq3.png"]{
-        width: 50%;
+    .figure img[src*="Eq2.png"] {
+        width: 30%;
         height: auto;
     }
 
+    .figure img[src*="Eq2b.png"] {
+        width: 35%;
+        height: auto;
+    }
+
+    .figure img[src*="Eq3.png"] {
+        width: 50%;
+        height: auto;
+    }
 
     .button-container {
         flex-direction: column;
@@ -211,13 +289,6 @@
         padding-left: 10px;
     }
 
-    /* Tooltip accesible para móviles */
-    .tooltip {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-    }
-
     .tooltip::after {
         content: attr(data-tooltip);
         display: block;
@@ -231,53 +302,20 @@
         font-size: 14px;
         white-space: pre-wrap;
     }
-}
 
-
-
-.only-desktop { display: inline; }
-.only-mobile { display: none; }
-
-@media (max-width: 768px) {
-    .only-desktop { display: none; }
-    .only-mobile { display: inline; }
-}
-
-
-
-
-.language-button {
-    position: absolute;
-    top: 90px;
-    right: 10px;
-    z-index: 100; /* Asegura que el botón esté por encima de otros elementos */
-}
-
-.english-button {
-    background-color: #007bff; /* Fondo azul */
-    color: white; /* Letras blancas */
-    font-size: 24px;
-    font-family: Arial, sans-serif;
-    border: none;
-    padding: 8px 20px;
-    cursor: pointer;
-    border-radius: 5px; /* Bordes redondeados para mejor apariencia */
-}
-
-.english-button:hover {
-    background-color: #0056b3; /* Oscurece el fondo al pasar el ratón */
-}
-
-@media (max-width: 768px) {
     .language-button {
         top: 140px;
         right: 8px;
     }
+
     .english-button {
-        font-size: 12px; /* Reduce el tamaño en móviles para mejor ajuste */
+        font-size: 12px;
         padding: 6px 12px;
     }
 }
+
+
+
 
 </style>
 </head>
