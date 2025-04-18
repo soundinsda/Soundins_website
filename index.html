@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---v3.6-->
+<!DOCTYPE html><!---v3.7-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -135,6 +135,7 @@
             width: 100%;
             transition: background-color 0.3s;
             display: block;
+            text-decoration: none; /* Añadido para enlaces */
         }
         .submenu-item:hover {
             background-color: #555;
@@ -236,10 +237,10 @@
                 margin-top: 10px;
             }
             #credit {
-                margin-top: -10vh; /* Ajustado para moverlo más arriba */
+                margin-top: -10vh;
             }
             #email {
-                margin-top: 0vh; /* Ajustado para moverlo más arriba */
+                margin-top: 0vh;
             }
         }
 
@@ -287,11 +288,11 @@
             <div id="dither-menu">
                 <button id="dither-btn">Dither</button>
                 <div id="dither-submenu">
-                    <button class="submenu-item" id="dither-article">Dither & NS Article</button>
-                    <button class="submenu-item" id="dither-tool">Dither & NS Benchmark Tool</button>
+                    <a href="https://soundins.com.ar/Publications/Dither_Article/DitherNS_Article.html" target="_blank" class="submenu-item" id="dither-article">Dither & NS Article</a>
+                    <a href="https://soundins.com.ar/Publications/Dither/DitherNS_Tool_Main.html" target="_blank" class="submenu-item" id="dither-tool">Dither & NS Benchmark Tool</a>
                 </div>
             </div>
-            <button class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</button> <!-- New menu item -->
+            <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</a>
         </div>
     </div>
     <img id="logo" alt="Soundins Logo">
@@ -318,36 +319,24 @@
 
             function findValidImage(paths) {
                 if (paths.length === 0) {
+                    console.error("No valid image found in any of the specified paths.");
                     logo.alt = "Image not found";
                     return;
                 }
                 var path = paths.shift();
+                console.log("Trying image path: " + path); // Depuración
                 checkImage(path, function(success, validUrl) {
                     if (success) {
+                        console.log("Image found at: " + validUrl);
                         logo.src = validUrl;
                     } else {
+                        console.log("Image not found at: " + validUrl);
                         findValidImage(paths);
                     }
                 });
             }
 
             findValidImage(possiblePaths);
-
-            var ditherArticleBtn = document.getElementById("dither-article");
-            var ditherToolBtn = document.getElementById("dither-tool");
-            var subNyquistBtn = document.getElementById("sub-nyquist-btn"); // Reference to new button
-
-            ditherArticleBtn.addEventListener("click", function() {
-                window.location.href = "https://soundins.com.ar/Publications//Dither_Article/DitherNS_Article.html";
-            });
-
-            ditherToolBtn.addEventListener("click", function() {
-                window.location.href = "https://soundins.com.ar/Publications/Dither/DitherNS_Tool_Main.html";
-            });
-
-            subNyquistBtn.addEventListener("click", function() {
-                window.location.href = "https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html"; // Redirect to the specified URL
-            });
         });
     </script>
 </body>
