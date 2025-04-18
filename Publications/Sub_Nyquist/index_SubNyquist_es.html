@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.5 -->
+<!DOCTYPE html><!-- Version v3.6 -->
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -601,7 +601,21 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
             <p>Fig 20. Efecto de batido a través del producto de señales</p>
         </div>
         <p>Notar que la frecuencia del batido, sigue siendo 50Hz (tal como en el ejemplo de la suma) que es, precisamente, la frecuencia de la moduladora.</p><br>
-        <h1>Referencias</h1>
+        
+      <h1>Apéndice III: Proceso de Interpolación de una señal muestreada.</h1>
+        <p>Se ha mencionado que, aún cumpliendo con el criterio de Nyquist, tendremos una reconstrucción imperfecta de la señal, debido a la limitante de tener que truncar la señal SINC en el proceso de convolución. También hemos hecho referencia que ese fenómeno, es notorio en frecuencias cercanas a Nyquist y que, ha medida que me nos alejamos de la misma, el efecto se va diluyendo.</p><br>
+
+       <p>A continuación, se muestran 3 gráficos en las que podemos apreciar cómo aumentando el tiempo de la SINC, la reconstrucción mejora notablemente.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable" href="#nota8">[8]</a></span><span class="only-mobile"><a href="#nota8">[8]</a></span></sup></p><br>
+       <div class="figure">
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21a.png"/><br>
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21b.png"/>
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21c.png"/>
+            <p><st>Fig 21. Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original<br>
+		a) t=+/- 50 mseg; b) t=+/- 500 mseg ; c) y=+/- 5 seg</st></p><br/>
+        </div>
+
+
+<h1>Referencias</h1>
         <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos entfermo el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará relevancia cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido en las próximas secciones.</p>
         <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
         <p id="nota3">[3] Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist.</p>
@@ -609,10 +623,11 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
         <p id="nota5">[5] Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)</p>
         <p id="nota6">[6] Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz).</p>
         <p id="nota7">[7] Este es el método utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión.</p>
-        <h1>Software y Hardware utilizado</h1>
+        <p id="nota8">[8] Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable</p><br>        
+	<h1>Software y Hardware utilizado</h1>
         <p>Las simulaciones realizadas en el presente trabajo se han desarrollado en MATLAB™.</p>
         <p>Placa de Sonido Universal Audio, Apollo Twin™.</p>
-        <p>Instrumento de medición Tektronix™ TBS 1052B.</p>
+        <p>Instrumento de medición Tektronix™ TBS 1052B.</p><br>
         <h1>Bibliografía</h1>
         <ul>
             <li>“Sub-Nyquist artefacts and sampling moiré effects” - Isaac Amidror, Ecole Polytechnique Fédérale de Lausanne (EPFL), Feb.Concurrent2015</li>

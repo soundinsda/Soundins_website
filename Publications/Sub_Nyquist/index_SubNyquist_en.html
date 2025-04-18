@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!---version 3.5--->
+<!---version 3.6--->
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -437,7 +437,7 @@
             <p><st>Fig 11. An analog signal (yellow) and its samples a) F = Fs/2 + 20, b) F = Fs/3 + 20, c) F = Fs/5 + 20. For all cases, Fs=8 kHz</st></p>
         </div>
         <p>In Fig 11, we can observe the distribution of the samples <strong>“forming” sinusoidal waves whose number corresponds to the value of the factor “<em>n</em>” and with a frequency of value <em style="font-size: 1.3em;">ε</em></strong>.</p>
-        <p>In other words, in the formula\( F = {\large \frac{F_s}{2}} - 20 \), 2 waves will be formed; in \( F = {\large \frac{F_s}{3}} - 20 \), 3 waves; and in \( F = {\large \frac{F_s}{5}} - 20 \), 5 interwaven waves. All of them have a frequency of 20 Hz (as is the value of <em style="font-size: 1.3em;">ε</em>).</p>
+        <p>In other words, in the formula\( F = {\large \frac{F_s}{2}} - 20 \), 2 waves will be formed; in \( F = {\large \frac{F_s}{3}} - 20 \), 3 waves; and in \( F = {\large \frac{F_s}{5}} - 20 \), 5 interwoven waves. All of them have a frequency of 20 Hz (as is the value of <em style="font-size: 1.3em;">ε</em>).</p>
         <p>Note that these waves are the product of a graphical distribution of the signal’s samples, and all have a frequency of <em style="font-size: 1.3em;">ε</em> Hz. This means that <em style="font-size: 1.3em;">ε</em> is the <i><u>frequency at which the samples occur again at the same phase</u></i> of the signal. It’s easy to see that if <em style="font-size: 1.3em;">ε</em>=0, the variation frequency is 0, and therefore, the samples always occur at the same phase of the signal.</p>
         <h1>5. Reconstruction Process</h1>
         <p>It’s striking that, if I wanted to reconstruct the signal by connecting the samples, I wouldn’t be obtaining the same original signal. As seen in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal with a beat, which obviously is not the same as the original signal. But this is a direct contradiction to the Nyquist theorem, which states that if I sample at a rate greater than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
@@ -561,7 +561,20 @@
             <p>Fig 20. Beat effect through the product of signals</p>
         </div>
         <p>Note that the beat frequency remains 50Hz (as in the sum example), which is precisely the frequency of the modulator.</p>
-        <h1>References</h1>
+        
+   <h1>Apéndix III: Interpolation Process of a Sampled Signal.</h1>
+        <p>It has been mentioned that even when the Nyquist criterion is satisfied, the signal reconstruction will still be imperfect due to the need to truncate the SINC function during the convolution process. We have also noted that this phenomenon becomes more noticeable at frequencies close to Nyquist, and that as we move further away from it, the effect gradually diminishes.</p><br>
+
+       <p>Below, three plots are presented to illustrate how extending the duration of the SINC function significantly improves the reconstruction quality.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="These results are derived from a simulation, yet they clearly reflect the theoretical concept. Obviously, this cannot be directly translated to the real world, as in D/A converters this duration is not adjustable." href="#nota8">[8]</a></span><span class="only-mobile"><a href="#nota8">[8]</a></span></sup></p><br>
+       <div class="figure">
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21a.png"/><br>
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21b.png"/>
+            <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21c.png"/>
+            <p><st>Fig 21. Effect of SINC Function Length on the Reconstruction of the Original Signal<br>
+		a) t=+/- 50 msec; b) t=+/- 500 msec ; c) y=+/- 5 sec</st></p><br/>
+        </div>
+
+	<h1>References</h1>
         <p id="nota1">[1] The beat frequency is the difference between both signals. However, if we think of the beat as two interwoven waves, the frequency of each component is half, i.e., 50Hz in our case. This clarification will become relevant when we start discussing the frequency of each “component” of the beat in the following sections.</p>
         <p id="nota2">[2] Matlab’s interpolation method is linear, which is why we see straight lines connecting the samples.</p>
         <p id="nota3">[3] Remember that the value must always be \(\large \frac{m}{n} \) &#8804 0.5 to satisfy the Nyquist criterion.</p>
@@ -569,10 +582,12 @@
         <p id="nota5">[5] Some software allows choosing the graphical interpolation mode (e.g., Ozone RX).</p>
         <p id="nota6">[6] Additionally, the beat is only perceived if its frequency is very low (no more than 15 Hz).</p>
         <p id="nota7">[7] This is the method used in the amplitude modulation (AM) process. A low-frequency modulating signal (e.g., voice) modulates a much higher-frequency carrier for transmission.</p>
-        <h1>Software and Hardware Used</h1>
+        <p id="nota8">[8] These results are derived from a simulation, yet they clearly reflect the theoretical concept. Obviously, this cannot be directly translated to the real world, as in D/A converters this duration is not adjustable.</p> <br>
+	
+	<h1>Software and Hardware Used</h1>
         <p>The simulations carried out in this work were developed in MATLAB™.</p>
         <p>Universal Audio sound card, Apollo Twin™.</p>
-        <p>Tektronix™ TBS 1052B measurement instrument.</p>
+        <p>Tektronix™ TBS 1052B measurement instrument.</p><br>
         <h1>Bibliography</h1>
         <ul>
             <li>“Sub-Nyquist artefacts and sampling moiré effects” - Isaac Amidror, Ecole Polytechnique Fédérale de Lausanne (EPFL), Feb. 2015</li>
