@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<!---version 3.5--->
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta content="Pablo Panitta" name="author"/>
+    <title>Beat Effect in Sub-Nyquist Signals</title>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 1300px;
+            padding: 10px;
+            font-size: 20px;
+            width: 100%;
+            animation: force-render 0.1s;
+        }
+
+        @keyframes force-render {
+            from { opacity: 0.999; }
+            to { opacity: 1; }
+        }
+
+        #main-container {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .titu {
+            font-size: 36px;
+            font-family: Verdana, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-top: 20px;
+            padding-left: 30px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 15px;
+            
+        }
+
+        p {
+            margin: 10px 0;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .figure {
+            text-align: center;
+            margin: 20px 0;
+            margin-left: 0;
+            font-style: italic;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .figure p {
+            margin-top: 5px;
+        }
+
+        .equation-left {
+            text-align: left;
+            font-style: italic;
+            margin-left: 0;
+        }
+
+        .equation-center {
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+
+        st {
+            font-style: italic;
+            font-size: 18px;
+        }
+
+        .speaker-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            padding: 5px;
+        }
+
+        .speaker-button:hover {
+            opacity: 0.7;
+        }
+
+        .speaker-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 0;
+            white-space: pre-wrap;
+            background-color: #eee;
+            color: #000;
+            padding: 6px 8px;
+            border-radius: 5px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateX(10px);
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            width: 300px;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        .only-desktop {
+            display: inline;
+        }
+
+        .only-mobile {
+            display: none;
+        }
+
+        .language-button {
+            position: absolute;
+            top: 90px;
+            right: 10px;
+            z-index: 100;
+        }
+
+        .espanol-button {
+            background-color: #007bff;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            border: none;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .espanol-button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .pablo span {
+                font-size: 20px !important;
+            }
+
+            body {
+                font-size: 16px;
+                padding: 10px;
+                margin: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .titu {
+                font-size: 28px;
+                background-color: black;
+                color: white;
+                padding: 8px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 20px;
+    		padding-left: 0;
+	    	padding-right: 0;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            st {
+                font-size: 14px;
+            }
+
+            .figure img {
+                width: 100%;
+                height: auto;
+            }
+
+            .figure img[src*="Eq2.png"] {
+                width: 30%;
+                height: auto;
+            }
+
+            .figure img[src*="Eq2b.png"] {
+                width: 35%;
+                height: auto;
+            }
+
+            .figure img[src*="Eq3.png"] {
+                width: 50%;
+                height: auto;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .speaker-button {
+                font-size: 18px;
+            }
+
+            ul {
+                margin-left: 15px;
+                padding-left: 10px;
+            }
+
+            .tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .tooltip::after {
+                content: attr(data-tooltip);
+                display: block;
+                position: static;
+                background-color: #eee;
+                color: #000;
+                padding: 6px 8px;
+                border-radius: 5px;
+                box-shadow: 0 0 6px rgba(0,0,0,0.2);
+                margin-top: 8px;
+                font-size: 14px;
+                white-space: pre-wrap;
+            }
+
+	p {
+    	margin: 10px 0;
+    	padding-left: 0;
+    	padding-right: 0;
+	}
+
+
+            .language-button {
+                top: 140px;
+                right: 12px;
+            }
+
+            .espanol-button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            // Limpiar parámetros de URL
+            if (window.location.search) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            // Forzar reflow
+            document.documentElement.style.width = '100%';
+            document.body.style.width = '100%';
+            document.body.style.zoom = '100%';
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                document.documentElement.style.overflowX = 'hidden';
+                document.body.style.overflowX = 'hidden';
+            }, 100);
+        });
+    </script>
+</head>
+<body>
+    <div id="main-container">
+        <div class="language-button">
+            <button class="espanol-button" onclick="window.location.href='index_SubNyquist_es.html'">Español</button>
+        </div>
+        <div class="full-width-band">
+            <div class="titu">Beat Effect in Sub-Nyquist Signals</div>
+            <div class="titu pablo"><span>Pablo Panitta</span></div>
+        </div>
+        <h1>Abstract</h1>
+        <p>This work aims to study the effects on signals whose frequencies are close to the Nyquist frequency (called sub-Nyquist). We will begin by analyzing the interaction between two analog signals and the effects that occur. Then, we will examine what happens in the digital domain between a signal and its proximity to the Nyquist frequency. The implications for the graphical representation of signals and their impact on D/A conversion for playback will be addressed.</p>
+        <h1>1. Sum of Two Analog Signals</h1>
+        <p>Suppose we have two analog sinusoidal signals and sum them. What result will we see on an oscilloscope screen? If the difference between their frequencies is large (say, more than 10 times), we will see the higher-frequency sine wave superimposed on the lower-frequency one.</p>
+        <p>But as this difference decreases, we will increasingly notice that the higher-frequency sine wave is <strong>“beaten”</strong> by the lower-frequency one.</p>
+        <p>In Fig 1, Fig 2, Fig 3, and Fig 4, the effects mentioned above can be observed.</p>
+        <div class="figure">
+            <img alt="Two sinusoidal signals of 1000Hz and 50 Hz" src="Pictures/fig1.png"/>
+            <p><st>Fig 1. Two sinusoidal signals of 1000Hz and 50 Hz</st></p><br/>
+        </div>
+        <div class="figure">
+            <img alt="Result of the sum of 1000Hz and 50Hz" src="Pictures/fig2.png"/>
+            <p><st>Fig 2. Result of the sum of two sinusoidal signals of 1000Hz and 50Hz</st></p><br/>
+        </div>
+        <div class="figure">
+            <img alt="Two sinusoidal signals of 1000Hz and 1100Hz" src="Pictures/fig3.png"/>
+            <p><st>Fig 3. Two sinusoidal signals of 1000Hz and 1100Hz</st></p><br/>
+        </div>
+        <div class="figure">
+            <img alt="Result of the sum of 1000Hz and 1100Hz" src="Pictures/fig4.png"/>
+            <p><st>Fig 4. Result of the sum of two sinusoidal signals of 1000Hz and 1100Hz</st></p><br/>
+        </div>
+        <p>It is interesting to note the effect that phase has on the sum of signals for both combinations. While it does not play a significant role when the frequency difference is large, it does when the frequencies are close, producing cancellations or reinforcements in the magnitude of the sum.</p>
+        <p>Note that the beat frequency is equal to the difference between the frequencies of both signals (in this case, 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="The beat frequency is the difference between both signals. However, if we think of the beat as two interwoven waves, the frequency of each component is half, i.e., 50Hz in our case. This clarification will become relevant when we start discussing the frequency of each 'component' of the beat in the following sections." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
+        <p>In both cases, in a spectral analysis, I will see the two pure sinusoidal frequencies and nothing else.</p>
+        <div class="figure">
+            <img alt="Signal spectrum Scenario1 and Scenario2" src="Pictures/fig5b.png"/><br>
+            <img alt="Signal spectrum Scenario1 and Scenario2" src="Pictures/fig5a.png"/>
+            <p>Fig 5. Signal spectrum a) Scenario1, b) Scenario2</p>
+        </div>
+        <h1>2. Beat in the Digital Domain</h1>
+        <p>Now, suppose we have an analog signal and proceed to sample it for digitization. For the purposes of the demonstration, let’s take the following values:</p>
+        <div class="equation-left">
+            <p> - Signal frequency: 500 Hz<br/> - Sampling frequency: 44.1kHz</p>
+        </div>
+        <p>In Fig 6, we can see that the sampled signal is perfectly aligned with the analog signal, showing no magnitude deviations.</p>
+        <div class="figure">
+            <img alt="Sampling of an analog signal far from Nyquist" src="Pictures/fig6.png"/>
+            <p><st>Fig 6. Sampling of an analog signal with a frequency far from Nyquist</st></p>
+        </div>
+        <p>Let’s repeat the process, but now with a frequency close to Nyquist frequency, for example, a signal frequency of 20 kHz.</p>
+        <div class="figure">
+            <img alt="Sampling of an analog signal close to Nyquist" src="Pictures/fig7.png"/>
+            <p><st>Fig 7. Sampling of an analog signal with a frequency close to Nyquist</st></p>
+        </div>
+        <p>In Fig 7, we can clearly observe a beat effect on the 20kHz signal. This looks very similar to the effect described in the previous section with two analog frequencies. But if we are working with only one frequency here… how can this be happening?</p>
+        <p>Let’s try to understand what’s going on in this case. I have an analog signal at the input of 20kHz, which, when sampled at a rate of 44.1kHz and then converted back to analog<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Matlab’s interpolation method is linear, which is why we see straight lines connecting the samples." href="#nota2">[2]</a></span><span class="only-mobile"><a href="#nota2">[2]</a></span></sup>, appears as a 20kHz signal but with a beat at 4.1kHz. Everything would suggest that, based on what we saw earlier, there should be another signal “modulating” the input to produce the modulated signal. Let’s confirm this with a spectrum analyzer.</p>
+        <div class="figure">
+            <img alt="Spectrum of a 20kHz signal sampled at 44kHz" src="Pictures/fig8.png"/>
+            <p><st>Fig 8. Spectrum of a 20kHz signal sampled at 44kHz</st></p>
+        </div>
+        <p>Undoubtedly, Fig 9 <strong>only shows the presence of a single signal!</strong> This doesn’t seem to make much sense. There is only one signal present in the spectrum, however in the time domain it shows clear signs of amplitude modulation (beat) that could only occur if another signal were interacting.</p>
+        <p>So, what’s going on?</p>
+        <h1>3. Sample Distribution in a Signal</h1>
+        <p>Let’s suppose we sample a signal of frequency F at a sampling rate Fs. If \( F_s = 3F\), we’ll have 3 samples per signal cycle, which always occur at the same phase of the waveform. That is, a periodic pattern is created.</p>
+
+
+        <div class="figure">
+            <img alt="Analog signal sampled at three times its frequency" src="Pictures/fig9.png"/>
+            <p><st>Fig 9. An analog signal sampled at three times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
+        </div>
+        <p>And if we do the same, but now with \( F_s = 5F\), there would be 5 samples per signal cycle, with the same characteristics as the previous signal, as can be seen in the following figure.</p>
+        <div class="figure">
+            <img alt="Analog signal sampled at five times its frequency" src="Pictures/fig10.png"/>
+            <p><st>Fig 10. An analog signal sampled at five times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
+        </div><br/>
+        <p>One particularity of the examples just mentioned is that the number of samples per signal cycle is invariant. This means that, for example, in  \( F_s = 3F \), there will be 3, and only 3, samples in any signal cycle. I won’t find cycles with 2, 4, or any other value different from 3. In other words, there is a relationship between <em>F</em> and <em>Fs</em> that we can represent with the following equation:</p>
+        <div class="figure">
+            <img src="Pictures/Eq2.png"/><br/>
+        </div>
+        <p>Again, this means that <strong>every 1 cycle</strong>, I will have “n” (2, 3, 4, etc.) and <strong>only “n” samples</strong>. No more, no less.<br/>We can generalize the formula and rewrite it as:</p>
+        <div class="figure">
+            <img src="Pictures/Eq2b.png"/><br/>
+        </div>
+        <p>Here, <i><u>m indicates the number of cycles</u></i> in which I will find a number of <i><u>n samples</u></i>. For example, if the ratio were \( \large\frac{2}{5} \), it would mean that in 2 signal cycles, I will find exactly 5 samples.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Remember that the value must always be \(\large \frac{m}{n} \) &#8804 0.5 to satisfy the Nyquist criterion." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
+        <p>But there is another characteristic that has a very important consequence: <strong>those n samples occur at the same phases of the signal every m cycles</strong>. Following the previous example, the samples will fall at the same phase of the signal every 2 cycles.</p>
+        <p>But where are we going with this? What does it have to do with what I see on the screen? A little more patience, and we’re getting closer.</p>
+        <h1>4. Cyclic Patterns</h1>
+        <p>Now, let’s add one last parameter to the formula, called <span style="font-size: 22px;">ε</span>, so that it looks like the following equation:</p>
+        <div class="figure">
+            <img src="Pictures/Eq3.png"/><br/>
+        </div>
+        <p>What does this modification achieve? <i><u>It eliminates the fixed positioning characteristic</u></i> of the samples within the signal cycle. Although there will still be n samples every m cycles, their location within the signal will vary across cycles.</p>
+        <p>And will the samples ever fall at the same phase of the wave again? In other words, is there a frequency at which the cycle repeats? The answer is yes, and that is precisely the value <span style="font-size: 22px;">ε</span>.</p>
+        <p>Let’s see the graphs of some examples:</p>
+        <div class="figure">
+            <img src="Pictures/fig11a.png"/><br/>
+            <img src="Pictures/fig11b.png"/><br/>
+            <img src="Pictures/fig11c.png"/><br/>
+            <p><st>Fig 11. An analog signal (yellow) and its samples a) F = Fs/2 + 20, b) F = Fs/3 + 20, c) F = Fs/5 + 20. For all cases, Fs=8 kHz</st></p>
+        </div>
+        <p>In Fig 11, we can observe the distribution of the samples <strong>“forming” sinusoidal waves whose number corresponds to the value of the factor “<em>n</em>” and with a frequency of value <em style="font-size: 1.3em;">ε</em></strong>.</p>
+        <p>In other words, in the formula\( F = {\large \frac{F_s}{2}} - 20 \), 2 waves will be formed; in \( F = {\large \frac{F_s}{3}} - 20 \), 3 waves; and in \( F = {\large \frac{F_s}{5}} - 20 \), 5 interwaven waves. All of them have a frequency of 20 Hz (as is the value of <em style="font-size: 1.3em;">ε</em>).</p>
+        <p>Note that these waves are the product of a graphical distribution of the signal’s samples, and all have a frequency of <em style="font-size: 1.3em;">ε</em> Hz. This means that <em style="font-size: 1.3em;">ε</em> is the <i><u>frequency at which the samples occur again at the same phase</u></i> of the signal. It’s easy to see that if <em style="font-size: 1.3em;">ε</em>=0, the variation frequency is 0, and therefore, the samples always occur at the same phase of the signal.</p>
+        <h1>5. Reconstruction Process</h1>
+        <p>It’s striking that, if I wanted to reconstruct the signal by connecting the samples, I wouldn’t be obtaining the same original signal. As seen in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal with a beat, which obviously is not the same as the original signal. But this is a direct contradiction to the Nyquist theorem, which states that if I sample at a rate greater than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
+        <div class="figure">
+            <img alt="Reconstruction process with beat" src="Pictures/fig12.png"/>
+            <p><st>Fig 12. a) Analog signal b) Samples of the analog signal c) Reconstruction process. It can be observed that a) and c) are different</st></p>
+        </div>
+        <p>The explanation lies in how the analog signal is reconstructed from its samples. The interpolation process involves reconstructing the signal’s value between samples, and this <strong>is not achieved by simply “connecting” the samples graphically</strong>. There are various ways to “connect” (interpolate) samples graphically. For example, one could do it linearly (straight line), through an Nth-order polynomial (curve), or some other type.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="There are several interpolation methods such as Lagrange (order N), cubic splines (3rd order), Bezier splines, etc." href="#nota4">[4]</a></span><span class="only-mobile"><a href="#nota4">[4]</a></span></sup><sup><span class="only-desktop"><a class="tooltip" data-tooltip="Some software allows choosing the graphical interpolation mode (e.g., Ozone RX)." href="#nota5">[5]</a></span><span class="only-mobile"><a href="#nota5">[5]</a></span></sup> But those methods do not reconstruct the original signal exactly.</p>
+        <p>The theoretical method to fully recover an analog signal (i.e., without losses) is through a convolution process between the samples and the SINC function. It is beyond the scope of this work to explain the reconstruction (interpolation) process in detail, but we can think of it as follows: If I wanted to recover a frequency-limited signal (that meets Nyquist requirements), I could filter it with a low-pass filter to keep the frequency band below <span style="font-size: 1.1em;">\( \frac{F_s}{2} \)</span> and reject all spectral components above it. In Fig 13, we can see the process.</p>
+        <div class="figure">
+            <img alt="Reconstruction in the frequency domain" src="Pictures/fig13.png"/>
+            <p><st>Fig 13. Signal reconstruction process in the frequency domain</st></p>
+        </div>
+        <p>The mechanism of this filtering process, when viewed from the time domain (always remembering the frequency-time duality), would mean a convolution between each sample and the SINC function, which is the time-domain representation of an ideal low-pass response.</p>
+        <div class="figure">
+            <img alt="Reconstruction in the time domain" src="Pictures/fig14.png"/>
+            <p><st>Fig 14. Signal reconstruction process in the time domain</st></p>
+        </div>
+        <p>In theory, this process achieves perfect reconstruction. But the problem arises in the impossibility of its implementation, as the SINC function extends from \(-\infty \) a \( +\infty \). Since this is not practical, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, causing the low-pass filter’s response to no longer be ideal, which introduces “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less similar to the original.</p>
+        <h1>6. Is the Effect Real?</h1>
+        <p>Having understood the reason for the “strange” shapes we see in the reconstruction of certain frequencies, it’s worth asking whether this is a real effect or merely a visual one. The answer is that this effect is as real as digital audio itself, so <strong>it is not just a visual perception but also an auditory one</strong>.</p>
+        <p>Proving this is not difficult. Simply create a session at an audible Nyquist frequency, generate a sinusoidal signal (or any periodic signal), and listen. For example, we can test with an <em>Fs = 8000Hz</em> and use a generator to create sine waves at <em>F = 3998 Hz and F=3999Hz</em>.</p>
+        <p>Having come this far (and hopefully understood the explanation)… what would you expect to hear? (4-second audio clips, be careful with the volume)</p><br/>
+        <div class="button-container">
+            <button class="speaker-button" id="playButton1" onclick="playAudio('audioElement1')">🔊 F=3998Hz @ Fs=8kHz</button>
+            <button class="speaker-button" id="playButton2" onclick="playAudio('audioElement2')">🔊 F=3999Hz @ Fs=8kHz</button>
+        </div>
+        <audio id="audioElement1" preload="auto" src="https://raw.githubusercontent.com/soundinsda/Soundins_website/main/Publications/Sub_Nyquist/Audios/Sine_3998_8k.wav"></audio>
+        <audio id="audioElement2" preload="auto" src="https://raw.githubusercontent.com/soundinsda/Soundins_website/main/Publications/Sub_Nyquist/Audios/Sine_3999_8k.wav"></audio>
+        <script>
+            const audio1 = document.getElementById("audioElement1");
+            const audio2 = document.getElementById("audioElement2");
+            const button1 = document.getElementById("playButton1");
+            const button2 = document.getElementById("playButton2");
+
+            // Verify loading of the first audio
+            audio1.addEventListener('loadedmetadata', () => {
+                console.log("Audio 1 (3998Hz) loaded, duration:", audio1.duration, "seconds");
+                button1.textContent = "🔊 F=3998Hz @ Fs=8kHz";
+            });
+            audio1.addEventListener('error', (e) => {
+                console.error("Error loading Audio 1 (3998Hz):", e.message, e);
+                button1.textContent = "🔊 Error 3998Hz";
+            });
+
+            // Verify loading of the second audio
+            audio2.addEventListener('loadedmetadata', () => {
+                console.log("Audio 2 (3999Hz) loaded, duration:", audio2.duration, "seconds");
+                button2.textContent = "🔊 F=3999Hz @ Fs=8kHz ";
+            });
+            audio2.addEventListener('error', (e) => {
+                console.error("Error loading Audio 2 (3999Hz):", e.message, e);
+                button2.textContent = "🔊 Error 3999Hz";
+            });
+
+            // Playback function
+            function playAudio(audioId) {
+                const audioPlayer = document.getElementById(audioId);
+                if (audioPlayer) {
+                    audioPlayer.currentTime = 0; // Resets audio to the start
+                    audioPlayer.play()
+                        .then(() => {
+                            console.log("Playing " + audioId);
+                        })
+                        .catch(error => {
+                            console.error("Error playing " + audioId + ":", error);
+                        });
+                } else {
+                    console.warn("Audio with ID not found: " + audioId);
+                }
+            }
+
+            // Force explicit loading
+            audio1.load();
+            audio2.load();
+        </script>
+        <h1><br/>7. Impact on Digital Audio</h1>
+        <p>But if this is the case… <i>why isn’t everything we hear through digital audio a complete disaster?</i></p>
+        <p>Well, there are two important aspects to consider in the explained process:</p>
+        <p> 1) This, while not exclusive, <strong>is noticeable in periodic signals</strong>. The beat effect is evident when there are periodic repetitions of samples in the signal cycles (as explained in section 4).</p>
+        <p> 2) The effect is extremely noticeable at <strong>frequencies very close to Nyquist</strong> and loses impact as I move away from it. If my Nyquist frequency is 22050 Hz, <i><u>the effect begins to fade from 20 kHz downward</u></i>. In other words, these are high frequencies for the average human hearing.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Additionally, the beat is only perceived if its frequency is very low (no more than 15 Hz)." href="#nota6">[6]</a></span><span class="only-mobile"><a href="#nota6">[6]</a></span></sup></p>
+        <p>In Fig 15, we can see the impact in relation to the analog frequency being sampled. As the frequency <em>F</em> moves away from <em>Fs/2</em>, the effect diminishes (the beat loses intensity).</p>
+        <div class="figure">
+            <img alt="Beat at different frequencies" src="Pictures/fig15.png"/>
+            <p><st>Fig 15. Beat at different frequencies. In all cases, <em>Fs = 8 kHz</em>. Peak signal of 1mV</st></p><br>
+        </div>
+        <p>For these reasons, although it is curious to see it on DAW screens, this effect is not a problem for the purpose of digital audio.</p><br>
+        <h1>Appendix I: Measurements</h1>
+        <p>Below are the measurements taken at the output of a Universal Audio sound card, model: Apollo Twin. The measurement instrument used was a Tektronix TBS 1052B, at different sampling and signal frequencies.<br/></p>
+        <p>The measurement process consisted of generating sine waves at different frequencies and measuring the analog audio output of the sound card. This is what the speakers will actually reproduce.</p><br/>
+        <div class="figure">
+            <img alt="Measurement with Fs=2Hz and F=1Hz" src="Pictures/fig16.png"/>
+            <p><st>Fig 16. Sampling frequency <em>Fs = 44100 Hz</em>, Signal frequency <em>F = 22049 Hz</em>. <br>The beat can be observed at a frequency of 0.5 Hz. Note that the frequency of each component is 1 Hz.<br/><br/></st></p>
+        </div>
+        <div class="figure">
+            <img alt="Measurement with Fs=10Hz and F=5Hz" src="Pictures/fig17.png"/>
+            <p><st>Fig 17. Sampling frequency <em>Fs = 44100 Hz</em>, Signal frequency <em>F = 22045 Hz</em>.<br>The beat can be observed at a frequency of 2.5 Hz. Note that the frequency of each component = 5 Hz.<br/><br/></st></p>
+        </div>
+        <div class="figure">
+            <img alt="Measurement with Fs=44100Hz and F=22000Hz" src="Pictures/fig18.png"/>
+            <p><st>Fig 18. Sampling frequency <em>Fs = 44100Hz</em>, Signal frequency <em>F = 15000Hz</em>.<br>  No significant beat can be observed. It is confirmed that moving away from the Nyquist frequency reduces the beat effect.<br/><br/></st></p>
+        </div>
+        <div class="figure">
+            <img alt="Comparison of impact at different Fs" src="Pictures/fig19a.png"/><br/>
+            <img alt="Comparison of impact at different Fs" src="Pictures/fig19b.png"/><br/>
+            <p><st>Fig 19. Signal F=22049 sampled at a) Fs=44100 Hz. 
+                           b) Fs=88200 Hz. <br>The impact can be observed for the same frequency at different sampling frequencies.<br> For 88200Hz, the impact is negligible, while for 44100Hz, it is noticeable.</st></p><br/>
+        </div>
+        <h1>Appendix II: Product of Two Analog Signals</h1>
+        <p>According to the trigonometric identity:</p>
+        <div class="figure">
+            <img src="Pictures/Eq1.png"/><br/>
+        </div>
+        <p>we can create the same beat effect, but <i><u>by multiplying sinusoidal signals</u></i> (instead of adding them) by modifying the frequencies to comply with this identity.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="This is the method used in the amplitude modulation (AM) process. A low-frequency modulating signal (e.g., voice) modulates a much higher-frequency carrier for transmission." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> In our example of A=1000Hz and B=1100Hz, the new frequencies to achieve the same effect would be:</p>
+        <div class="equation-center">
+	<p>\( F_1 ={\large \frac{A + B}{2}} = 1050\,\text{Hz} \)</p>
+	<p>\( F_2 ={\large \frac{A - B}{2}} = 50\,\text{Hz} \)</p><br>
+        </div>
+        <div class="figure">
+            <img alt="Beat effect through the product of signals" src="Pictures/fig20.png"/>
+            <p>Fig 20. Beat effect through the product of signals</p>
+        </div>
+        <p>Note that the beat frequency remains 50Hz (as in the sum example), which is precisely the frequency of the modulator.</p>
+        <h1>References</h1>
+        <p id="nota1">[1] The beat frequency is the difference between both signals. However, if we think of the beat as two interwoven waves, the frequency of each component is half, i.e., 50Hz in our case. This clarification will become relevant when we start discussing the frequency of each “component” of the beat in the following sections.</p>
+        <p id="nota2">[2] Matlab’s interpolation method is linear, which is why we see straight lines connecting the samples.</p>
+        <p id="nota3">[3] Remember that the value must always be \(\large \frac{m}{n} \) &#8804 0.5 to satisfy the Nyquist criterion.</p>
+        <p id="nota4">[4] There are several interpolation methods such as Lagrange (order N), cubic splines (3rd order), Bezier splines, etc.</p>
+        <p id="nota5">[5] Some software allows choosing the graphical interpolation mode (e.g., Ozone RX).</p>
+        <p id="nota6">[6] Additionally, the beat is only perceived if its frequency is very low (no more than 15 Hz).</p>
+        <p id="nota7">[7] This is the method used in the amplitude modulation (AM) process. A low-frequency modulating signal (e.g., voice) modulates a much higher-frequency carrier for transmission.</p>
+        <h1>Software and Hardware Used</h1>
+        <p>The simulations carried out in this work were developed in MATLAB™.</p>
+        <p>Universal Audio sound card, Apollo Twin™.</p>
+        <p>Tektronix™ TBS 1052B measurement instrument.</p>
+        <h1>Bibliography</h1>
+        <ul>
+            <li>“Sub-Nyquist artefacts and sampling moiré effects” - Isaac Amidror, Ecole Polytechnique Fédérale de Lausanne (EPFL), Feb. 2015</li>
+            <li>“Analyzing the Sampling-Induced Beat Frequency Effect” - Kerry Schutz – Mathwork, Oct 2021</li>
+            <li>“Bandlimited Interpolation” – Julius O. Smith III - CCRMA – Stanford Univ, 2016 May</li>
+            <li>“Modern Sampling: A Tutorial”. Jamie A.S. Angus – AES Vol 67, No 5, 2019 May</li><br/>
+        </ul>
+        <p><span style="font-size: 24px;">Author: Pablo Panitta / Soundins</span></p>
+    </div>
+</body>
+</html>
