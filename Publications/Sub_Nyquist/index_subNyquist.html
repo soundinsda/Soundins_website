@@ -3,13 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soundins - Procesamiento de Señales</title>
-    <meta name="description" content="Explora artículos técnicos sobre procesamiento de señales, efecto de batido y señales sub Nyquist en español e inglés.">
-    <meta name="keywords" content="procesamiento de señales, efecto de batido, señales sub Nyquist, audio digital, muestreo, aliasing">
+    <title>Soundins - Efecto de Batido y Señales Sub Nyquist</title>
+    <meta name="description" content="Explora artículos técnicos sobre el efecto de batido y señales sub Nyquist en español e inglés.">
+    <meta name="keywords" content="efecto de batido, señales sub Nyquist, procesamiento de señales, audio digital, muestreo, aliasing">
+    <meta property="og:title" content="Soundins - Efecto de Batido y Señales Sub Nyquist">
+    <meta property="og:description" content="Artículos técnicos sobre procesamiento de señales en español e inglés.">
+    <meta property="og:image" content="https://www.soundins.com.ar/Pictures/fig1.png">
+    <meta property="og:url" content="https://www.soundins.com.ar">
+    <link rel="alternate" hreflang="es" href="https://www.soundins.com.ar/index_SubNyquist_es.html">
+    <link rel="alternate" hreflang="en" href="https://www.soundins.com.ar/index_SubNyquist_en.html">
+    <link rel="alternate" hreflang="x-default" href="https://www.soundins.com.ar/index_SubNyquist_es.html">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #333); /* Fondo degradado oscuro */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .lang-button {
+            background: #1425af;
+            color: #fff;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .lang-button:hover {
+            background: #1425af;
+            transform: scale(1.05);
+        }
+
+        .lang-button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .lang-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido a Soundins</h1>
-    <p>Selecciona tu idioma:</p>
-    <a href="index_SubNyquist_es.html">Español</a> | <a href="index_SubNyquist_en.html">English</a>
+    <h1>Selecciona tu idioma</h1>
+    <div class="button-container">
+        <a href="index_SubNyquist_es.html" class="lang-button">Español</a>
+        <a href="index_SubNyquist_en.html" class="lang-button">English</a>
+    </div>
 </body>
 </html>
