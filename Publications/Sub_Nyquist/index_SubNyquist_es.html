@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.6 -->
+<!DOCTYPE html><!-- Version v3.7 -->
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -406,7 +406,7 @@
             <p><st>Fig 4. Resultado de la suma de 2 señales senoidales de 1000Hz y 1100Hz</st></p><br/>
         </div>
         <p>Interesante notar el efecto que tiene la fase en la suma de señales para ambas combinaciones. Mientras la misma no juega un papel importante cuando la diferencia de frecuencias es grande, sí lo hace cuando son frecuencias cercanas, produciendo cancelaciones o refuerzos en la magnitud de la suma.</p>
-        <p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará relevancia cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido en las próximas secciones." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
+        <p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es el doble, o sea, 200Hz para nuestro caso." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
         <p>En ambos casos, en un análisis espectral, veré las dos frecuencias senoidales puras y nada más.</p>
         <div class="figure">
             <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5b.png"/><br>
@@ -450,22 +450,35 @@
             <p><st>Fig 10. Una señal analógica muestreada a 5 veces su frecuencia. Distribución de las muestrase interpolación lineal para la reconstrucción</st></p>
         </div><br/>
         <p>Una particularidad que tienen los ejemplos recién enunciados es que la cantidad de muestras por ciclo de señal es invariante. Esto quiere decir que, por ejemplo, en \( F_s = 3F \), existirán en cualquier ciclo de la señal 3, y solamente 3, muestras. No encontraré ciclos en donde existan 2, 4 u otro valor distinto de 3. O sea que existe una relación entre <em>F</em> y \( F_s \) que la podemos representar por la siguiente ecuación:</p>
-        <div class="figure">
-            <img src="Pictures/Eq2.png"/><br/>
-        </div>
+       
+
+
+	\[ {\large F = \frac{1}{n} \cdot F_s } \]<br>
+
         <p>Nuevamente, esto significa que <strong>cada 1 ciclo</strong>, voy a tener “n” (2, 3, 4, etc) y <strong>solo “n” muestras</strong>. No más, no menos.<br/>Podemos generalizar la fórmula y reescribirla como:</p>
-        <div class="figure">
-            <img src="Pictures/Eq2b.png"/><br/>
-        </div>
+        
+
+	\[ {\large F = \frac{m}{n} \cdot F_s } \]<br>
+
+
+
         <p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese \( \large\frac{2}{5} \)
-significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
+	significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
         <p>Pero existe otra característica que tiene una consecuencia muy importante y es la siguiente: : esas<strong> n muestras se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
         <p>Pero ¿a dónde queremos llegar con esto? ¿Qué tiene que ver con lo que veo en la pantalla? Un poco más de paciencia que ya estamos más cerca.</p>
         <h1>4. Patrones cíclicos.</h1>
-        <p>Adicionemos ahora un último parámetro a fórmula, llamado ε, de manera que resulte como indica la siguiente ecuación:</p>
-        <div class="figure">
-            <img src="Pictures/Eq3.png"/><br/>
-        </div>
+        <p>Adicionemos ahora un último parámetro a fórmula, llamado <em style="font-size: 1.3em;">ε</em>, de manera que resulte como indica la siguiente ecuación:</p><br>
+        
+
+
+	\[ {\large F = \frac{m}{n} \cdot F_s - {\Large \varepsilon}} \]<br>
+
+
+
+
+
+
+
         <p>¿Qué logro con esta modificación? <i><u>Anular la característica de posicionamiento fijo</u></i> de las muestras dentro de ciclo de la señal. Aunque seguirá habiendo una cantidad de n muestras cada m ciclos, la ubicación de las mismas dentro de la señal irá variando a través de los ciclos.</p>
         <p>Y ¿en algún momento volverán las muestras a caer en la misma fase de la onda? O sea ¿Existirá una frecuencia a la cual se repite el ciclo? La respuesta es sí, y justamente ese es el valor <em style="font-size: 1.3em;">ε</em>.</p>
         <p>Observemos los gráficos de algunos ejemplos:</p>
@@ -558,7 +571,7 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
         <p>Bueno, hay que tener en cuenta dos aspectos importantes que se aplican al proceso explicado:</p>
         <p> 1) Esto, si bien no es exclusivo, <strong>es notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 4).</p>
         <p> 2) El efecto es extremadamente notorio en <strong>frecuencias muy próximas a Nyquist</strong> y va perdiendo impacto a medida que me alejo de la misma. Si mi frecuencia de Nyquist es de 22050 Hz, <i><u>el efecto empieza a desvanecerse a partir de los 20 kHz hacia abajo</u></i>. O sea, son frecuencias elevadas para una audición promedio del humano.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz)." href="#nota6">[6]</a></span><span class="only-mobile"><a href="#nota6">[6]</a></span></sup></p>
-        <p>En la Fig 15 podemos evidenciar el impacto en relación con la frecuencia analógica a muestrear. A medida que la frecuencia <em>F</em> se aleja de <em>Fs/2</em>, el efecto se va diluyendo (el batido va perdiendo intensidad).</p>
+        <p>En la Fig 15 podemos evidenciar el impacto en relación con la frecuencia analógica a muestrear. A medida que la frecuencia <em>F</em> se aleja de \({\large\frac{F_s}{2}}\), el efecto se va diluyendo (el batido va perdiendo intensidad).</p>
         <div class="figure">
             <img alt="Batido a distintas frecuencias" src="Pictures/fig15.png"/>
             <p><st>Fig 15. Batido a distintas frecuencias. En todos los casos <em>Fs = 8 kHz</em>. Señal pico de 1mv</st></p><br>
@@ -569,11 +582,11 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
         <p>El proceso de medición consistió en generar senoidales a distintas frecuencias y medir la salida de audio analógica de la placa. Eso es lo que realmente reproducirán los parlantes.</p><br/>
         <div class="figure">
             <img alt="Medición con Fs=2Hz y F=1Hz" src="Pictures/fig16.png"/>
-            <p><st>Fig 16. Frecuencia de muestreo <em>Fs = 44100 Hz</em>, Frecuencia de señal <em>F = 22049 Hz</em>. Se puede apreciar el <br/>batimento a una frecuencia de 0.5 Hz. Observar que la frecuencia de cada componente es de 1 Hz.<br/><br/></st></p>
+            <p><st>Fig 16. Frecuencia de muestreo <em>Fs = 44100 Hz</em>, Frecuencia de señal <em>F = 22049 Hz</em>. Se puede apreciar el <br/>batimento a una frecuencia de 2 Hz. Observar que la frecuencia de cada componente es de 1 Hz.<br/><br/></st></p>
         </div>
         <div class="figure">
             <img alt="Medición con Fs=10Hz y F=5Hz" src="Pictures/fig17.png"/>
-            <p><st>Fig 17. Frecuencia de muestreo <em>Fs = 44100 Hz</em>, Frecuencia de señal <em>F = 22045 Hz</em>. Se puede apreciar el <br/>batimento a una frecuencia de 2.5 Hz. Observar que la frecuencia de cada componente = 5 Hz.<br/><br/></st></p>
+            <p><st>Fig 17. Frecuencia de muestreo <em>Fs = 44100 Hz</em>, Frecuencia de señal <em>F = 22045 Hz</em>. Se puede apreciar el <br/>batimento a una frecuencia de 10 Hz. Observar que la frecuencia de cada componente = 5 Hz.<br/><br/></st></p>
         </div>
         <div class="figure">
             <img alt="Medición con Fs=44100Hz y F=22000Hz" src="Pictures/fig18.png"/>
@@ -590,7 +603,7 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
         <div class="figure">
             <img src="Pictures/Eq1.png"/><br/>
         </div>
-        <p>podemos crear el mismo efecto de batido, pero <i><u>multiplicando señales senoidales</u></i> (en vez de sumarlas) modificando las frecuencias para cumplir con dicha identidad.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Este es el método utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> En nuestro ejemplo de A=1000Hz y B=1100Hz, las nuevas frecuencias para lograr el mismo efecto serían:</p>
+        <p>podemos crear el mismo efecto de batido, pero <i><u>multiplicando señales senoidales</u></i> (en vez de sumarlas) modificando las frecuencias para cumplir con dicha identidad.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Este es el principio utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> En nuestro ejemplo de A=1000Hz y B=1100Hz, las nuevas frecuencias para lograr el mismo efecto serían:</p>
         <div class="equation-center">
 	<p>\( F_1 ={\large \frac{A + B}{2}} = 1050\,\text{Hz} \)</p>
 	<p>\( F_2 ={\large \frac{A - B}{2}} = 50\,\text{Hz} \)</p><br>
@@ -614,15 +627,15 @@ significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.
 		a) SINC_span=+/- 50 mseg; b) SINC_span=+/- 500 mseg ; c) SINC_span=+/- 5 seg</st></p><br/>
        </div>
 
-<p> El ejemplo preentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es válido para demostrar el efecto en cuestión.</p>
+<p> El ejemplo preentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es perfectamente válido para demostrar el efecto en cuestión.</p>
 <h1>Referencias</h1>
-        <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, si pensamos entfermo el batido como 2 ondas que se entrelazan, la frecuencia de cada componente es la mitad, o sea, 50Hz para nuestro caso. La aclaración tomará relevancia cuando comenzaremos a hablar de la frecuencia de cada “componente” del batido en las próximas secciones.</p>
+        <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es el doble, o sea, 200Hz para nuestro caso. Esta relación será distitna en el efecto subNyquist que veremos en las próximas secciones.</p>
         <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
         <p id="nota3">[3] Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist.</p>
         <p id="nota4">[4] Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc.</p>
         <p id="nota5">[5] Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)</p>
         <p id="nota6">[6] Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz).</p>
-        <p id="nota7">[7] Este es el método utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión.</p>
+        <p id="nota7">[7] Este es el principio utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión.</p>
         <p id="nota8">[8] Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable</p><br>        
 	<h1>Software y Hardware utilizado</h1>
         <p>Las simulaciones realizadas en el presente trabajo se han desarrollado en MATLAB™.</p>
