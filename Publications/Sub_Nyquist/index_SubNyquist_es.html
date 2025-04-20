@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.7 -->
+<!DOCTYPE html><!-- Version v3.8 -->
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -10,20 +10,12 @@
     <title>Efecto de Batido en Señales Sub Nyquist: Procesamiento de Señales</title>
     <meta name="description" content="Análisis del efecto de batido en señales sub Nyquist y su impacto en el procesamiento digital de señales.">
     <meta name="keywords" content="efecto de batido, señales sub Nyquist, procesamiento de señales, muestreo, aliasing, cuantización">
-
-
     <meta property="og:title" content="Efecto de Batido en Señales Sub Nyquist">
     <meta property="og:description" content="Descubre cómo el efecto de batido afecta las señales sub Nyquist en el procesamiento de señales.">
     <meta property="og:image" content="https://raw.githubusercontent.com/soundinsda/Soundins_website/main/Publications/Sub_Nyquist/Pictures/fig11a.png">
     <meta property="og:url" content="https://soundins.com.ar/Publications/Sub_Nyquist/index_SubNyquist_es.html">
-
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -60,7 +52,7 @@
             overflow-x: hidden;
         }
 
-        .titu {
+        h1 {
             font-size: 36px;
             font-family: Verdana, sans-serif;
             text-align: center;
@@ -71,15 +63,21 @@
             margin: 0 auto;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-top: 20px;
-            padding-left: 30px;
+        .pablo {
+            font-size: 36px;
+            font-family: Verdana, sans-serif;
+            text-align: center;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            margin: 0 auto;
         }
 
         h2 {
-            font-size: 20px;
-            margin-top: 15px;
+            font-size: 24px;
+            margin-top: 20px;
+            padding-left: 30px;
         }
 
         p {
@@ -102,13 +100,6 @@
 
         .fig15-image {
             margin-left: 90px;
-        }
-
-        @media (max-width: 768px) {
-            .fig15-image {
-                margin-left: 0;
-                margin: 0 auto;
-            }
         }
 
         .figure p {
@@ -205,15 +196,6 @@
             display: none;
         }
 
-        @media (max-width: 768px) {
-            .only-desktop {
-                display: none;
-            }
-            .only-mobile {
-                display: inline;
-            }
-        }
-
         .language-button {
             position: absolute;
             top: 90px;
@@ -245,7 +227,7 @@
                 margin: 0;
             }
 
-            .titu {
+            h1, .pablo {
                 font-size: 32px;
                 width: 100%;
                 margin: 0 auto;
@@ -276,7 +258,7 @@
                 width: 100%;
             }
 
-            .titu {
+            h1, .pablo {
                 font-size: 28px;
                 background-color: black;
                 color: white;
@@ -285,14 +267,10 @@
                 margin: 0 auto;
             }
 
-            h1 {
-                font-size: 20px;
-    		padding-left: 0;
-	    	padding-right: 0;
-            }
-
             h2 {
-                font-size: 18px;
+                font-size: 20px;
+                padding-left: 0;
+                padding-right: 0;
             }
 
             st {
@@ -347,11 +325,11 @@
                 white-space: pre-wrap;
             }
 
-	p {
-    	margin: 10px 0;
-    	padding-left: 0;
-    	padding-right: 0;
-	}
+            p {
+                margin: 10px 0;
+                padding-left: 0;
+                padding-right: 0;
+            }
 
             .language-button {
                 top: 140px;
@@ -388,13 +366,13 @@
             <button class="english-button" onclick="window.location.href='index_SubNyquist_en.html'">English</button>
         </div>
         <div class="full-width-band">
-            <div class="titu">Efecto de Batido en Señales sub Nyquist</div>
-            <div class="titu pablo"><span>Pablo Panitta</span></div>
+            <h1>Efecto de Batido en Señales sub Nyquist</h1>
+            <p class="pablo"><span>Pablo Panitta</span></p>
         </div>
 
-        <h1>Introducción</h1>
+        <h2>Introducción</h2>
         <p>El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre dos señales analógicas y los efectos que se presentan. Luego analizaremos lo que ocurre en el ámbito digital entre una señal y su cercanía con la frecuencia de Nyquist. Se abordará las implicancias en la representación gráfica de las señales y su impacto en la conversión D/A para su reproducción.</p>
-        <h1>1. Suma de dos señales analógicas</h1>
+        <h2>1. Suma de dos señales analógicas</h2>
         <p>Supongamos que tenemos 2 señales senoidales analógicas y las sumamos. ¿Qué resultado veremos en la pantalla de un osciloscopio? Si la diferencia entre ambas frecuencias es grande (digamos superior a 10 veces), veremos que la senoidal de mayor frecuencia se encontrará superpuesta sobre la de baja frecuencia.</p>
         <p>Pero a medida que dicha diferencia se achica, comenzaremos a apreciar cada vez mas, que la senoide de mayor frecuencia se encuentra <strong>“batida”</strong> por la de menor frecuencia.</p>
         <p>En las Fig 1, Fig 2, Fig 3 y Fig 4 se pueden apreciar los efectos recién mencionados.</p>
@@ -422,7 +400,7 @@
             <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5a.png"/>
             <p>Fig 5. Espectro de señales a) Escenario1 , b) Escenario2</p>
         </div>
-        <h1>2. Batido en ámbito digital</h1>
+        <h2>2. Batido en ámbito digital</h2>
         <p>Supongamos ahora, que tenemos una señal analógica y procedemos a muestrearla para su digitación. A los fines de la demostración, tomemos los siguientes valores:</p>
         <div class="equation-left">
             <p> - Frecuencia de la señal: 500 Hz<br/> - Frecuencia de muestreo: 44.1kHz</p>
@@ -445,10 +423,8 @@
         </div>
         <p>Sin lugar a dudas, la Fig 8 <strong>solo evidencia la existencia de 1 sola señal!</strong> Esto no parece tener mucho sentido. Existe una sola señal presente en el espectro pero que, sin embargo, en el dominio del tiempo muestra síntomas claros de una modulación en amplitud (batido) que solo podrían darse cuando existiese otra señal interactuando.</p>
         <p>¿Y entonces?</p>
-        <h1>3. Distribución de las muestras en una señal.</h1>
+        <h2>3. Distribución de las muestras en una señal.</h2>
         <p>Supongamos que muestreo una señal de frecuencia F a una tasa de muestreo \( F_s = 3F\). Lo que obtendría sería la presencia de 3 muestras por ciclo de señal y que, además, ocurrían siempre en la misma fase de misma. O sea, se crea un patrón periódico, como podemos observar en la Fig 9</p>
-
-        
         <div class="figure">
             <img alt="Señal analógica muestreada a 3 veces su frecuencia" src="Pictures/fig9.png"/>
             <p><st>Fig 9. Una señal analógica muestreada a 3 veces su frecuencia. Distribución de las muestras e interpolación lineal para la reconstrucción</st></p>
@@ -456,38 +432,19 @@
         <p>Y si hiciésemos lo propio, pero ahora con \( F_s = 5F\), habría 5 muestras por ciclo de señal, con las mismas características indicadas para la señal anterior, como se puede apreciar en la figura de a continuación.</p>
         <div class="figure">
             <img alt="Señal analógica muestreada a 5 veces su frecuencia" src="Pictures/fig10.png"/>
-            <p><st>Fig 10. Una señal analógica muestreada a 5 veces su frecuencia. Distribución de las muestrase interpolación lineal para la reconstrucción</st></p>
+            <p><st>Fig 10. Una señal analógica muestreada a 5 veces su frecuencia. Distribución de las muestras e interpolación lineal para la reconstrucción</st></p>
         </div><br/>
         <p>Una particularidad que tienen los ejemplos recién enunciados es que la cantidad de muestras por ciclo de señal es invariante. Esto quiere decir que, por ejemplo, en \( F_s = 3F \), existirán en cualquier ciclo de la señal 3, y solamente 3, muestras. No encontraré ciclos en donde existan 2, 4 u otro valor distinto de 3. O sea que existe una relación entre <em>F</em> y \( F_s \) que la podemos representar por la siguiente ecuación:</p>
-       
-
-
-	\[ {\large F = \frac{1}{n} \cdot F_s } \]<br>
-
+        \[ {\large F = \frac{1}{n} \cdot F_s } \]<br>
         <p>Nuevamente, esto significa que <strong>cada 1 ciclo</strong>, voy a tener “n” (2, 3, 4, etc) y <strong>solo “n” muestras</strong>. No más, no menos.<br/>Podemos generalizar la fórmula y reescribirla como:</p>
-        
-
-	\[ {\large F = \frac{m}{n} \cdot F_s } \]<br>
-
-
-
+        \[ {\large F = \frac{m}{n} \cdot F_s } \]<br>
         <p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese \( \large\frac{2}{5} \)
-	significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
+        significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) ≤ 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
         <p>Pero existe otra característica que tiene una consecuencia muy importante y es la siguiente: : esas<strong> n muestras se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
         <p>Pero ¿a dónde queremos llegar con esto? ¿Qué tiene que ver con lo que veo en la pantalla? Un poco más de paciencia que ya estamos más cerca.</p>
-        <h1>4. Patrones cíclicos.</h1>
+        <h2>4. Patrones cíclicos.</h2>
         <p>Adicionemos ahora un último parámetro a fórmula, llamado <em style="font-size: 1.3em;">ε</em>, de manera que resulte como indica la siguiente ecuación:</p><br>
-        
-
-
-	\[ {\large F = \frac{m}{n} \cdot F_s - {\Large \varepsilon}} \]<br>
-
-
-
-
-
-
-
+        \[ {\large F = \frac{m}{n} \cdot F_s - {\Large \varepsilon}} \]<br>
         <p>¿Qué logro con esta modificación? <i><u>Anular la característica de posicionamiento fijo</u></i> de las muestras dentro de ciclo de la señal. Aunque seguirá habiendo una cantidad de n muestras cada m ciclos, la ubicación de las mismas dentro de la señal irá variando a través de los ciclos.</p>
         <p>Y ¿en algún momento volverán las muestras a caer en la misma fase de la onda? O sea ¿Existirá una frecuencia a la cual se repite el ciclo? La respuesta es sí, y justamente ese es el valor <em style="font-size: 1.3em;">ε</em>.</p>
         <p>Observemos los gráficos de algunos ejemplos:</p>
@@ -500,7 +457,7 @@
         <p>En la Fig 11 podemos observar la distribución de las muestras <strong>“formando” ondas senoidales cuya cantidad corresponde con el valor del factor “<em>n</em>” y de una frecuencia de valor <em>ε</em></strong>.</p>
         <p>O sea, en la fórmula \( F = {\large \frac{F_s}{2}} - 20 \) se formarán 2 ondas, en la \( F = {\large \frac{F_s}{3}} - 20 \), 3 ondas y en la \( F = {\large \frac{F_s}{5}} - 20 \), 5 ondas entrelazadas. Todas ellas tienen una frecuencia de 20 Hz (tal como es el valor <em style="font-size: 1.3em;">ε</em>).</p>
         <p>Notar que estas ondas son productos de una distribución gráfica las muestras de la señal y todas poseen una frecuencia de <em style="font-size: 1.3em;">ε</em>. Quiere decir que <em style="font-size: 1.3em;">ε</em>, es la <i><u>frecuencia a la cual las muestras vuelven a producirse en la misma fase</u></i> de la señal. Es fácil notar que si <em style="font-size: 1.3em;">ε</em>=0, la frecuencia de variación es 0 y, por lo tanto, las muestras ocurren siempre en la misma fase de la señal.</p>
-        <h1>5. Proceso de reconstrucción</h1>
+        <h2>5. Proceso de reconstrucción</h2>
         <p>Llama la atención el hecho que, si quisiera reconstruir la señal a través de la unión de las muestras, no estaría obteniendo la misma señal original. Tal como se observa en la Fig 12, si aplico el proceso de muestreo a una señal senoidal pura (A/D) y luego, a partir de esas muestras, reconstruyo la señal (D/A) uniendo las muestras, estaría llegando a una señal senoidal pero con batido, lo cual obviamente no es la misma señal original. Pero esto es una directa contradicción con el teorema de Nyquist, el cual afirma que, si cumplo la condición de muestrear a una tasa superior al doble de la máxima frecuencia presente, podría reconstruir la señal original de manera exacta.</p>
         <div class="figure">
             <img alt="Proceso de reconstrucción con batido" src="Pictures/fig12.png"/>
@@ -518,8 +475,8 @@
             <p><st>Fig 14. Proceso de reconstrucción de la señal en el dominio del tiempo</st></p>
         </div>
         <p>En la teoría, este proceso posee una reconstrucción perfecta. Pero el inconveniente se presenta en la imposibilidad de su implementación, ya que la función SINC se extiende desde \(-\infty \) a \( +\infty \). Como esto no es posible a los fines prácticos, debemos acotarla en el tiempo. Este recorte temporal de la función, tendrá su impacto en el dominio de la frecuencia y será en que la respuesta del <u><i>filtro pasa bajo ya no será la ideal y eso traerá “distorsiones” en la reconstrucción de la señal analógica</i></u>. Y son precisamente esos errores lo que hacen que la señal reconstruida sea en mayor o menor medida, igual a la original.</p>
-	<p> En el Apendice III, encontrarán una demostración práctica del impacto de la longuitd de la SINC en el proceso de reconstrucción.</p>
-        <h1>6. ¿Es real el efecto?</h1>
+        <p> En el Apendice III, encontrarán una demostración práctica del impacto de la longuitd de la SINC en el proceso de reconstrucción.</p>
+        <h2>6. ¿Es real el efecto?</h2>
         <p>Habiendo entendido el motivo de las formas “raras” que vemos en la reconstrucción de determinadas frecuencias, cabe preguntarnos si este es un efecto real o es simplemente un efecto visual. La respuesta es que este efecto es tan real como el mismo audio digital, por lo que <strong>no es solamente una percepción visual, sino también auditiva</strong>.</p>
         <p>Y comprobar esto no es nada difícil. Simplemente se puede crear una sesión en alguna frecuencia de Nyquist que sea audible, generar una señal senoidal (o cualquier señal periódica) y escuchar. Por ejemplo, podemos hacer la prueba con una <em>Fs = 8000Hz</em> y con un generador crear senoidales a una <em>F = 3998 Hz y F=3999Hz</em>.</p>
         <p>Habiendo llegado hasta aquí (y ojalá comprendido la explicación) … ¿qué esperarías escuchar? (audios de 4 seg, cuidado con el volmen)</p><br/>
@@ -576,7 +533,7 @@
             audio1.load();
             audio2.load();
         </script>
-        <h1><br/>7. Impacto en el audio digital</h1>
+        <h2>7. Impacto en el audio digital</h2>
         <p>Pero si esto es así… <i>¿cómo no es un completo desastre todo lo que escuchamos a través del audio digital?</i></p>
         <p>Bueno, hay que tener en cuenta dos aspectos importantes que se aplican al proceso explicado:</p>
         <p> 1) Esto, si bien no es exclusivo, <strong>es notorio en señales periódicas</strong>. El efecto de batido, se evidencia al tener repeticiones periódicas de las muestras en los ciclos de la señal (tal como lo explicado en 4).</p>
@@ -587,7 +544,7 @@
             <p><st>Fig 15. Batido a distintas frecuencias. En todos los casos <em>Fs = 8 kHz</em>. Señal pico de 1mv</st></p><br>
         </div>
         <p>Por estos motivos, aunque resulta curioso verlo en la pantalla de los DAWs, este efecto no resulta ser un problema para el propósito del audio digital.</p><br>
-        <h1>Apéndice I: Mediciones</h1>
+        <h2>Apéndice I: Mediciones</h2>
         <p>A continuación se exhiben las mediciones realizadas a la salida de una placa de sonido Marca: Universal Audio - Modelo: Apollo Twin. El instrumento de medición utilizado fue un Tektronix TBS 1052B, a distintas frecuencias de muestreo y de señal.<br/></p>
         <p>El proceso de medición consistió en generar senoidales a distintas frecuencias y medir la salida de audio analógica de la placa. Eso es lo que realmente reproducirán los parlantes.</p><br/>
         <div class="figure">
@@ -608,50 +565,46 @@
             <p><st>Fig 19. Señal F=22049 muestreada a a) Fs=44100 Hz. 
                            b) Fs=88200 Hz.<br> Se puede apreciar el impacto para una misma frecuencia a distintas frecuencias de muestreo. <br>Para 88100Hz el impacto es despreciable, mientras que para 44100Hz es notorio.</st></p><br/>
         </div>
-        <h1>Apéndice II: Producto de dos señales analógicas</h1>
+        <h2>Apéndice II: Producto de dos señales analógicas</h2>
         <p>Según la identidad trigonométrica:</p>
         <div class="figure">
             <img src="Pictures/Eq1.png"/><br/>
         </div>
         <p>podemos crear el mismo efecto de batido, pero <i><u>multiplicando señales senoidales</u></i> (en vez de sumarlas) modificando las frecuencias para cumplir con dicha identidad.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Este es el principio utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> En nuestro ejemplo de A=1000Hz y B=1100Hz, las nuevas frecuencias para lograr el mismo efecto serían:</p>
         <div class="equation-center">
-	<p>\( F_1 ={\large \frac{A + B}{2}} = 1050\,\text{Hz} \)</p>
-	<p>\( F_2 ={\large \frac{A - B}{2}} = 50\,\text{Hz} \)</p><br>
-
+            <p>\( F_1 ={\large \frac{A + B}{2}} = 1050\,\text{Hz} \)</p>
+            <p>\( F_2 ={\large \frac{A - B}{2}} = 50\,\text{Hz} \)</p><br>
         </div>
         <div class="figure">
             <img alt="Efecto de batido por producto de señales" src="Pictures/fig20.png"/>
             <p>Fig 20. Efecto de batido a través del producto de señales</p>
         </div>
         <p>Notar que la frecuencia del batido, sigue siendo 100Hz (tal como en el ejemplo de la suma) que es, precisamente, el doble de la frecuencia de la moduladora.</p><br>
-        
-      <h1>Apéndice III: Proceso de Interpolación de una señal muestreada.</h1>
+        <h2>Apéndice III: Proceso de Interpolación de una señal muestreada.</h2>
         <p>Se ha mencionado que, aún cumpliendo con el criterio de Nyquist, tendremos una reconstrucción imperfecta de la señal, debido a la limitante de tener que truncar la señal SINC en el proceso de convolución. También hemos hecho referencia que ese fenómeno, es notorio en frecuencias cercanas a Nyquist y que, ha medida que me nos alejamos de la misma, el efecto se va diluyendo.</p><br>
-
-       <p>A continuación, se muestran 3 gráficos en las que podemos apreciar cómo aumentando el tiempo de la SINC, la reconstrucción mejora notablemente.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable" href="#nota8">[8]</a></span><span class="only-mobile"><a href="#nota8">[8]</a></span></sup></p><br>
-       <div class="figure">
+        <p>A continuación, se muestran 3 gráficos en las que podemos apreciar cómo aumentando el tiempo de la SINC, la reconstrucción mejora notablemente.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable" href="#nota8">[8]</a></span><span class="only-mobile"><a href="#nota8">[8]</a></span></sup></p><br>
+        <div class="figure">
             <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21a.png"/><br>
             <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21b.png"/>
             <img alt="Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original " src="Pictures/fig21c.png"/>
             <p><st>Fig 21. Efecto de la longitud de la SINC en el resultado de la reconstrucción de la señal original<br>
-		a) SINC_span=+/- 50 mseg; b) SINC_span=+/- 500 mseg ; c) SINC_span=+/- 5 seg</st></p><br/>
-       </div>
-
-<p> El ejemplo preentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es perfectamente válido para demostrar el efecto en cuestión.</p>
-<h1>Referencias</h1>
+                a) SINC_span=+/- 50 mseg; b) SINC_span=+/- 500 mseg ; c) SINC_span=+/- 5 seg</st></p><br/>
+        </div>
+        <p> El ejemplo preentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es perfectamente válido para demostrar el efecto en cuestión.</p>
+        <h2>Referencias</h2>
         <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es la mitad, o sea, 50Hz para nuestro caso. Esta relación será distitna en el efecto subNyquist que veremos en las próximas secciones.</p>
         <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
-        <p id="nota3">[3] Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist.</p>
+        <p id="nota3">[3] Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) ≤ 0.5 para satisfacer el criterio de Nyquist.</p>
         <p id="nota4">[4] Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc.</p>
         <p id="nota5">[5] Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)</p>
         <p id="nota6">[6] Adicionalmente, el batido es solo percibido si su frecuencia es de muy bajo valor (no más allá de 15 Hz).</p>
         <p id="nota7">[7] Este es el principio utilizado en el proceso de modulación por amplitud (AM). Una señal modulante de baja frecuencia (p.e la voz) modula a una portadora (modulada) de bastante mayor frecuencia para su transmisión.</p>
         <p id="nota8">[8] Esto es producto de una simulación, pero que bien refleja el concepto teórico afirmado. Obviamente no podemos trasladar esto al mundo real, ya que en los conversores DA, este tiempo no es modificable</p><br>        
-	<h1>Software y Hardware utilizado</h1>
+        <h2>Software y Hardware utilizado</h2>
         <p>Las simulaciones realizadas en el presente trabajo se han desarrollado en MATLAB™.</p>
         <p>Placa de Sonido Universal Audio, Apollo Twin™.</p>
         <p>Instrumento de medición Tektronix™ TBS 1052B.</p><br>
-        <h1>Bibliografía</h1>
+        <h2>Bibliografía</h2>
         <ul>
             <li>“Sub-Nyquist artefacts and sampling moiré effects” - Isaac Amidror, Ecole Polytechnique Fédérale de Lausanne (EPFL), Feb.Concurrent2015</li>
             <li>“Analyzing the Sampling-Induced Beat Frequency Effect” - Kerry Schutz – Mathwork, Oct 2021</li>
