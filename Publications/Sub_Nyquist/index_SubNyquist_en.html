@@ -463,6 +463,7 @@
             <p><st>Fig 14. Signal reconstruction process in the time domain</st></p>
         </div>
         <p>In theory, this process achieves perfect reconstruction. But the problem arises in the impossibility of its implementation, as the SINC function extends from \(-\infty \) a \( +\infty \). Since this is not practical, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, causing the low-pass filter’s response to no longer be ideal, which introduces “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less similar to the original.</p>
+	<p>In Appendix III, you will find a practical demonstration of the impact of the length of the SINC on the reconstruction process.</p>
         <h1>6. Is the Effect Real?</h1>
         <p>Having understood the reason for the “strange” shapes we see in the reconstruction of certain frequencies, it’s worth asking whether this is a real effect or merely a visual one. The answer is that this effect is as real as digital audio itself, so <strong>it is not just a visual perception but also an auditory one</strong>.</p>
         <p>Proving this is not difficult. Simply create a session at an audible Nyquist frequency, generate a sinusoidal signal (or any periodic signal), and listen. For example, we can test with an <em>Fs = 8000Hz</em> and use a generator to create sine waves at <em>F = 3998 Hz and F=3999Hz</em>.</p>
