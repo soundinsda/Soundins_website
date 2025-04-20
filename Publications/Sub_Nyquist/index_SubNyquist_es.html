@@ -415,7 +415,7 @@
             <p><st>Fig 4. Resultado de la suma de 2 señales senoidales de 1000Hz y 1100Hz</st></p><br/>
         </div>
         <p>Interesante notar el efecto que tiene la fase en la suma de señales para ambas combinaciones. Mientras la misma no juega un papel importante cuando la diferencia de frecuencias es grande, sí lo hace cuando son frecuencias cercanas, produciendo cancelaciones o refuerzos en la magnitud de la suma.</p>
-        <p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es el doble, o sea, 200Hz para nuestro caso." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
+        <p>Observar que la frecuencia de batido es igual a la diferencia de frecuencias entre ambas señales (en este caso 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es la mitad, o sea, 50Hz para nuestro caso." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
         <p>En ambos casos, en un análisis espectral, veré las dos frecuencias senoidales puras y nada más.</p>
         <div class="figure">
             <img alt="Espectro de señales Escenario1 y Escenario2" src="Pictures/fig5b.png"/><br>
@@ -622,7 +622,7 @@
             <img alt="Efecto de batido por producto de señales" src="Pictures/fig20.png"/>
             <p>Fig 20. Efecto de batido a través del producto de señales</p>
         </div>
-        <p>Notar que la frecuencia del batido, sigue siendo 100Hz (tal como en el ejemplo de la suma) que es, precisamente, la frecuencia de la moduladora.</p><br>
+        <p>Notar que la frecuencia del batido, sigue siendo 100Hz (tal como en el ejemplo de la suma) que es, precisamente, el doble de la frecuencia de la moduladora.</p><br>
         
       <h1>Apéndice III: Proceso de Interpolación de una señal muestreada.</h1>
         <p>Se ha mencionado que, aún cumpliendo con el criterio de Nyquist, tendremos una reconstrucción imperfecta de la señal, debido a la limitante de tener que truncar la señal SINC en el proceso de convolución. También hemos hecho referencia que ese fenómeno, es notorio en frecuencias cercanas a Nyquist y que, ha medida que me nos alejamos de la misma, el efecto se va diluyendo.</p><br>
@@ -638,7 +638,7 @@
 
 <p> El ejemplo preentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es perfectamente válido para demostrar el efecto en cuestión.</p>
 <h1>Referencias</h1>
-        <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es el doble, o sea, 200Hz para nuestro caso. Esta relación será distitna en el efecto subNyquist que veremos en las próximas secciones.</p>
+        <p id="nota1">[1] La frecuencia de batido es la diferencia entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es la mitad, o sea, 50Hz para nuestro caso. Esta relación será distitna en el efecto subNyquist que veremos en las próximas secciones.</p>
         <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
         <p id="nota3">[3] Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) &#8804 0.5 para satisfacer el criterio de Nyquist.</p>
         <p id="nota4">[4] Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc.</p>

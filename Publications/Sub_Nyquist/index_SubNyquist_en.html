@@ -380,7 +380,7 @@
             <p><st>Fig 4. Result of the sum of two sinusoidal signals of 1000Hz and 1100Hz</st></p><br/>
         </div>
         <p>It is interesting to note the effect that phase has on the sum of signals for both combinations. While it does not play a significant role when the frequency difference is large, it does when the frequencies are close, producing cancellations or reinforcements in the magnitude of the sum.</p>
-        <p>Note that the beat frequency is equal to the difference between the frequencies of both signals (in this case, 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="The beat frequency is the difference between both signals. However, The frequency of each interwoven waves, is the double, i.e., 200Hz in this case." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
+        <p>Note that the beat frequency is equal to the difference between the frequencies of both signals (in this case, 100Hz).<sup><span class="only-desktop"><a class="tooltip" data-tooltip="The beat frequency is the difference between both signals. However, The frequency of each interwoven waves, is the half, i.e., 50Hz in this case." href="#nota1">[1]</a></span><span class="only-mobile"><a href="#nota1">[1]</a></span></sup></p>
         <p>In both cases, in a spectral analysis, I will see the two pure sinusoidal frequencies and nothing else.</p>
         <div class="figure">
             <img alt="Signal spectrum Scenario1 and Scenario2" src="Pictures/fig5b.png"/><br>
@@ -566,7 +566,7 @@
             <img alt="Beat effect through the product of signals" src="Pictures/fig20.png"/>
             <p>Fig 20. Beat effect through the product of signals</p>
         </div>
-        <p>Note that the beat frequency remains 100Hz (as in the sum example), which is precisely the frequency of the modulator.</p>
+        <p>Note that the beat frequency remains 100Hz (as in the sum example), which is precisely twice the frequency of the modulator signal.</p>
         
    <h1>Apéndix III: Interpolation Process of a Sampled Signal.</h1>
         <p>It has been mentioned that even when the Nyquist criterion is satisfied, the signal reconstruction will still be imperfect due to the need to truncate the SINC function during the convolution process. We have also noted that this phenomenon becomes more noticeable at frequencies close to Nyquist, and that as we move further away from it, the effect gradually diminishes.</p><br>
@@ -586,7 +586,7 @@
 
 
 	<h1>References</h1>
-        <p id="nota1">[1] The beat frequency is the difference between both signals. However, if we think of the beat as two interwoven waves, the frequency of each component is double, i.e, 200Hz in this case. This will be different in subNyquist effect will see in the next sections.</p>
+        <p id="nota1">[1] The beat frequency is the difference between both signals. However, if we think of the beat as two interwoven waves, the frequency of each component is half, i.e, 50Hz in this case. This will be different in subNyquist effect will see in the next sections.</p>
         <p id="nota2">[2] Matlab’s interpolation method is linear, which is why we see straight lines connecting the samples.</p>
         <p id="nota3">[3] Remember that the value must always be \(\large \frac{m}{n} \) &#8804 0.5 to satisfy the Nyquist criterion.</p>
         <p id="nota4">[4] There are several interpolation methods such as Lagrange (order N), cubic splines (3rd order), Bezier splines, etc.</p>
