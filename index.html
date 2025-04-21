@@ -1,4 +1,4 @@
-<!DOCTYPE html><!---v3.7-->
+<!DOCTYPE html><!---v3.8-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -67,7 +67,7 @@
             position: absolute;
             top: 50px;
             left: 20px;
-            z-index: 2;
+            z-index: 3; /* Increased to ensure it's above menu-bar */
         }
         #menu-title {
             font-size: 24px;
@@ -90,7 +90,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
         }
-        #menu:hover #menu-content {
+        #menu.active #menu-content {
             display: block;
         }
         #dither-menu {
@@ -121,7 +121,7 @@
             padding: 10px;
             white-space: nowrap;
         }
-        #dither-menu:hover #dither-submenu {
+        #dither-menu.active #dither-submenu {
             display: block;
         }
         .submenu-item {
@@ -135,7 +135,7 @@
             width: 100%;
             transition: background-color 0.3s;
             display: block;
-            text-decoration: none; /* Añadido para enlaces */
+            text-decoration: none;
         }
         .submenu-item:hover {
             background-color: #555;
@@ -167,11 +167,16 @@
             #menu-title {
                 font-size: 18px;
                 padding: 8px;
+                background-color: #1a2b5f;
+                width: 100%;
+                box-sizing: border-box;
             }
             #menu-content {
                 top: 100%;
                 width: 100%;
                 left: 0;
+                position: relative;
+                border-radius: 0;
             }
             #dither-submenu {
                 position: static;
@@ -301,6 +306,34 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Menu toggle for mobile
+            const menu = document.getElementById("menu");
+            const menuTitle = document.getElementById("menu-title");
+            const ditherBtn = document.getElementById("dither-btn");
+            const ditherMenu = document.getElementById("dither-menu");
+            const ditherSubmenu = document.getElementById("dither-submenu");
+
+            // Toggle main menu
+            menuTitle.addEventListener("click", function(e) {
+                e.preventDefault();
+                menu.classList.toggle("active");
+            });
+
+            // Toggle dither submenu
+            ditherBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                ditherMenu.classList.toggle("active");
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener("click", function(e) {
+                if (!menu.contains(e.target)) {
+                    menu.classList.remove("active");
+                    ditherMenu.classList.remove("active");
+                }
+            });
+
+            // Logo loading
             var logo = document.getElementById("logo");
             var possiblePaths = [
                 "Soundins.png",
@@ -324,13 +357,10 @@
                     return;
                 }
                 var path = paths.shift();
-                console.log("Trying image path: " + path); // Depuración
                 checkImage(path, function(success, validUrl) {
                     if (success) {
-                        console.log("Image found at: " + validUrl);
                         logo.src = validUrl;
                     } else {
-                        console.log("Image not found at: " + validUrl);
                         findValidImage(paths);
                     }
                 });
