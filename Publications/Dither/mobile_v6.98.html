@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--Mobile_v6.98 -->
+<!DOCTYPE html><!--Mobile_v6.98-->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -7,7 +7,485 @@
   <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
-    /* [Unchanged CSS, omitted for brevity] */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #EEEEF2;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+#header-container {
+  position: relative;
+  width: 100vw;
+  height: 60px;
+  margin-bottom: 60px;
+}
+#header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: black;
+  z-index: 0;
+}
+#logo {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  width: 100px;
+  height: auto;
+  z-index: 1;
+}
+h1 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(16px, 4vw, 24px);
+  color: white;
+  text-align: center;
+  z-index: 1;
+  white-space: nowrap;
+}
+#version-text {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: clamp(8px, 2vw, 10px);
+  color: #888;
+  z-index: 1;
+}
+#readme-link {
+  position: absolute;
+  top: 43px;
+  right: 100px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  z-index: 2;
+  cursor: pointer;
+}
+#language-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: none;
+  z-index: 3;
+}
+#language-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+#language-menu button:hover {
+  background-color: #f0f0f0;
+}
+#fullscreen-btn {
+  position: absolute;
+  top: 23px;
+  right: 3px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 27px;
+  cursor: pointer;
+  z-index: 2;
+}
+#mode-toggle-container {
+  position: absolute;
+  top: 27px;
+  right: calc(3px + 32px + 10px);
+  z-index: 2;
+}
+#mode-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+#mode-icon {
+  width: 32px;
+  height: 32px;
+}
+#main-content {
+  width: 100%;
+  padding-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+#main-row {
+  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.source-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.source-label {
+  font-weight: bold;
+  font-size: clamp(12px, 3vw, 16px);
+  color: #333;
+  margin-bottom: 5px;
+  transform: translateY(5px);
+}
+.source-btn {
+  width: 80px;
+  padding: 5px;
+  background-color: #1a73e8;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: clamp(10px, 2.5vw, 12px);
+}
+.source-btn.active {
+  background-color: green;
+}
+.rect {
+  width: 80px;
+  padding: 8px;
+  border-radius: 10px;
+  background-color: blue;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  font-size: clamp(10px, 2.5vw, 12px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.rect.green {
+  background-color: green;
+}
+#rect-24bits {
+  transform: translateY(2px);
+}
+#rect-main {
+  transform: translateY(9px);
+}
+#toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(8px, 2vw, 10px);
+  transform: translateY(9px);
+}
+#toggle-btn.red {
+  background-color: red;
+}
+#toggle-btn:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+#stop-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: red;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  margin-left: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(9px);
+}
+#stop-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: black;
+}
+#stop-btn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+#table-container {
+  width: 100%;
+  margin-top: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+th, td {
+  padding: 5px;
+  text-align: center;
+  font-size: clamp(10px, 2.5vw, 12px);
+}
+th {
+  font-weight: bold;
+  color: #333;
+  border-bottom: 2px solid #333;
+}
+#progress-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  z-index: 10;
+  display: none;
+}
+#progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+#progress-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 5s linear;
+}
+#progress-text {
+  margin-top: -21px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+#rotation-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 24px;
+  text-align: center;
+  z-index: 1000;
+  display: none;
+}
+#rotation-text {
+  margin-top: 220px;
+  animation: blink-message 1s infinite;
+}
+@keyframes blink-message {
+  0% { opacity: 1; }
+  50% { opacity: 0.1; }
+  100% { opacity: 1; }
+}
+@media (max-width: 400px) {
+  #main-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  .source-group {
+    margin-bottom: 10px;
+  }
+}
+@media (min-width: 401px) and (max-width: 768px) {
+  #main-row {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+}
+@media (max-width: 668px) {
+  #spectrum-container {
+    display: none !important;
+  }
+}
+@media (min-width: 668px) {
+  #table-container {
+    margin-top: 30px;
+  }
+  .source-label {
+    transform: translate(-120px, 6px);
+  }
+  #source-Sine, #source-flaute {
+    transform: translate(-120px, 5px);
+  }
+  #rect-24bits {
+    transform: translate(-120px, 7px);
+  }
+  #rect-main {
+    transform: translate(-120px, 14px);
+  }
+  #toggle-btn {
+    transform: translate(-120px, 14px);
+  }
+  #stop-btn {
+    transform: translate(-120px, 14px);
+  }
+}
+@media (min-width: 1024px) and (max-width: 2732px) and (orientation: landscape) {
+  #table-container table td > .rect {
+    transform: translateX(30px);
+  }
+}
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+body.dark-mode h1 {
+  color: #ffffff;
+}
+body.dark-mode #version-text {
+  color: #aaaaaa;
+}
+body.dark-mode #readme-link {
+  color: #ffffff;
+}
+body.dark-mode .source-label {
+  color: #ffffff;
+}
+body.dark-mode .source-btn {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+body.dark-mode .source-btn.active {
+  background-color: #4CAF50;
+}
+body.dark-mode #toggle-btn {
+  background-color: #4CAF50;
+}
+body.dark-mode #toggle-btn.red {
+  background-color: #f44336;
+}
+body.dark-mode #toggle-btn:disabled {
+  background-color: #555555;
+}
+body.dark-mode #stop-btn {
+  background-color: #f44336;
+}
+body.dark-mode #stop-btn::before {
+  background-color: #ffffff;
+}
+body.dark-mode th {
+  color: #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+body.dark-mode td {
+  color: #ffffff;
+}
+body.dark-mode #progress-bar {
+  background-color: #555555;
+}
+body.dark-mode #progress-fill {
+  background-color: #4CAF50;
+}
+body.dark-mode #progress-text {
+  color: #ffffff;
+}
+body.dark-mode #rotation-message {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+#table-container::-webkit-scrollbar {
+  height: 7px;
+}
+#table-container::-webkit-scrollbar-thumb {
+  background-color: #000;
+}
+body.dark-mode #table-container::-webkit-scrollbar-thumb {
+  background-color: #fff;
+}
+#spectrum-container {
+  position: absolute;
+  top: 12px;
+  left: 82%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 30px;
+  background-color: #000;
+  border: 1px solid white;
+  box-sizing: border-box;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.3s ease;
+}
+#spectrum-container:not(.minimized) {
+  height: 100px;
+}
+#spectrumCanvas {
+  width: 100%;
+  height: 80px;
+  background-color: #000;
+  display: none;
+  order: 2;
+}
+#spectrum-container:not(.minimized) #spectrumCanvas {
+  display: block;
+}
+#spectrum-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  order: 1;
+}
+#spectrum-title {
+  flex-grow: 1;
+  text-align: center;
+  color: #1ff909;
+  font-size: 14px;
+  font-weight: bold;
+}
+#minimize-btn, #maximize-btn {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#minimize-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 14H4v-2h16v2z"/></svg>');
+  display: none;
+}
+#maximize-btn {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/></svg>');
+  display: block;
+}
+#spectrum-container:not(.minimized) #minimize-btn {
+  display: block;
+}
+#spectrum-container:not(.minimized) #maximize-btn {
+  display: none;
+}
   </style>
 </head>
 <body>
@@ -23,7 +501,7 @@
       <img src="Soundins.png" id="logo" alt="Logo de Soundins">
     </a>
     <h1>Dither & NS Benchmark Tool</h1>
-    <div id="version-text">v6.98_Mobile</div>
+    <div id="version-text">v6.98Mobile</div>
     <div id="mode-toggle-container">
       <button id="mode-toggle-btn">
         <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
@@ -234,10 +712,8 @@
     let currentSource = "Sine";
     const audioPlayers = {};
     let preloadPromise = null;
+let hasShownProgressBar = false;
     let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-    // NEW: Flag to track if progress bar has been shown
-    let hasProgressBarBeenShown = false;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -522,57 +998,54 @@
     }
 
     async function playAudioFromMemory(audioData, rect) {
-      if (isIOS) {
-        const blob = new Blob([audioData], { type: "audio/flac" });
-        const audioURL = URL.createObjectURL(blob);
-        const iosAudio = document.getElementById("ios-audio");
-
-        iosAudio.src = audioURL;
-        iosAudio.load();
-        iosAudio.play().then(() => {
-          console.log("iOS audio playing.");
-          iosAudio.onended = () => {
-            if (rect) rect.classList.remove("green");
-          };
-        }).catch(error => {
-          console.error("iOS audio playback failed:", error);
-          if (rect) rect.classList.remove("green");
-        });
-
-        return;
-      }
-
-      // Versión original para Android
       if (!audioContext || !analyser || !gainNode) {
         console.log("Reinitializing AudioContext...");
         initializeAudioContext();
       }
 
+      if (!audioContext || !analyser || !gainNode) {
+        console.error("Failed to initialize AudioContext, Analyser, or GainNode.");
+        if (rect) rect.classList.remove("green");
+        return;
+      }
+
       await resumeAudioContext();
+
       stopAudio();
 
       try {
+        console.log("Decoding audio data...");
         const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
+        console.log("Audio decoded. Duration:", audioBuffer.duration, "Channels:", audioBuffer.numberOfChannels);
+
         sourceNode = audioContext.createBufferSource();
         sourceNode.buffer = audioBuffer;
 
+        // Re-create analyser and gainNode for fresh state
         analyser = audioContext.createAnalyser();
         analyser.fftSize = 16384;
         analyser.smoothingTimeConstant = 0.1;
         analyser.minDecibels = -110;
         analyser.maxDecibels = -60;
-
         gainNode = audioContext.createGain();
         gainNode.gain.setValueAtTime(isIOS ? 2.0 : 1.0, audioContext.currentTime);
+        console.log("Nodes recreated. Gain:", gainNode.gain.value);
 
+        // Connect audio chain
         sourceNode.connect(analyser);
         analyser.connect(gainNode);
         gainNode.connect(audioContext.destination);
+        console.log("Audio chain connected: source -> analyser -> gain -> destination");
 
         sourceNode.start();
+        console.log("Audio started.");
+
         sourceNode.onended = () => {
-          if (rect) rect.classList.remove("green");
-          stopAudio();
+          console.log("Audio ended.");
+          if (rect) {
+            rect.classList.remove("green");
+            stopAudio();
+          }
         };
       } catch (e) {
         console.error("Error decoding or playing audio:", e);
@@ -647,32 +1120,23 @@
       }
     }
 
-    function showProgressBar() {
-      progressContainer.style.display = "block";
-      progressFill.style.width = "0%";
-      void progressFill.offsetWidth;
-      progressFill.style.width = "100%";
-      setTimeout(() => {
-        preloadPromise.then(() => {
-          completeProgressBar();
-        });
-      }, 5000);
-    }
+    
+function showProgressBar() {
+  if (hasShownProgressBar) return;
 
-    function completeProgressBar() {
-      progressContainer.style.display = "none";
-      progressFill.style.width = "0%";
-    }
+  hasShownProgressBar = true;
+  progressContainer.style.display = "block";
+  progressFill.style.width = "0%";
+  void progressFill.offsetWidth;
+  progressFill.style.width = "100%";
 
-    toggleBtn.addEventListener("click", async () => {
-      await resumeAudioContext();
-      if (!toggleBtn.disabled) {
-        isToggleEnabled = !isToggleEnabled;
-        updateToggleButtonState();
-        if (currentActiveRect) {
-          await playAudio(currentActiveRect);
-        }
-      }
+  setTimeout(() => {
+    preloadPromise.then(() => {
+      completeProgressBar();
+    });
+  }, 5000);
+}
+
     });
 
     stopBtn.addEventListener("click", async () => {
@@ -698,11 +1162,7 @@
           isToggleEnabled = false;
         }
         updateToggleButtonState();
-        // MODIFIED: Show progress bar only on first click
-        if (!hasProgressBarBeenShown) {
-          showProgressBar();
-          hasProgressBarBeenShown = true;
-        }
+        showProgressBar();
         await playAudio(rectElem);
       });
     });
@@ -769,7 +1229,6 @@
 
     preloadPromise = preloadAllAudio();
   </script>
-
-  <audio id="ios-audio" style="display: none;"></audio>
 </body>
 </html>
+
