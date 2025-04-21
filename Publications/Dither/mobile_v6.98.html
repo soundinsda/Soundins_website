@@ -1,0 +1,775 @@
+<!DOCTYPE html><!--Mobile_v6.98 -->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    /* [Unchanged CSS, omitted for brevity] */
+  </style>
+</head>
+<body>
+  <div id="header-container">
+    <div id="header-background"></div>
+    <button id="fullscreen-btn" title="Maximizar pantalla">⛶</button>
+    <span id="readme-link" onclick="toggleLanguageMenu()">Readme</span>
+    <div id="language-menu">
+      <button onclick="openInstructions('en')">English</button>
+      <button onclick="openInstructions('es')">Español</button>
+    </div>
+    <a href="http://www.soundins.com.ar">
+      <img src="Soundins.png" id="logo" alt="Logo de Soundins">
+    </a>
+    <h1>Dither & NS Benchmark Tool</h1>
+    <div id="version-text">v6.98Mobile</div>
+    <div id="mode-toggle-container">
+      <button id="mode-toggle-btn">
+        <img id="mode-icon" src="dark_mode.png" alt="Dark Mode">
+      </button>
+    </div>
+  </div>
+  <div id="rotation-message">
+    <div id="rotation-text">Por favor, rote el dispositivo a la posición horizontal<br><br>Please rotate the device to horizontal position</div>
+  </div>
+  <div id="main-content">
+    <div id="progress-container">
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+      <div id="progress-text">Loading Audio Files</div>
+    </div>
+    <div id="main-row">
+      <div class="source-group">
+        <span class="source-label">Source</span>
+        <div class="source-btn active" id="source-Sine">Sine</div>
+        <div class="source-btn" id="source-flaute">Instrument</div>
+      </div>
+      <div class="rect" id="rect-24bits">24 bits</div>
+      <div class="rect" id="rect-main">16 bits No Dither</div>
+      <button id="toggle-btn">997Hz</button>
+      <button id="stop-btn"></button>
+    </div>
+    <div id="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Izotope</th>
+            <th>Izotope</th>
+            <th>FabFilter</th>
+            <th>Waves</th>
+            <th>Waves</th>
+            <th>Reaper</th>
+            <th>Ableton</th>
+            <th>Avid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="rect" id="rect-1">Ozone 11<br>Dither: Low<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-2">Ozone 11<br>Dither: Strong<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-3">Pro L2<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-4">L2<br>Dither: T1<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-5">L2<br>Dither: T2<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-8">Reaper<br>Dither: On<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-9">Live<br>Dither: TPDF<br>NS: Off</div></td>
+            <td><div class="rect" id="rect-10">ProTools (Maxim)<br>Dither: On<br>NS: Off</div></td>
+          </tr>
+          <tr>
+            <td><div class="rect" id="rect-31">Ozone 11<br>Dither: Low<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-32">Ozone 11<br>Dither: Strong<br>NS: Max</div></td>
+            <td><div class="rect" id="rect-33">Pro L2<br>Dither: On<br>NS: Weighted</div></td>
+            <td><div class="rect" id="rect-34">L2<br>Dither: T1<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-35">L2<br>Dither: T2<br>NS: Ultra</div></td>
+            <td><div class="rect" id="rect-38">Reaper<br>Dither: On<br>NS: On</div></td>
+            <td><div class="rect" id="rect-39">Live<br>Dither: TPDF<br>NS: POWr3</div></td>
+            <td><div class="rect" id="rect-40">ProTools (Dither)<br>Dither: On<br>NS: Type 3</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="spectrum-container" class="minimized">
+      <div id="spectrum-header">
+        <span id="spectrum-title">Spectrum Analyzer</span>
+        <div id="spectrum-buttons">
+          <button id="minimize-btn"></button>
+          <button id="maximize-btn"></button>
+        </div>
+      </div>
+      <canvas id="spectrumCanvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const audioMapping = {
+      "rect-24bits": {
+        "Sine": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Sine_24bits_adj.flac" },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_24bits.flac" }
+      },
+      "rect-main": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_16bits_NoDither_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_16bits_NoDither.flac" }
+      },
+      "rect-1": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low.flac" }
+      },
+      "rect-2": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong.flac" }
+      },
+      "rect-3": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2.flac" }
+      },
+      "rect-4": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T1.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1.flac" }
+      },
+      "rect-5": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_L2T2.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2.flac" }
+      },
+      "rect-8": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper.flac" }
+      },
+      "rect-9": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_tpdf.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live.flac" }
+      },
+      "rect-10": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Maxim_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Maxim.flac" }
+      },
+      "rect-31": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Low_Max_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Low_Max.flac" }
+      },
+      "rect-32": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Ozo_Strong_Max_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Ozo_Strong_Max.flac" }
+      },
+      "rect-33": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_ProL2_Weighted_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_ProL2_Weighted.flac" }
+      },
+      "rect-34": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T1_Ultra_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T1_Ultra.flac" }
+      },
+      "rect-35": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_T2_Ultra_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_T2_Ultra.flac" }
+      },
+      "rect-38": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Reaper_NS_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Reaper_NS.flac" }
+      },
+      "rect-39": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Live_POWr3_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Live_POWr3.flac" }
+      },
+      "rect-40": {
+        "Sine": {
+          "997(act)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_AVID_Type3.flac",
+          "997(no)": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Sine/997Hz_2LSB_Avid_Type3_no997.flac"
+        },
+        "Flaute": { "NA": "https://raw.githubusercontent.com/soundinsda/soundins_website/main/Publications/Dither/Audio/Audio_FLAC/Flaute/Flaute_Avid_Type3.flac" }
+      }
+    };
+
+    let isToggleEnabled = true;
+    let currentActiveRect = null;
+    let lastActiveRect = null;
+    let currentSource = "Sine";
+    const audioPlayers = {};
+    let preloadPromise = null;
+    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    // NEW: Flag to track if progress bar has been shown
+    let hasProgressBarBeenShown = false;
+
+    const sourceSine = document.getElementById("source-Sine");
+    const sourceFlaute = document.getElementById("source-flaute");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const stopBtn = document.getElementById("stop-btn");
+    const progressContainer = document.getElementById("progress-container");
+    const progressFill = document.getElementById("progress-fill");
+
+    const rectsToLoad = [
+      "rect-24bits", "rect-main",
+      "rect-1", "rect-2", "rect-3", "rect-4", "rect-5", "rect-8", "rect-9", "rect-10",
+      "rect-31", "rect-32", "rect-33", "rect-34", "rect-35", "rect-38", "rect-39", "rect-40"
+    ];
+
+    let audioContext = null;
+    let analyser = null;
+    let sourceNode = null;
+    let gainNode = null;
+    const canvas = document.getElementById("spectrumCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 385;
+    canvas.height = 50;
+    let smoothedData = null;
+    const smoothingWindow = 50;
+    let dataHistory = [];
+
+    function initializeAudioContext() {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 16384;
+        analyser.smoothingTimeConstant = 0.1;
+        analyser.minDecibels = -110;
+        analyser.maxDecibels = -60;
+        gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(isIOS ? 2.0 : 1.0, audioContext.currentTime);
+        smoothedData = new Float32Array(analyser.frequencyBinCount);
+        console.log("AudioContext initialized. State:", audioContext.state);
+        resumeAudioContext();
+        if (!window.isDrawing) {
+          window.isDrawing = true;
+          drawSpectrum();
+        }
+      } catch (e) {
+        console.error("Error initializing AudioContext:", e);
+      }
+    }
+
+    async function resumeAudioContext() {
+      if (audioContext && audioContext.state === 'suspended') {
+        try {
+          await audioContext.resume();
+          console.log("AudioContext resumed. State:", audioContext.state);
+        } catch (e) {
+          console.error("Error resuming AudioContext:", e);
+        }
+      }
+    }
+
+    function drawSpectrum() {
+      if (!analyser) {
+        console.error("Analyser not defined.");
+        return;
+      }
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      analyser.getByteFrequencyData(dataArray);
+
+      dataHistory.push(new Uint8Array(dataArray));
+      if (dataHistory.length > smoothingWindow) {
+        dataHistory.shift();
+      }
+
+      for (let i = 0; i < bufferLength; i++) {
+        let sum = 0;
+        for (let j = 0; j < dataHistory.length; j++) {
+          sum += dataHistory[j][i];
+        }
+        smoothedData[i] = sum / dataHistory.length;
+      }
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (sourceNode) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgb(0, 255, 0)";
+        ctx.beginPath();
+
+        const sampleRate = audioContext.sampleRate;
+        const freqMax = sampleRate / 2;
+        const freqStep = freqMax / bufferLength;
+
+        const minFreq = 20;
+        const maxFreq = 20000;
+        const logMin = Math.log10(minFreq);
+        const logMax = Math.log10(maxFreq);
+        const logRange = logMax - logMin;
+
+        let hasData = false;
+        ctx.moveTo(0, canvas.height);
+
+        for (let i = 0; i < bufferLength; i++) {
+          const freq = i * freqStep;
+          if (freq < minFreq || freq > maxFreq) continue;
+
+          const logFreq = Math.log10(freq);
+          const x = canvas.width * (logFreq - logMin) / logRange;
+          const value = smoothedData[i] / 255;
+          const y = canvas.height * (1 - value);
+
+          if (smoothedData[i] > 0) hasData = true;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.stroke();
+        console.log("Spectrum drawn. Data present:", hasData);
+      }
+
+      requestAnimationFrame(drawSpectrum);
+    }
+
+    function toggleLanguageMenu() {
+      resumeAudioContext();
+      const menu = document.getElementById("language-menu");
+      const readmeLink = document.getElementById("readme-link");
+      const rect = readmeLink.getBoundingClientRect();
+
+      menu.style.display = "block";
+      const menuWidth = menu.offsetWidth;
+      const readmeCenterX = rect.left + rect.width / 2;
+      const menuLeft = readmeCenterX - menuWidth / 2 + window.scrollX;
+
+      menu.style.top = `${rect.bottom + window.scrollY}px`;
+      menu.style.left = `${menuLeft}px`;
+
+      if (menu.dataset.isVisible === "true") {
+        menu.style.display = "none";
+        menu.dataset.isVisible = "false";
+      } else {
+        menu.style.display = "block";
+        menu.dataset.isVisible = "true";
+      }
+    }
+
+    function openInstructions(lang) {
+      resumeAudioContext();
+      const url = lang === "en" ? "instructionsmobile_en.html" : "instructionsmobile_es.html";
+      window.open(url, "_blank");
+      toggleLanguageMenu();
+    }
+
+    document.getElementById('fullscreen-btn').addEventListener('click', function() {
+      resumeAudioContext();
+      if (!document.fullscreenElement && !document.documentElement.mozFullScreenElement && !document.documentElement.webkitFullscreenElement && !document.documentElement.msFullscreenElement) {
+        var elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+    });
+
+    function updateModeIcon() {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      const modeIcon = document.getElementById('mode-icon');
+      if (isDarkMode) {
+        modeIcon.src = 'bright_mode.png';
+        modeIcon.alt = 'Bright Mode';
+      } else {
+        modeIcon.src = 'dark_mode.png';
+        modeIcon.alt = 'Dark Mode';
+      }
+    }
+
+    document.getElementById('mode-toggle-btn').addEventListener('click', function() {
+      resumeAudioContext();
+      document.body.classList.toggle('dark-mode');
+      updateModeIcon();
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+    updateModeIcon();
+
+    window.addEventListener('focus', function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      updateModeIcon();
+    });
+
+    function setActiveSource(source) {
+      resumeAudioContext();
+      stopAllAudio();
+      currentSource = source;
+      sourceSine.classList.toggle("active", source === "Sine");
+      sourceFlaute.classList.toggle("active", source === "Flaute");
+      updateToggleButtonState();
+      if (currentActiveRect) {
+        playAudio(currentActiveRect);
+      }
+    }
+
+    sourceSine.addEventListener("click", () => {
+      resumeAudioContext();
+      setActiveSource("Sine");
+      toggleBtn.disabled = false;
+      toggleBtn.classList.remove("red");
+      toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
+      toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+    });
+
+    sourceFlaute.addEventListener("click", () => {
+      resumeAudioContext();
+      setActiveSource("Flaute");
+      toggleBtn.disabled = true;
+      toggleBtn.classList.add("red");
+      toggleBtn.textContent = "N/A";
+      isToggleEnabled = false;
+    });
+
+    async function preloadAllAudio() {
+      const totalFiles = Object.values(audioMapping).reduce((sum, sources) => sum + Object.values(sources).reduce((subSum, states) => subSum + Object.keys(states).length, 0), 0);
+      let loadedFiles = 0;
+
+      const loadPromises = [];
+      for (const rectId in audioMapping) {
+        audioPlayers[rectId] = {};
+        for (const source in audioMapping[rectId]) {
+          audioPlayers[rectId][source] = {};
+          for (const state in audioMapping[rectId][source]) {
+            const url = audioMapping[rectId][source][state];
+            loadPromises.push(
+              fetch(url)
+                .then(response => {
+                  if (!response.ok) throw new Error(`Error fetching ${url}: ${response.statusText}`);
+                  return response.arrayBuffer();
+                })
+                .then(arrayBuffer => {
+                  audioPlayers[rectId][source][state] = { buffer: arrayBuffer };
+                  loadedFiles++;
+                  const progressPercentage = (loadedFiles / totalFiles) * 100;
+                  progressFill.style.width = `${progressPercentage}%`;
+                  console.log(`Loaded ${url}`);
+                })
+                .catch(error => {
+                  console.error(`Error preloading ${url}:`, error);
+                  loadedFiles++;
+                  const progressPercentage = (loadedFiles / totalFiles) * 100;
+                  progressFill.style.width = `${progressPercentage}%`;
+                })
+            );
+          }
+        }
+      }
+
+      await Promise.all(loadPromises);
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 200);
+    }
+
+    async function playAudioFromMemory(audioData, rect) {
+      if (isIOS) {
+        const blob = new Blob([audioData], { type: "audio/flac" });
+        const audioURL = URL.createObjectURL(blob);
+        const iosAudio = document.getElementById("ios-audio");
+
+        iosAudio.src = audioURL;
+        iosAudio.load();
+        iosAudio.play().then(() => {
+          console.log("iOS audio playing.");
+          iosAudio.onended = () => {
+            if (rect) rect.classList.remove("green");
+          };
+        }).catch(error => {
+          console.error("iOS audio playback failed:", error);
+          if (rect) rect.classList.remove("green");
+        });
+
+        return;
+      }
+
+      // Versión original para Android
+      if (!audioContext || !analyser || !gainNode) {
+        console.log("Reinitializing AudioContext...");
+        initializeAudioContext();
+      }
+
+      await resumeAudioContext();
+      stopAudio();
+
+      try {
+        const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
+        sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = audioBuffer;
+
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 16384;
+        analyser.smoothingTimeConstant = 0.1;
+        analyser.minDecibels = -110;
+        analyser.maxDecibels = -60;
+
+        gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(isIOS ? 2.0 : 1.0, audioContext.currentTime);
+
+        sourceNode.connect(analyser);
+        analyser.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        sourceNode.start();
+        sourceNode.onended = () => {
+          if (rect) rect.classList.remove("green");
+          stopAudio();
+        };
+      } catch (e) {
+        console.error("Error decoding or playing audio:", e);
+        if (rect) rect.classList.remove("green");
+      }
+    }
+
+    function stopAudio() {
+      if (sourceNode) {
+        try {
+          sourceNode.stop();
+          console.log("SourceNode stopped.");
+        } catch (e) {
+          console.log("SourceNode already stopped:", e);
+        }
+        sourceNode.disconnect();
+        sourceNode = null;
+      }
+      if (analyser && analyser.context.state !== "closed") {
+        analyser.disconnect();
+        console.log("Analyser disconnected.");
+      }
+      if (gainNode && gainNode.context.state !== "closed") {
+        gainNode.disconnect();
+        console.log("GainNode disconnected.");
+      }
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      dataHistory = [];
+      console.log("Audio resources cleared.");
+    }
+
+    function stopAllAudio() {
+      stopAudio();
+      document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
+      currentActiveRect = null;
+      console.log("All audio stopped.");
+    }
+
+    async function playAudio(rect) {
+      if (!audioContext) {
+        console.log("Initializing AudioContext for playback...");
+        initializeAudioContext();
+      }
+      await resumeAudioContext();
+      const rectId = rect.id;
+      const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
+      const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
+      if (audioData) {
+        stopAudio();
+        rect.classList.add("green");
+        currentActiveRect = rect;
+        console.log(`Playing audio for ${rectId}, source: ${currentSource}, state: ${state}`);
+        await playAudioFromMemory(audioData, rect);
+      } else {
+        console.error(`No audio found for ${rectId}, source: ${currentSource}, state: ${state}`);
+      }
+    }
+
+    function updateToggleButtonState() {
+      toggleBtn.disabled = (currentSource === "Flaute" || (currentActiveRect && currentActiveRect.id === "rect-24bits"));
+      toggleBtn.classList.remove("red", "green");
+      if (toggleBtn.disabled) {
+        toggleBtn.classList.add("red");
+        toggleBtn.textContent = "N/A";
+        if (currentActiveRect && currentActiveRect.id === "rect-24bits") {
+          isToggleEnabled = true;
+        }
+      } else {
+        toggleBtn.classList.add(isToggleEnabled ? "green" : "red");
+        toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+      }
+    }
+
+    function showProgressBar() {
+      progressContainer.style.display = "block";
+      progressFill.style.width = "0%";
+      void progressFill.offsetWidth;
+      progressFill.style.width = "100%";
+      setTimeout(() => {
+        preloadPromise.then(() => {
+          completeProgressBar();
+        });
+      }, 5000);
+    }
+
+    function completeProgressBar() {
+      progressContainer.style.display = "none";
+      progressFill.style.width = "0%";
+    }
+
+    toggleBtn.addEventListener("click", async () => {
+      await resumeAudioContext();
+      if (!toggleBtn.disabled) {
+        isToggleEnabled = !isToggleEnabled;
+        updateToggleButtonState();
+        if (currentActiveRect) {
+          await playAudio(currentActiveRect);
+        }
+      }
+    });
+
+    stopBtn.addEventListener("click", async () => {
+      await resumeAudioContext();
+      stopAllAudio();
+      updateToggleButtonState();
+    });
+
+    rectsToLoad.forEach(rectId => {
+      const rectElem = document.getElementById(rectId);
+      rectElem.addEventListener("click", async () => {
+        await resumeAudioContext();
+        if (currentActiveRect === rectElem) {
+          stopAllAudio();
+          updateToggleButtonState();
+          return;
+        }
+        stopAllAudio();
+        currentActiveRect = rectElem;
+        lastActiveRect = rectElem;
+        rectElem.classList.add("green");
+        if (rectId === "rect-24bits" && currentSource === "Sine") {
+          isToggleEnabled = false;
+        }
+        updateToggleButtonState();
+        // MODIFIED: Show progress bar only on first click
+        if (!hasProgressBarBeenShown) {
+          showProgressBar();
+          hasProgressBarBeenShown = true;
+        }
+        await playAudio(rectElem);
+      });
+    });
+
+    const minimizeBtn = document.getElementById("minimize-btn");
+    const maximizeBtn = document.getElementById("maximize-btn");
+    const spectrumContainer = document.getElementById("spectrum-container");
+    const spectrumTitle = document.getElementById("spectrum-title");
+
+    minimizeBtn.addEventListener("click", async () => {
+      await resumeAudioContext();
+      spectrumContainer.classList.add("minimized");
+      spectrumTitle.style.color = "#1ff909";
+    });
+
+    maximizeBtn.addEventListener("click", async () => {
+      await resumeAudioContext();
+      spectrumContainer.classList.remove("minimized");
+      spectrumTitle.style.color = "green";
+    });
+
+    if (!navigator.userAgent.match(/Android/i)) {
+      document.getElementById('fullscreen-btn').style.display = 'none';
+    }
+
+    const rotationMessage = document.getElementById("rotation-message");
+    const mainContent = document.getElementById("main-content");
+    const headerContainer = document.getElementById("header-container");
+
+    function checkOrientation() {
+      const isPortrait = window.innerWidth < window.innerHeight;
+      const isMobileWidth = window.innerWidth <= 768;
+      if (isPortrait && isMobileWidth) {
+        rotationMessage.style.display = "flex";
+        mainContent.style.display = "none";
+        headerContainer.style.display = "none";
+      } else {
+        rotationMessage.style.display = "none";
+        mainContent.style.display = "block";
+        headerContainer.style.display = "block";
+      }
+      console.log("Orientation checked: isPortrait=", isPortrait, "isMobileWidth=", isMobileWidth);
+    }
+
+    function initOrientationCheck() {
+      checkOrientation();
+      setTimeout(checkOrientation, 100);
+    }
+
+    document.addEventListener('DOMContentLoaded', initOrientationCheck);
+    window.addEventListener("orientationchange", () => {
+      setTimeout(checkOrientation, 100);
+      setTimeout(checkOrientation, 500);
+    });
+    window.addEventListener("resize", () => {
+      setTimeout(checkOrientation, 100);
+    });
+
+    document.addEventListener('touchstart', function initAudioOnTouch() {
+      if (!audioContext) {
+        initializeAudioContext();
+      }
+    }, { once: true });
+
+    preloadPromise = preloadAllAudio();
+  </script>
+
+  <audio id="ios-audio" style="display: none;"></audio>
+</body>
+</html>
