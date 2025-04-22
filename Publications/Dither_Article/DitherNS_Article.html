@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v1.8 -->
+<!DOCTYPE html><!-- Version v1.9 -->
 <html lang="es">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -63,6 +63,20 @@
         border-radius: 4px;
     }
     .toggle-lang:hover {
+        background-color: darkblue;
+    }
+    .download-btn {
+        background-color: blue;
+        font-size: 14px; /* Ligeramente más pequeño que toggle-lang */
+        font-weight: bold;
+        padding: 4px 8px; /* Ligeramente más pequeño */
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px; /* Espacio entre botones */
+    }
+    .download-btn:hover {
         background-color: darkblue;
     }
     h2 {
@@ -130,7 +144,7 @@
         .author-name {
             font-size: 20px;
         }
-        .toggle-lang {
+        .toggle-lang, .download-btn {
             font-size: 14px;
             padding: 4px 8px;
         }
@@ -174,12 +188,13 @@
 <body>
     <div class="container lang-es">
         <!-- Contenido en español -->
-        <div class="language spanish" aria-hidden="false">
+        <div class="language spanish">
             <div class="header-container">
                 <h1>Dither & Noise Shaping: Un abordaje práctico</h1>
                 <p class="author-name">Pablo Panitta</p>
                 <div class="toggle-container">
                     <button class="toggle-lang" aria-label="Cambiar a inglés">English</button>
+                    <a href="Dither&NS_es.pdf" id="download-pdf-es" class="download-btn">Descargar PDF</a>
                 </div>
             </div>
             <h2>Introducción</h2>
@@ -256,12 +271,13 @@
         </div>
 
         <!-- Contenido en inglés -->
-        <div class="language english" aria-hidden="true">
+        <div class="language english">
             <div class="header-container">
                 <h1>Dither & Noise Shaping: A Pragmatic Approach</h1>
                 <p class="author-name">Pablo Panitta</p>
                 <div class="toggle-container">
                     <button class="toggle-lang" aria-label="Switch to Spanish">Español</button>
+                    <a href="Dither&NS_en.pdf" id="download-pdf-en" class="download-btn">Download PDF</a>
                 </div>
             </div>
             <h2>Abstract</h2>
@@ -344,29 +360,72 @@
             const pageTitle = document.getElementById('page-title');
             const spanishDiv = document.querySelector('.language.spanish');
             const englishDiv = document.querySelector('.language.english');
-            let isEnglish = false;
 
             function updateLanguage(setEnglish) {
-                isEnglish = setEnglish;
+                // Actualizar clases del contenedor
+                container.classList.toggle('lang-es', !setEnglish);
+                container.classList.toggle('lang-en', setEnglish);
+
+                // Actualizar visibilidad y aria-hidden
+                spanishDiv.style.display = setEnglish ? 'none' : 'block';
+                englishDiv.style.display = setEnglish ? 'block' : 'none';
+                spanishDiv.setAttribute('aria-hidden', setEnglish ? 'true' : 'false');
+                englishDiv.setAttribute('aria-hidden', setEnglish ? 'false' : 'true');
+
+                // Actualizar texto y atributos del botón
                 toggleButtons.forEach(button => {
-                    button.textContent = isEnglish ? 'Español' : 'English';
-                    button.setAttribute('aria-label', isEnglish ? 'Cambiar a español' : 'Cambiar a inglés');
+                    button.textContent = setEnglish ? 'Español' : 'English';
+                    button.setAttribute('aria-label', setEnglish ? 'Cambiar a español' : 'Cambiar a inglés');
                 });
-                container.classList.toggle('lang-es', !isEnglish);
-                container.classList.toggle('lang-en', isEnglish);
-                metaDescription.content = isEnglish ? 'Explore a practical approach to audio Dither and Noise Shaping...' : 'Explora un abordaje práctico sobre Dither y Noise Shaping...';
-                ogTitle.content = isEnglish ? 'Dither & Noise Shaping: A Pragmatic Approach' : 'Dither & Noise Shaping: Un abordaje práctico';
+
+                // Actualizar metadatos
+                metaDescription.content = setEnglish ? 
+                    'Explore a practical approach to audio Dither and Noise Shaping...' : 
+                    'Explora un abordaje práctico sobre Dither y Noise Shaping...';
+                ogTitle.content = setEnglish ? 
+                    'Dither & Noise Shaping: A Pragmatic Approach' : 
+                    'Dither & Noise Shaping: Un abordaje práctico';
                 ogDescription.content = metaDescription.content;
                 pageTitle.textContent = ogTitle.content;
-                spanishDiv.setAttribute('aria-hidden', isEnglish);
-                englishDiv.setAttribute('aria-hidden', !isEnglish);
-                document.documentElement.lang = isEnglish ? 'en' : 'es';
+
+                // Actualizar atributo lang del HTML
+                document.documentElement.lang = setEnglish ? 'en' : 'es';
+
+                // Quitar foco del botón para evitar conflicto con aria-hidden
+                if (document.activeElement.classList.contains('toggle-lang')) {
+                    document.activeElement.blur();
+                }
             }
 
+            // Forzar descarga del PDF
+            function forceDownload(url, fileName) {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName || url.split('/').pop(); // Usa el nombre del archivo de la URL si no se especifica
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Asignar eventos a los botones de idioma
             toggleButtons.forEach(button => {
-                button.addEventListener('click', () => updateLanguage(!isEnglish));
+                button.addEventListener('click', () => {
+                    updateLanguage(container.classList.contains('lang-es'));
+                });
             });
 
+            // Asignar eventos a los botones de descarga
+            const downloadButtons = document.querySelectorAll('.download-btn');
+            downloadButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault(); // Evitar que el navegador abra el enlace
+                    const url = button.getAttribute('href');
+                    const fileName = button.getAttribute('href').split('/').pop();
+                    forceDownload(url, fileName);
+                });
+            });
+
+            // Inicializar según parámetro de URL
             if (window.location.search.includes('lang=en')) {
                 updateLanguage(true);
             } else {
