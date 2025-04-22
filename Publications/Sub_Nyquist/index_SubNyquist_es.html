@@ -165,27 +165,36 @@
             text-decoration: none;
         }
 
+        /* Tooltips deshabilitados por defecto para todos los dispositivos */
         .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 100%;
-            top: 0;
-            white-space: pre-wrap;
-            background-color: #eee;
-            color: #000;
-            padding: 6px 8px;
-            border-radius: 5px;
-            box-shadow: 0 0 6px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: translateX(10px);
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 10;
-            width: 300px;
+            display: none !important;
         }
 
-        .tooltip:hover::after {
-            opacity: 1;
+        /* Habilitar tooltips solo para laptops/desktops (min-width: 1025px) */
+        @media (min-width: 1025px) {
+            .tooltip::after {
+                display: block !important;
+                content: attr(data-tooltip);
+                position: absolute;
+                left: 100%;
+                top: 0;
+                white-space: pre-wrap;
+                background-color: #eee;
+                color: #000;
+                padding: 6px 8px;
+                border-radius: 5px;
+                box-shadow: 0 0 6px rgba(0,0,0,0.2);
+                opacity: 0;
+                transform: translateX(10px);
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+                z-index: 10;
+                width: 300px;
+            }
+
+            .tooltip:hover::after {
+                opacity: 1;
+            }
         }
 
         .only-desktop {
@@ -218,8 +227,8 @@
             background-color: #0056b3;
         }
 
-        /* Media query para tablets (769px - 1024px) */
-        @media (min-width: 769px) and (max-width: 1024px) {
+        /* Media query para tabletas y móviles (max-width: 1024px) */
+        @media (max-width: 1024px) {
             body {
                 max-width: 100%;
                 width: 100%;
@@ -242,9 +251,22 @@
                 margin-left: 0;
                 margin: 0 auto;
             }
+
+            /* Asegurar que los tooltips estén deshabilitados para tabletas y móviles */
+            .tooltip::after {
+                display: none !important;
+            }
+
+            .only-desktop {
+                display: none;
+            }
+
+            .only-mobile {
+                display: inline;
+            }
         }
 
-        /* Media query para móviles (máximo 768px) */
+        /* Media query para móviles (max-width: 768px) */
         @media (max-width: 768px) {
             .pablo span {
                 font-size: 20px !important;
@@ -311,23 +333,15 @@
                 padding-left: 10px;
             }
 
+            /* Asegurar que los tooltips estén deshabilitados para móviles */
             .tooltip::after {
-                content: attr(data-tooltip);
-                display: block;
-                position: static;
-                background-color: #eee;
-                color: #000;
-                padding: 6px 8px;
-                border-radius: 5px;
-                box-shadow: 0 0 6px rgba(0,0,0,0.2);
-                margin-top: 8px;
-                font-size: 14px;
-                white-space: pre-wrap;
+                display: none !important;
             }
 
             p {
                 margin: 10px 0;
                 padding-left: 0;
+                padding-right:  Ascending
                 padding-right: 0;
             }
 
@@ -439,7 +453,7 @@
         <p>Nuevamente, esto significa que <strong>cada 1 ciclo</strong>, voy a tener “n” (2, 3, 4, etc) y <strong>solo “n” muestras</strong>. No más, no menos.<br/>Podemos generalizar la fórmula y reescribirla como:</p>
         \[ {\large F = \frac{m}{n} \cdot F_s } \]<br>
         <p>Aquí <i><u>m indica la cantidad de ciclos</u></i> en los cuáles encontraré una cantidad <i><u>n de muestras</u></i>. Por ejemplo si la relación fuese \( \large\frac{2}{5} \)
-        significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre \(\large \frac{m}{n} \) ≤ 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
+        significaría que en 2 ciclos de la señal encontraré exactamente a 5 muestras.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Recordar que el valor debe ser siempre m/n ≤ 0.5 para satisfacer el criterio de Nyquist." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
         <p>Pero existe otra característica que tiene una consecuencia muy importante y es la siguiente: : esas<strong> n muestras se producen en las mismas fases de la señal cada m ciclos</strong>. Siguiendo con el ejemplo anterior, las muestras volverán a caer en la misma fase de la señal cada 2 ciclos.</p>
         <p>Pero ¿a dónde queremos llegar con esto? ¿Qué tiene que ver con lo que veo en la pantalla? Un poco más de paciencia que ya estamos más cerca.</p>
         <h2>4. Patrones cíclicos.</h2>
