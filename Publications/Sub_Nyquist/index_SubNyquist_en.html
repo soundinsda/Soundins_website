@@ -165,27 +165,36 @@
             text-decoration: none;
         }
 
+        /* Tooltips disabled by default for all devices */
         .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            left: 100%;
-            top: 0;
-            white-space: pre-wrap;
-            background-color: #eee;
-            color: #000;
-            padding: 6px 8px;
-            border-radius: 5px;
-            box-shadow: 0 0 6px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: translateX(10px);
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 10;
-            width: 300px;
+            display: none !important;
         }
 
-        .tooltip:hover::after {
-            opacity: 1;
+        /* Enable tooltips only for laptops/desktops (min-width: 1025px) */
+        @media (min-width: 1025px) {
+            .tooltip::after {
+                display: block !important;
+                content: attr(data-tooltip);
+                position: absolute;
+                left: 100%;
+                top: 0;
+                white-space: pre-wrap;
+                background-color: #eee;
+                color: #000;
+                padding: 6px 8px;
+                border-radius: 5px;
+                box-shadow: 0 0 6px rgba(0,0,0,0.2);
+                opacity: 0;
+                transform: translateX(10px);
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+                z-index: 10;
+                width: 300px;
+            }
+
+            .tooltip:hover::after {
+                opacity: 1;
+            }
         }
 
         .only-desktop {
@@ -218,8 +227,8 @@
             background-color: #0056b3;
         }
 
-        /* Media query para tablets (769px - 1024px) */
-        @media (min-width: 769px) and (max-width: 1024px) {
+        /* Media query for tablets and mobiles (max-width: 1024px) */
+        @media (max-width: 1024px) {
             body {
                 max-width: 100%;
                 width: 100%;
@@ -242,9 +251,22 @@
                 margin-left: 0;
                 margin: 0 auto;
             }
+
+            /* Ensure tooltips are disabled for tablets and mobiles */
+            .tooltip::after {
+                display: none !important;
+            }
+
+            .only-desktop {
+                display: none;
+            }
+
+            .only-mobile {
+                display: inline;
+            }
         }
 
-        /* Media query para móviles (máximo 768px) */
+        /* Media query for mobiles (max-width: 768px) */
         @media (max-width: 768px) {
             .pablo span {
                 font-size: 20px !important;
@@ -311,18 +333,9 @@
                 padding-left: 10px;
             }
 
+            /* Ensure tooltips are disabled for mobiles */
             .tooltip::after {
-                content: attr(data-tooltip);
-                display: block;
-                position: static;
-                background-color: #eee;
-                color: #000;
-                padding: 6px 8px;
-                border-radius: 5px;
-                box-shadow: 0 0 6px rgba(0,0,0,0.2);
-                margin-top: 8px;
-                font-size: 14px;
-                white-space: pre-wrap;
+                display: none !important;
             }
 
             p {
