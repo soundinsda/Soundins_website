@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v1.6 -->
+<!DOCTYPE html><!-- Version v1.8 -->
 <html lang="es">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -16,10 +16,10 @@
     <meta property="og:title" id="og-title" content="Dither & Noise Shaping: Un abordaje práctico">
     <meta property="og:description" id="og-description" content="Explora un abordaje práctico sobre Dither y Noise Shaping, mediciones prácticas en procesos de Dithering y Noise Shaping de audio.">
     <meta property="og:image" content="https://www.soundins.com.ar/Publications/Dither/Figure1.png">
-    <meta property="og:url" content="https://www.soundins.com.ar/Publications/Dither/Dither_Article.html">
+    <meta property="og:url" content="https://www.soundins.com.ar/Publications/Dither/DitherNS_Article.html">
     <meta name="author" content="Pablo Panitta">
-    <link rel="alternate" hreflang="es" href="https://www.soundins.com.ar/Publications/Dither/Dither_Article.html?lang=es">
-    <link rel="alternate" hreflang="en" href="https://www.soundins.com.ar/Publications/Dither/Dither_Article.html?lang=en">
+    <link rel="alternate" hreflang="es" href="https://www.soundins.com.ar/Publications/Dither/DitherNS_Article.html?lang=es">
+    <link rel="alternate" hreflang="en" href="https://www.soundins.com.ar/Publications/Dither/DitherNS_Article.html?lang=en">
     <title id="page-title">Dither & Noise Shaping: Un abordaje práctico</title>
     <style>
         body {
@@ -28,23 +28,43 @@
             padding: 20px;
             font-family: Arial, sans-serif;
         }
+        .header-container {
+            position: relative;
+            background-color: black;
+            padding-bottom: 10px; /* Espacio adicional para el nombre del autor */
+        }
         h1 {
             font-size: 32px;
             font-weight: bold;
             text-align: center;
-            background-color: black;
             color: white;
             padding: 20px;
-            margin: 0 0 20px 0;
+            margin: 0;
         }
-
-.author-name {
-    font-size: 24px;
-    text-align: center;
-    margin: -10px 0;
-    color: black;
-    /*background-color: black;  Mismo fondo que h1 */
-}
+        .author-name {
+            font-size: 24px;
+            text-align: center;
+            margin: 0;
+            color: white;
+        }
+        .toggle-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .toggle-lang {
+            background-color: blue;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .toggle-lang:hover {
+            background-color: darkblue;
+        }
         h2 {
             font-size: 24px;
             font-weight: bold;
@@ -90,24 +110,6 @@
         sup {
             font-size: 0.75em;
         }
-        .toggle-container {
-            position: absolute;
-            top: 60px;
-            right: 40px;
-        }
-        #toggle-lang {
-            background-color: blue;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 5px 10px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        #toggle-lang:hover {
-            background-color: darkblue;
-        }
         .language {
             display: none;
         }
@@ -125,9 +127,17 @@
                 font-size: 25px;
                 padding: 10px;
             }
-    .author-name {
-        font-size: 20px; /* Tamaño reducido en móvil */
-    }
+            .author-name {
+                font-size: 20px;
+            }
+            .toggle-lang {
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+            .toggle-container {
+                top: 90px;
+                right: 10px;
+            }
             h2 {
                 font-size: 20px;
             }
@@ -148,29 +158,19 @@
             .caption {
                 font-size: 14px;
             }
-            #toggle-lang {
-                font-size: 14px;
-                padding: 4px 8px;
-            }
-            .toggle-container {
-		position: fixed !important;             
-		top: 80px;
-                right: 10px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="toggle-container">
-        <button id="toggle-lang" aria-label="Cambiar a inglés">English</button>
-    </div>
     <div class="container lang-es">
         <!-- Contenido en español -->
         <div class="language spanish" aria-hidden="false">
-            <h1>Dither & Noise Shaping: Un abordaje práctico</h1>
-            <p class="author-name">Pablo Panitta</p>
-            <div class="toggle-container">
-                <button id="toggle-lang" aria-label="Cambiar a inglés">English</button>
+            <div class="header-container">
+                <h1>Dither & Noise Shaping: Un abordaje práctico</h1>
+                <p class="author-name">Pablo Panitta</p>
+                <div class="toggle-container">
+                    <button class="toggle-lang" aria-label="Cambiar a inglés">English</button>
+                </div>
             </div>
             <h2>Introducción</h2>
             <p>Al reducir la profundidad de bits de una señal digital (por ejemplo de 24 a 16), se producirá lo que se denomina <em>“ruido de cuantización” </em>.
@@ -247,10 +247,12 @@
 
         <!-- Contenido en inglés -->
         <div class="language english" aria-hidden="true">
-            <h1>Dither & Noise Shaping: A Pragmatic Approach</h1>
-            <p class="author-name">Pablo Panitta</p>
-            <div class="toggle-container">
-                <button id="toggle-lang" aria-label="Cambiar a inglés">English</button>
+            <div class="header-container">
+                <h1>Dither & Noise Shaping: A Pragmatic Approach</h1>
+                <p class="author-name">Pablo Panitta</p>
+                <div class="toggle-container">
+                    <button class="toggle-lang" aria-label="Switch to Spanish">Español</button>
+                </div>
             </div>
             <h2>Abstract</h2>
             <p>When reducing the bit depth of a digital signal (e.g., from 24 to 16), what is known as <em>“quantization noise"</em> will occur. This is a result of performing a "truncation" (removing the 8 least significant bits) of the 24-bit signal to convert it to 16-bit word length signal. In order to reduce the adverse effects of this process, a technique called <strong>“Dithering”</strong> is applied.<br><br>
@@ -322,12 +324,9 @@
             <p id="nota6-en">[6] Noise to Mask Ratio (NMR) is a measure of noise masking. More negative values indicate that the noise profile lies further from the masking threshold, resulting in lower psychoacoustic perception.</p>
         </div>
     </div>
-    <noscript>
-        <p>Por favor, habilita JavaScript para alternar entre idiomas. Alternativamente, accede a la versión en inglés <a href="?lang=en">aquí</a> o en español <a href="?lang=es">aquí</a>.</p>
-    </noscript>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const toggleButton = document.getElementById('toggle-lang');
+            const toggleButtons = document.querySelectorAll('.toggle-lang');
             const container = document.querySelector('.container');
             const metaDescription = document.getElementById('meta-description');
             const ogTitle = document.getElementById('og-title');
@@ -335,75 +334,32 @@
             const pageTitle = document.getElementById('page-title');
             const spanishDiv = document.querySelector('.language.spanish');
             const englishDiv = document.querySelector('.language.english');
-
-            // Validar que todos los elementos existan
-            if (!toggleButton || !container || !metaDescription || !ogTitle || !ogDescription || !pageTitle || !spanishDiv || !englishDiv) {
-                console.error('Error: Uno o más elementos DOM no se encontraron.');
-                return;
-            }
-
-            // Variable para rastrear el idioma actual
             let isEnglish = false;
 
             function updateLanguage(setEnglish) {
-                console.log('Estado actual de clases antes del cambio:', container.classList.toString());
-                console.log('Cambiando idioma a:', setEnglish ? 'Inglés' : 'Español');
-
                 isEnglish = setEnglish;
-
-                if (isEnglish) {
-                    container.classList.remove('lang-es');
-                    container.classList.add('lang-en');
-                    toggleButton.textContent = 'Español';
-                    toggleButton.setAttribute('aria-label', 'Cambiar a español');
-                    metaDescription.content = 'Explore a practical approach to audio Dither and Noise Shaping, pragmatic measurement in Dithering and Noise Shaping audio processes.';
-                    ogTitle.content = 'Dither & Noise Shaping: A Pragmatic Approach';
-                    ogDescription.content = 'Explore a practical approach to audio Dither and Noise Shaping, pragmatic measurement in Dithering and Noise Shaping audio processes.';
-                    pageTitle.textContent = 'Dither & Noise Shaping: A Pragmatic Approach';
-                    spanishDiv.setAttribute('aria-hidden', 'true');
-                    englishDiv.setAttribute('aria-hidden', 'false');
-                    document.documentElement.lang = 'en';
-                } else {
-                    container.classList.remove('lang-en');
-                    container.classList.add('lang-es');
-                    toggleButton.textContent = 'English';
-                    toggleButton.setAttribute('aria-label', 'Cambiar a inglés');
-                    metaDescription.content = 'Explora un abordaje práctico sobre Dither y Noise Shaping, mediciones prácticas en procesos de Dithering y Noise Shaping de audio.';
-                    ogTitle.content = 'Dither & Noise Shaping: Un abordaje práctico';
-                    ogDescription.content = 'Explora un abordaje práctico sobre Dither y Noise Shaping, mediciones prácticas en procesos de Dithering y Noise Shaping de audio.';
-                    pageTitle.textContent = 'Dither & Noise Shaping: Un abordaje práctico';
-                    spanishDiv.setAttribute('aria-hidden', 'false');
-                    englishDiv.setAttribute('aria-hidden', 'true');
-                    document.documentElement.lang = 'es';
-                }
-
-                // Forzar reflow para asegurar que el cambio se aplique
-                console.log('Forzando reflow...');
-                container.style.display = 'none';
-                container.offsetHeight; // Forzar reflow
-                container.style.display = 'block';
-                console.log('Estado de clases después del cambio:', container.classList.toString());
-
-                // Limpiar parámetros de la URL
-                if (window.location.search) {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
+                toggleButtons.forEach(button => {
+                    button.textContent = isEnglish ? 'Español' : 'English';
+                    button.setAttribute('aria-label', isEnglish ? 'Cambiar a español' : 'Cambiar a inglés');
+                });
+                container.classList.toggle('lang-es', !isEnglish);
+                container.classList.toggle('lang-en', isEnglish);
+                metaDescription.content = isEnglish ? 'Explore a practical approach to audio Dither and Noise Shaping...' : 'Explora un abordaje práctico sobre Dither y Noise Shaping...';
+                ogTitle.content = isEnglish ? 'Dither & Noise Shaping: A Pragmatic Approach' : 'Dither & Noise Shaping: Un abordaje práctico';
+                ogDescription.content = metaDescription.content;
+                pageTitle.textContent = ogTitle.content;
+                spanishDiv.setAttribute('aria-hidden', isEnglish);
+                englishDiv.setAttribute('aria-hidden', !isEnglish);
+                document.documentElement.lang = isEnglish ? 'en' : 'es';
             }
 
-            toggleButton.addEventListener('click', () => {
-                console.log('Botón de cambio de idioma clicado');
-                updateLanguage(!isEnglish);
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => updateLanguage(!isEnglish));
             });
 
-            // Detectar idioma inicial desde URL
             if (window.location.search.includes('lang=en')) {
-                console.log('URL detectada: ?lang=en, cargando inglés');
                 updateLanguage(true);
-            } else if (window.location.search.includes('lang=es')) {
-                console.log('URL detectada: ?lang=es, cargando español');
-                updateLanguage(false);
             } else {
-                console.log('Sin parámetro de idioma, usando español por defecto');
                 updateLanguage(false);
             }
         });
