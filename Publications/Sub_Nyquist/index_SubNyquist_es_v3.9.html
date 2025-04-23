@@ -208,7 +208,7 @@ st {
 
 .language-button {
     position: absolute;
-    top: 90px;
+    top: 160px;
     right: 10px;
     z-index: 100;
 }
@@ -216,7 +216,7 @@ st {
 .english-button {
     background-color: #007bff;
     color: white;
-    font-size: 24px;
+    font-size: 18x;
     font-family: Arial, sans-serif;
     border: none;
     padding: 8px 20px;
@@ -371,40 +371,56 @@ st {
         padding-right: 0;
     }
 
-    .language-button {
-        top: 140px;
-        right: 12px;
-    }
-
     .english-button {
         font-size: 12px;
         padding: 6px 12px;
     }
 
-    /* Estilos base para móviles */
-    .pdf-download {
-        font-size: 14px; /* Tamaño más pequeño */
-        left: 10px; /* Margen izquierdo por defecto */
-        top: 100px; /* Ajustado para orientación vertical (portrait) */
+    /* Estilos para el botón de idioma en móviles */
+    .language-button {
+        top: 115px; /* Valor para portrait, igual al código de referencia */
+        right: 8px; /* Igual al código de referencia */
     }
 
     /* Orientación vertical (portrait) */
     @media (orientation: portrait) {
-        .pdf-download {
-            left: 10px; /* Margen izquierdo para portrait */
-            top: 130px; /* Alineado con el nombre del autor en portrait */
+        .language-button {
+            top: 180px; /* Mismo valor que .toggle-container en portrait */
+            right: 8px;
         }
     }
 
     /* Orientación horizontal (landscape) */
     @media (orientation: landscape) {
+        .language-button {
+            top: 90px; /* Mismo valor que .toggle-container en landscape */
+            right: 8px;
+        }
+    }
+
+    /* Estilos para el enlace de descarga en móviles */
+    .pdf-download {
+        font-size: 14px; /* Tamaño más pequeño */
+        left: 10px; /* Margen izquierdo por defecto */
+        top: 60px; /* Ajustado para orientación vertical (portrait) */
+    }
+
+    /* Orientación vertical (portrait) para el enlace de descarga */
+    @media (orientation: portrait) {
+        .pdf-download {
+            left: 10px; /* Margen izquierdo para portrait */
+            top: 60px; /* Alineado con el nombre del autor en portrait */
+        }
+    }
+
+    /* Orientación horizontal (landscape) para el enlace de descarga */
+    @media (orientation: landscape) {
         .pdf-download {
             left: 15px; /* Margen izquierdo ligeramente mayor para landscape */
-            top: 90px; /* Ajustado para alinearse con el nombre del autor en landscape */
+            top: 58px; /* Ajustado para alinearse con el nombre del autor en landscape */
         }
     }
 }
-
 
 
 
