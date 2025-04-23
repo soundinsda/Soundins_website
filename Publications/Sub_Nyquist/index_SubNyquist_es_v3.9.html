@@ -17,7 +17,6 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-
 * {
     box-sizing: border-box;
 }
@@ -208,44 +207,33 @@ st {
 
 .language-button {
     position: absolute;
-    top: 160px;
-    right: 10px;
+    top: 110px;
+    right: 12px;
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
     z-index: 100;
 }
 
-.english-button {
+.english-button, .download-button {
     background-color: #007bff;
     color: white;
-    font-size: 18x;
+    font-size: 16px;
     font-family: Arial, sans-serif;
     border: none;
     padding: 8px 20px;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none; /* Para el enlace .download-button */
+    display: inline-block; /* Para que el enlace se comporte como botón */
 }
 
-.english-button:hover {
+.english-button:hover, .download-button:hover {
     background-color: #0056b3;
 }
 
 /* Asegurar que full-width-band sea el contenedor de referencia */
 .full-width-band {
     position: relative; /* Establece el contexto de posicionamiento */
-}
-
-/* Estilos para el enlace de descarga */
-.pdf-download {
-    position: absolute; /* Posicionamiento absoluto respecto a full-width-band */
-    left: 20px; /* Margen desde el borde izquierdo */
-    top: 100px; /* Alineado verticalmente con el nombre del autor */
-    color: #007bff; /* Color azul */
-    text-decoration: none; /* Sin subrayado */
-    font-size: 18px; /* Tamaño de fuente */
-    font-family: Arial, sans-serif;
-}
-
-.pdf-download:hover {
-    text-decoration: underline; /* Subrayado al pasar el mouse */
 }
 
 /* Media query para tabletas y móviles (max-width: 1024px) */
@@ -286,10 +274,9 @@ st {
         display: inline;
     }
 
-    .pdf-download {
+    .english-button, .download-button {
         font-size: 16px;
-        left: 15px;
-        top: 60px; /* Ajustado para el tamaño reducido del título y autor */
+        padding: 6px 12px;
     }
 }
 
@@ -371,58 +358,33 @@ st {
         padding-right: 0;
     }
 
-    .english-button {
-        font-size: 12px;
+    .english-button, .download-button {
+        font-size: 8px;
         padding: 6px 12px;
     }
 
-    /* Estilos para el botón de idioma en móviles */
+    /* Estilos para el contenedor de botones en móviles */
     .language-button {
-        top: 115px; /* Valor para portrait, igual al código de referencia */
-        right: 8px; /* Igual al código de referencia */
-    }
-
-    /* Orientación vertical (portrait) */
-    @media (orientation: portrait) {
-        .language-button {
-            top: 180px; /* Mismo valor que .toggle-container en portrait */
-            right: 8px;
-        }
-    }
-
-    /* Orientación horizontal (landscape) */
-    @media (orientation: landscape) {
-        .language-button {
-            top: 140px; /* Mismo valor que .toggle-container en landscape */
-            right: 8px;
-        }
-    }
-
-    /* Estilos para el enlace de descarga en móviles */
-    .pdf-download {
-        font-size: 14px; /* Tamaño más pequeño */
-        left: 10px; /* Margen izquierdo por defecto */
-        top: 60px; /* Ajustado para orientación vertical (portrait) */
-    }
-
-    /* Orientación vertical (portrait) para el enlace de descarga */
-    @media (orientation: portrait) {
-        .pdf-download {
-            left: 10px; /* Margen izquierdo para portrait */
-            top: 60px; /* Alineado con el nombre del autor en portrait */
-        }
-    }
-
-    /* Orientación horizontal (landscape) para el enlace de descarga */
-    @media (orientation: landscape) {
-        .pdf-download {
-            left: 15px; /* Margen izquierdo ligeramente mayor para landscape */
-            top: 58px; /* Ajustado para alinearse con el nombre del autor en landscape */
-        }
+        top: 170px; /* Valor original para portrait */
+        right: 10px; /* Valor original */
     }
 }
 
+/* Orientación vertical (portrait) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    .language-button {
+        top: 180px; /* Valor original para portrait */
+        right: 10px;
+    }
+}
 
+/* Orientación horizontal (landscape) */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .language-button {
+        top: 170px !important; /* Valor solicitado, con !important para forzar */
+        right: 10px !important;
+    }
+}
 
     </style>
     <script>
@@ -444,15 +406,15 @@ st {
     </script>
 </head>
 <body>
-    <div id="main-container">
+  <div id="main-container">
         <div class="language-button">
+            <a href="Sub_Nyquist_Artifact_es_AESformat.pdf" class="download-button" download="Efecto_de_Batido_en_Senales_sub_Nyquist.pdf">Descargar PDF</a>
             <button class="english-button" onclick="window.location.href='index_SubNyquist_en.html'">English</button>
         </div>
-<div class="full-width-band">
-    <h1>Efecto de Batido en Señales sub Nyquist</h1>
-    <p class="pablo"><span>Pablo Panitta</span></p>
-    <a href="Sub_Nyquist Artifact_es_AESformat.pdf" class="pdf-download" download="Efecto_de_Batido_en_Senales_sub_Nyquist.pdf">Descargar PDF</a>
-</div>
+        <div class="full-width-band">
+            <h1>Efecto de Batido en Señales sub Nyquist</h1>
+            <p class="pablo"><span>Pablo Panitta</span></p>
+        </div>
 
         <h2>Introducción</h2>
         <p>El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre dos señales analógicas y los efectos que se presentan. Luego analizaremos lo que ocurre en el ámbito digital con una señal en las próximidades de la frecuencia de Nyquist. Se abordarán las implicancias en la representación gráfica de las señales y su impacto en la conversión D/A para su reproducción.</p>
