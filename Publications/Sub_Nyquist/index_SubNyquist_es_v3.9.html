@@ -17,6 +17,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
+
 * {
     box-sizing: border-box;
 }
@@ -236,7 +237,7 @@ st {
 .pdf-download {
     position: absolute; /* Posicionamiento absoluto respecto a full-width-band */
     left: 20px; /* Margen desde el borde izquierdo */
-    top: 100px; /* Ajustado para alinearse verticalmente con el nombre del autor */
+    top: 100px; /* Alineado verticalmente con el nombre del autor */
     color: #007bff; /* Color azul */
     text-decoration: none; /* Sin subrayado */
     font-size: 18px; /* Tamaño de fuente */
@@ -380,12 +381,31 @@ st {
         padding: 6px 12px;
     }
 
+    /* Estilos base para móviles */
     .pdf-download {
         font-size: 14px; /* Tamaño más pequeño */
-        left: 20px; /* Menor margen */
-        top: 100px; /* Ajustado para el tamaño reducido del título y autor */
+        left: 10px; /* Margen izquierdo por defecto */
+        top: 100px; /* Ajustado para orientación vertical (portrait) */
+    }
+
+    /* Orientación vertical (portrait) */
+    @media (orientation: portrait) {
+        .pdf-download {
+            left: 10px; /* Margen izquierdo para portrait */
+            top: 60px; /* Alineado con el nombre del autor en portrait */
+        }
+    }
+
+    /* Orientación horizontal (landscape) */
+    @media (orientation: landscape) {
+        .pdf-download {
+            left: 15px; /* Margen izquierdo ligeramente mayor para landscape */
+            top: 50px; /* Ajustado para alinearse con el nombre del autor en landscape */
+        }
     }
 }
+
+
 
 
     </style>
