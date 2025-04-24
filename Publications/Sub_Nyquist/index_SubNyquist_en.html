@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.8 -->
+<!DOCTYPE html><!-- Version v3.9 -->
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -207,24 +207,33 @@
 
         .language-button {
             position: absolute;
-            top: 90px;
-            right: 10px;
+            top: 110px;
+            right: 12px;
+            display: flex;
+            gap: 10px; /* Space between buttons */
             z-index: 100;
         }
 
-        .spanish-button {
+        .english-button, .download-button {
             background-color: #007bff;
             color: white;
-            font-size: 24px;
+            font-size: 16px;
             font-family: Arial, sans-serif;
             border: none;
             padding: 8px 20px;
             cursor: pointer;
             border-radius: 5px;
+            text-decoration: none; /* For the .download-button link */
+            display: inline-block; /* To make the link behave like a button */
         }
 
-        .spanish-button:hover {
+        .english-button:hover, .download-button:hover {
             background-color: #0056b3;
+        }
+
+        /* Ensure full-width-band is the reference container */
+        .full-width-band {
+            position: relative; /* Establishes positioning context */
         }
 
         /* Media query for tablets and mobiles (max-width: 1024px) */
@@ -263,6 +272,11 @@
 
             .only-mobile {
                 display: inline;
+            }
+
+            .english-button, .download-button {
+                font-size: 16px;
+                padding: 6px 12px;
             }
         }
 
@@ -344,24 +358,41 @@
                 padding-right: 0;
             }
 
-            .language-button {
-                top: 140px;
-                right: 12px;
+            .english-button, .download-button {
+                font-size: 12px;
+                padding: 10px 12px;
             }
 
-            .spanish-button {
-                font-size: 12px;
-                padding: 6px 12px;
+            /* Styles for the button container on mobiles */
+            .language-button {
+                top: 170px; /* Value for portrait */
+                right: 10px; /* Value */
+            }
+        }
+
+        /* Portrait orientation */
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+            .language-button {
+                top: 180px; /* Value for portrait */
+                right: 10px;
+            }
+        }
+
+        /* Landscape orientation */
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .language-button {
+                top: 140px !important; /* Requested value, with !important to force */
+                right: 10px !important;
             }
         }
     </style>
     <script>
         window.addEventListener('load', function() {
-            // Limpiar parámetros de URL
+            // Clear URL parameters
             if (window.location.search) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
-            // Forzar reflow
+            // Force reflow
             document.documentElement.style.width = '100%';
             document.body.style.width = '100%';
             document.body.style.zoom = '100%';
@@ -376,13 +407,14 @@
 <body>
     <div id="main-container">
         <div class="language-button">
-            <button class="spanish-button" onclick="window.location.href='index_SubNyquist_es.html'">Español</button>
+            <a href="Sub_Nyquist Artifact_en_AESformat.pdf" class="download-button" download="Beat_Effect_in_Sub_Nyquist_Signals.pdf">Download PDF</a>
+            <button class="english-button" onclick="window.location.href='index_SubNyquist_es.html'">Español</button>
         </div>
         <div class="full-width-band">
             <h1>Beat Artifact in Sub-Nyquist Signals</h1>
             <p class="pablo"><span>Pablo Panitta</span></p>
         </div>
-
+	<br>
         <h2>Introduction</h2>
         <p>This work aims to study the artifact on signals whose frequencies are close to the Nyquist frequency (called sub-Nyquist signals). We will begin by analyzing the interaction between two analog signals and the effects that arise. Then, we will examine what happens in the digital domain regarding a signal's proximity to the Nyquist frequency. The implications for the graphical representation of signals and their impact on D/A conversion for playback will be addressed.</p>
         <h2>1. Sum of Two Analog Signals</h2>
@@ -436,7 +468,7 @@
         </div>
         <p>Undoubtedly, Fig 8 <strong>shows evidence of only one signal!</strong> This doesn’t seem to make much sense. There is only one signal present in the spectrum, yet in the time domain, it shows clear signs of amplitude modulation (beat) that could only occur if another signal were interacting.</p>
         <p>So what’s going on?</p>
-        <h2>3. Distribution of Samples in a Signal</h2>
+        <h2>3. Samples Distribution</h2>
         <p>Suppose we sample a signal with frequency F at a sampling rate \( F_s = 3F \). What we would get is the presence of 3 samples per signal cycle, and furthermore, these occur at the same phase of the signal. In other words, a periodic pattern is created, as we can observe in Fig 9.</p>
         <div class="figure">
             <img alt="Analog signal sampled at 3 times its frequency" src="Pictures/fig9.png"/>
@@ -469,8 +501,8 @@
         <p>In Fig 11, we can observe the distribution of samples <strong>“forming” sinusoidal waves whose number corresponds to the value of the factor “<em>n</em>” and with a frequency of value <em>ε</em></strong>.</p>
         <p>In other words, in the formula \( F = {\large \frac{F_s}{2}} - 20 \), 2 waves will be formed; in \( F = {\large \frac{F_s}{3}} - 20 \), 3 waves; and in \( F = {\large \frac{F_s}{5}} - 20 \), 5 interlaced waves. All of them have a frequency of 20 Hz (as is the value of <em style="font-size: 1.3em;">ε</em>).</p>
         <p>Note that these waves are the product of a graphical distribution of the signal’s samples, and all have a frequency of <em style="font-size: 1.3em;">ε</em>. This means that <em style="font-size: 1.3em;">ε</em> is the <i><u>frequency at which the samples occur again at the same phase</u></i> of the signal. It is easy to see that if <em style="font-size: 1.3em;">ε</em>=0, the variation frequency is 0, and therefore, the samples always occur at the same phase of the signal.</p>
-        <h2>5. Reconstruction Process</h2>
-        <p>It is striking that if I wanted to reconstruct the signal by connecting the samples, I would not be obtaining the same original signal. As observed in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then, from those samples, reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal but with a beat, which obviously is not the same as the original signal. But this is a direct contradiction to the Nyquist theorem, which states that if I meet the condition of sampling at a rate higher than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
+        <h2>5. The Reconstruction Process</h2>
+        <p>It is striking that if I wanted to reconstruct the signal by connecting the samples, I would not be obtaining the same original signal. As observed in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then, from those samples, reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal but with a beat, which obviously is not the same as the original signal. But this would be a clear contradiction to the Nyquist theorem, which states that if I meet the condition of sampling at a rate higher than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
         <div class="figure">
             <img alt="Reconstruction process with beat" src="Pictures/fig12.png"/>
             <p><st>Fig 12. a) Analog signal b) Samples of the analog signal c) Reconstruction process. It can be observed that a) and c) are different</st></p>
@@ -486,10 +518,10 @@
             <img alt="Reconstruction in the time domain" src="Pictures/fig14.png"/>
             <p><st>Fig 14. Signal reconstruction process in the time domain</st></p>
         </div>
-        <p>In theory, this process provides perfect reconstruction. But the problem lies in the impossibility of its implementation, as the SINC function extends from \(-\infty \) to \( +\infty \). Since this is not feasible for practical purposes, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, meaning that the low-pass filter response will no longer be ideal, and this will introduce “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less similar to the original.</p>
+        <p>In theory, this process provides perfect reconstruction. But the problem lies in the impossibility of its implementation, as the SINC function extends from \(-\infty \) to \( +\infty \). Since this is not feasible for practical purposes, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, meaning that the low-pass filter response will no longer be ideal, and this will introduce “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less like the original.</p>
         <p>In Appendix III, you will find a practical demonstration of the impact of the SINC length on the reconstruction process.</p>
-        <h2>6. Is the Effect Real?</h2>
-        <p>Having understood the reason for the “strange” shapes we see in the reconstruction of certain frequencies, it is worth asking whether this is a real effect or simply a visual effect. The answer is that this effect is as real as digital audio itself, so <strong>it is not only a visual perception but also an auditory one</strong>.</p>
+        <h2>6. Is this artifact Real?</h2>
+        <p>Having understood the reason for the “weird” shapes we see in the reconstruction of certain frequencies, it is worth asking whether this is a real effect or simply a visual effect. The answer is that this effect is as real as digital audio itself, so <strong>it is not only a visual perception but also an auditory one</strong>.</p>
         <p>And verifying this is not difficult at all. You can simply create a session at some audible Nyquist frequency, generate a sinusoidal signal (or any periodic signal), and listen. For example, we can test with an <em>Fs = 8000Hz</em> and use a generator to create sinusoids at <em>F = 3998 Hz and F=3999Hz</em>.</p>
         <p>Having reached this point (and hopefully understood the explanation) … what would you expect to hear? (4-second audios, be careful with the volume)</p><br/>
         <div class="button-container">
@@ -582,7 +614,7 @@
         <div class="figure">
             <img src="Pictures/Eq1.png"/><br/>
         </div>
-        <p>We can create the same beat effect, but by <i><u>multiplying sinusoidal signals</u></i> (instead of summing them), modifying the frequencies to satisfy this identity.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="This is the principle used in the amplitude modulation (AM) process. A low-frequency modulating signal (e.g., voice) modulates a much higher-frequency carrier for transmission." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> In our example of A=1000Hz and B=1100Hz, the new frequencies to achieve the same effect would be:</p>
+        <p>We can create the same beat effect <i><u>multiplying sinusoidal signals</u></i> (instead of summing them), modifying the frequencies to satisfy this identity.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="This is the principle used in the amplitude modulation (AM) process. A low-frequency modulating signal (e.g., voice) modulates a much higher-frequency carrier for transmission." href="#nota7">[7]</a></span><span class="only-mobile"><a href="#nota7">[7]</a></span></sup> In our example of A=1000Hz and B=1100Hz, the new frequencies to achieve the same effect would be:</p>
         <div class="equation-center">
             <p>\( F_1 ={\large \frac{A + B}{2}} = 1050\,\text{Hz} \)</p>
             <p>\( F_2 ={\large \frac{A - B}{2}} = 50\,\text{Hz} \)</p><br>
