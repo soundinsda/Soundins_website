@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.9 -->
+<!DOCTYPE html><!-- Version v4.0 -->
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -10,381 +10,423 @@
     <title>Beat Effect in Sub-Nyquist Signals: Signal Processing</title>
     <meta name="description" content="Analysis of the beat artifact in sub-Nyquist signals and its impact on digital signal processing.">
     <meta name="keywords" content="beat effect, sub-Nyquist signals, signal processing, sampling, aliasing, quantization">
-    <meta property="og:title" content="Beat artifact in Sub-Nyquist Signals">
+    <meta property="og:title" content="Beat Effect in Sub-Nyquist Signals">
     <meta property="og:description" content="Discover how the beat artifact impacts sub-Nyquist signals in signal processing.">
     <meta property="og:image" content="https://raw.githubusercontent.com/soundinsda/Soundins_website/main/Publications/Sub_Nyquist/Pictures/fig11a.png">
     <meta property="og:url" content="https://soundins.com.ar/Publications/Sub_Nyquist/index_SubNyquist_en.html">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        html, body {
-            width: 100%;
-            min-width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-        }
+html, body {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            max-width: 1300px;
-            padding: 10px;
-            font-size: 20px;
-            width: 100%;
-            animation: force-render 0.1s;
-        }
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 1300px;
+    padding: 10px;
+    font-size: 20px;
+    width: 100%;
+    animation: force-render 0.1s;
+}
 
-        @keyframes force-render {
-            from { opacity: 0.999; }
-            to { opacity: 1; }
-        }
+@keyframes force-render {
+    from { opacity: 0.999; }
+    to { opacity: 1; }
+}
 
-        #main-container {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
+#main-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
-        h1 {
-            font-size: 36px;
-            font-family: Verdana, sans-serif;
-            text-align: center;
-            background-color: black;
-            color: white;
-            padding: 10px;
-            width: 100%;
-            margin: 0 auto;
-        }
+h1 {
+    font-size: 36px;
+    font-family: Verdana, sans-serif;
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    margin: 0 auto;
+}
 
-        .pablo {
-            font-size: 36px;
-            font-family: Verdana, sans-serif;
-            text-align: center;
-            background-color: black;
-            color: white;
-            padding: 10px;
-            width: 100%;
-            margin: 0 auto;
-        }
+.pablo {
+    font-size: 36px;
+    font-family: Verdana, sans-serif;
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 5px; /* Reduced padding to shift name upwards */
+    width: 100%;
+    margin: 0 auto;
+}
 
-        h2 {
-            font-size: 24px;
-            margin-top: 20px;
-            padding-left: 30px;
-        }
+.author-email {
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 5px; /* Reduced padding to shift email upwards */
+    width: 100%;
+    margin: 0 auto;
+}
 
-        p {
-            margin: 10px 0;
-            padding-left: 30px;
-            padding-right: 30px;
-        }
+.author-email a {
+    color: #007bff; /* Matches button color for consistency */
+    text-decoration: none;
+}
 
-        .figure {
-            text-align: center;
-            margin: 20px 0;
-            margin-left: 0;
-            font-style: italic;
-        }
+.author-email a:hover {
+    text-decoration: underline;
+}
 
-        .figure img {
-            max-width: 100%;
-            height: auto;
-        }
+h2 {
+    font-size: 24px;
+    margin-top: 20px;
+    padding-left: 30px;
+}
 
-        .fig15-image {
-            margin-left: 90px;
-        }
+p {
+    margin: 10px 0;
+    padding-left: 30px;
+    padding-right: 30px;
+}
 
-        .figure p {
-            margin-top: 5px;
-        }
+.figure {
+    text-align: center;
+    margin: 20px 0;
+    margin-left: 0;
+    font-style: italic;
+}
 
-        .equation-left {
-            text-align: left;
-            font-style: italic;
-            margin-left: 0;
-        }
+.figure img {
+    max-width: 100%;
+    height: auto;
+}
 
-        .equation-center {
-            text-align: center;
-            font-style: italic;
-            margin: 15px 0;
-        }
+.fig15-image {
+    margin-left: 90px;
+}
 
-        strong {
-            font-weight: bold;
-        }
+.figure p {
+    margin-top: 5px;
+}
 
-        em {
-            font-style: italic;
-        }
+.equation-left {
+    text-align: left;
+    font-style: italic;
+    margin-left: 0;
+}
 
-        ul {
-            margin: 10px 0 10px 20px;
-        }
+.equation-center {
+    text-align: center;
+    font-style: italic;
+    margin: 15px 0;
+}
 
-        st {
-            font-style: italic;
-            font-size: 18px;
-        }
+strong {
+    font-weight: bold;
+}
 
-        .speaker-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 22px;
-            padding: 5px;
-        }
+em {
+    font-style: italic;
+}
 
-        .speaker-button:hover {
-            opacity: 0.7;
-        }
+ul {
+    margin: 10px 0 10px 20px;
+}
 
-        .speaker-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+st {
+    font-style: italic;
+    font-size: 18px;
+}
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 20px 0;
-        }
+.speaker-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    padding: 5px;
+}
 
-        .tooltip {
-            position: relative;
-            cursor: pointer;
-            text-decoration: none;
-        }
+.speaker-button:hover {
+    opacity: 0.7;
+}
 
-        /* Tooltips disabled by default for all devices */
-        .tooltip::after {
-            display: none !important;
-        }
+.speaker-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
-        /* Enable tooltips only for laptops/desktops (min-width: 1025px) */
-        @media (min-width: 1025px) {
-            .tooltip::after {
-                display: block !important;
-                content: attr(data-tooltip);
-                position: absolute;
-                left: 100%;
-                top: 0;
-                white-space: pre-wrap;
-                background-color: #eee;
-                color: #000;
-                padding: 6px 8px;
-                border-radius: 5px;
-                box-shadow: 0 0 6px rgba(0,0,0,0.2);
-                opacity: 0;
-                transform: translateX(10px);
-                transition: opacity 0.3s ease;
-                pointer-events: none;
-                z-index: 10;
-                width: 300px;
-            }
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+}
 
-            .tooltip:hover::after {
-                opacity: 1;
-            }
-        }
+.tooltip {
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+}
 
-        .only-desktop {
-            display: inline;
-        }
+/* Tooltips disabled by default for all devices */
+.tooltip::after {
+    display: none !important;
+}
 
-        .only-mobile {
-            display: none;
-        }
+/* Enable tooltips only for laptops/desktops (min-width: 1025px) */
+@media (min-width: 1025px) {
+    .tooltip::after {
+        display: block !important;
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 100%;
+        top: 0;
+        white-space: pre-wrap;
+        background-color: #eee;
+        color: #000;
+        padding: 6px 8px;
+        border-radius: 5px;
+        box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        opacity: 0;
+        transform: translateX(10px);
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+        width: 300px;
+    }
 
-        .language-button {
-            position: absolute;
-            top: 110px;
-            right: 12px;
-            display: flex;
-            gap: 10px; /* Space between buttons */
-            z-index: 100;
-        }
+    .tooltip:hover::after {
+        opacity: 1;
+    }
+}
 
-        .english-button, .download-button {
-            background-color: #007bff;
-            color: white;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-            border: none;
-            padding: 8px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none; /* For the .download-button link */
-            display: inline-block; /* To make the link behave like a button */
-        }
+.only-desktop {
+    display: inline;
+}
 
-        .english-button:hover, .download-button:hover {
-            background-color: #0056b3;
-        }
+.only-mobile {
+    display: none;
+}
 
-        /* Ensure full-width-band is the reference container */
-        .full-width-band {
-            position: relative; /* Establishes positioning context */
-        }
+.language-button {
+    position: absolute;
+    top: 200px;
+    right: 12px;
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    z-index: 100;
+}
 
-        /* Media query for tablets and mobiles (max-width: 1024px) */
-        @media (max-width: 1024px) {
-            body {
-                max-width: 100%;
-                width: 100%;
-                padding: 10px;
-                margin: 0;
-            }
+.english-button, .download-button {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none; /* For the .download-button link */
+    display: inline-block; /* To make the link behave like a button */
+}
 
-            h1, .pablo {
-                font-size: 32px;
-                width: 100%;
-                margin: 0 auto;
-            }
+.english-button:hover, .download-button:hover {
+    background-color: #0056b3;
+}
 
-            .figure img {
-                max-width: 100%;
-                height: auto;
-            }
+/* Ensure full-width-band is the reference container */
+.full-width-band {
+    position: relative; /* Establishes positioning context */
+}
 
-            .fig15-image {
-                margin-left: 0;
-                margin: 0 auto;
-            }
+/* Media query for tablets and mobiles (max-width: 1024px) */
+@media (max-width: 1024px) {
+    body {
+        max-width: 100%;
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+    }
 
-            /* Ensure tooltips are disabled for tablets and mobiles */
-            .tooltip::after {
-                display: none !important;
-            }
+    h1, .pablo, .author-email {
+        font-size: 38px;
+        width: 100%;
+        margin: 0 auto;
+    }
 
-            .only-desktop {
-                display: none;
-            }
+    .author-email {
+        font-size: 18px;
+    }
 
-            .only-mobile {
-                display: inline;
-            }
+    .figure img {
+        max-width: 100%;
+        height: auto;
+    }
 
-            .english-button, .download-button {
-                font-size: 16px;
-                padding: 6px 12px;
-            }
-        }
+    .fig15-image {
+        margin-left: 0;
+        margin: 0 auto;
+    }
 
-        /* Media query for mobiles (max-width: 768px) */
-        @media (max-width: 768px) {
-            .pablo span {
-                font-size: 20px !important;
-            }
+    /* Ensure tooltips are disabled for tablets and mobiles */
+    .tooltip::after {
+        display: none !important;
+    }
 
-            body {
-                font-size: 16px;
-                padding: 10px;
-                margin: 0;
-                max-width: 100%;
-                width: 100%;
-            }
+    .only-desktop {
+        display: none;
+    }
 
-            h1, .pablo {
-                font-size: 28px;
-                background-color: black;
-                color: white;
-                padding: 8px;
-                width: 100%;
-                margin: 0 auto;
-            }
+    .only-mobile {
+        display: inline;
+    }
 
-            h2 {
-                font-size: 20px;
-                padding-left: 0;
-                padding-right: 0;
-            }
+    .english-button, .download-button {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+}
 
-            st {
-                font-size: 14px;
-            }
+/* Media query for mobiles (max-width: 768px) */
+@media (max-width: 768px) {
+    .pablo span {
+        font-size: 20px !important;
+    }
 
-            .figure img {
-                width: 100%;
-                height: auto;
-            }
+    body {
+        font-size: 16px;
+        padding: 10px;
+        margin: 0;
+        max-width: 100%;
+        width: 100%;
+    }
 
-            .figure img[src*="Eq2.png"] {
-                width: 30%;
-                height: auto;
-            }
+    h1 {
+        font-size: 24px; /* Reduced title font size for mobile */
+        background-color: black;
+        color: white;
+        padding: 6px; /* Reduced padding to lower black bar height */
+        width: 100%;
+        margin: 0 auto;
+    }
 
-            .figure img[src*="Eq2b.png"] {
-                width: 35%;
-                height: auto;
-            }
+    .pablo {
+        font-size: 24px; /* Match title font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Further reduced padding to shift name upwards */
+        width: 100%;
+        margin: 0 auto;
+    }
 
-            .figure img[src*="Eq3.png"] {
-                width: 50%;
-                height: auto;
-            }
+    .author-email {
+        font-size: 14px; /* Slightly smaller email font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Reduced padding to shift email upwards */
+        width: 100%;
+        margin: 0 auto;
+    }
 
-            .button-container {
-                flex-direction: column;
-                gap: 10px;
-            }
+    h2 {
+        font-size: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
 
-            .speaker-button {
-                font-size: 18px;
-            }
+    st {
+        font-size: 14px;
+    }
 
-            ul {
-                margin-left: 15px;
-                padding-left: 10px;
-            }
+    .figure img {
+        width: 100%;
+        height: auto;
+    }
 
-            /* Ensure tooltips are disabled for mobiles */
-            .tooltip::after {
-                display: none !important;
-            }
+    .figure img[src*="Eq2.png"] {
+        width: 30%;
+        height: auto;
+    }
 
-            p {
-                margin: 10px 0;
-                padding-left: 0;
-                padding-right: 0;
-            }
+    .figure img[src*="Eq2b.png"] {
+        width: 35%;
+        height: auto;
+    }
 
-            .english-button, .download-button {
-                font-size: 12px;
-                padding: 10px 12px;
-            }
+    .figure img[src*="Eq3.png"] {
+        width: 50%;
+        height: auto;
+    }
 
-            /* Styles for the button container on mobiles */
-            .language-button {
-                top: 170px; /* Value for portrait */
-                right: 10px; /* Value */
-            }
-        }
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-        /* Portrait orientation */
-        @media screen and (max-width: 768px) and (orientation: portrait) {
-            .language-button {
-                top: 180px; /* Value for portrait */
-                right: 10px;
-            }
-        }
+    .speaker-button {
+        font-size: 18px;
+    }
 
-        /* Landscape orientation */
-        @media screen and (max-width: 768px) and (orientation: landscape) {
-            .language-button {
-                top: 140px !important; /* Requested value, with !important to force */
-                right: 10px !important;
-            }
-        }
+    ul {
+        margin-left: 15px;
+        padding-left: 10px;
+    }
+
+    /* Ensure tooltips are disabled for mobiles */
+    .tooltip::after {
+        display: none !important;
+    }
+
+    p {
+        margin: 10px 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .english-button, .download-button {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+
+    /* Styles for the button container on mobiles */
+    .language-button {
+        top: 180px; /* Adjusted for reduced black bar height */
+        right: 10px;
+    }
+}
+
+/* Portrait orientation */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+    .language-button {
+        top: 180px; /* Adjusted for reduced black bar height */
+        right: 10px;
+    }
+}
+
+/* Landscape orientation */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .language-button {
+        top: 140px !important; /* Adjusted for reduced black bar height */
+        right: 10px !important;
+    }
+}
     </style>
     <script>
         window.addEventListener('load', function() {
@@ -411,12 +453,13 @@
             <button class="english-button" onclick="window.location.href='index_SubNyquist_es.html'">Español</button>
         </div>
         <div class="full-width-band">
-            <h1>Beat Artifact in Sub-Nyquist Signals</h1>
+            <h1>Beat Effect in Sub-Nyquist Signals</h1>
             <p class="pablo"><span>Pablo Panitta</span></p>
+            <p class="author-email"><a href="mailto:pfp2017@gmail.com">pfp2017@gmail.com</a></p>
         </div>
-	<br>
+        <br>
         <h2>Introduction</h2>
-        <p>This work aims to study the artifact on signals whose frequencies are close to the Nyquist frequency (called sub-Nyquist signals). We will begin by analyzing the interaction between two analog signals and the effects that arise. Then, we will examine what happens in the digital domain regarding a signal's proximity to the Nyquist frequency. The implications for the graphical representation of signals and their impact on D/A conversion for playback will be addressed.</p>
+        <p>This work aims to study the effect on signals whose frequencies are in the lower vicinity of the Nyquist frequency (called sub-Nyquist signals). We will begin by analysing the interaction between two analog signals and the effects that arise. Then, we will examine what happens in the digital domain regarding a signal's proximity to the Nyquist frequency. The implications for the graphical representation of signals and their impact on D/A conversion for playback will be addressed.</p>
         <h2>1. Sum of Two Analog Signals</h2>
         <p>Suppose we have two analog sinusoidal signals and add them together. What result will we see on an oscilloscope screen? If the difference between their frequencies is large (say, more than 10 times), we will see the higher-frequency sine wave superimposed on the lower-frequency one.</p>
         <p>However, as this difference decreases, we will increasingly notice that the higher-frequency sine wave is <strong>"beaten"</strong> by the lower-frequency one.</p>
@@ -451,6 +494,7 @@
             <p> - Signal frequency: 500 Hz<br/> - Sampling frequency: 44.1kHz</p>
         </div>
         <p>In Fig 6, we can see that the sampled signal is perfectly overlaid on the analog signal, showing no amplitude deviations.</p>
+        <p>It is striking that if I wanted to reconstruct the signal by connecting the samples, I would not be obtaining the same original signal. As observed in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then, from those samples, reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal but with a beat, which obviously is not the same as the original signal. But this would be a clear contradiction to the Nyquist theorem, which states that if I meet the condition of sampling at a rate higher than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
         <div class="figure">
             <img alt="Sampling of an analog signal far from Nyquist" src="Pictures/fig6.png"/>
             <p><st>Fig 6. Sampling of an analog signal with a frequency far from Nyquist</st></p>
@@ -468,22 +512,22 @@
         </div>
         <p>Undoubtedly, Fig 8 <strong>shows evidence of only one signal!</strong> This doesn’t seem to make much sense. There is only one signal present in the spectrum, yet in the time domain, it shows clear signs of amplitude modulation (beat) that could only occur if another signal were interacting.</p>
         <p>So what’s going on?</p>
-        <h2>3. Samples Distribution</h2>
+        <h2>3. Sample Distribution in a Signal</h2>
         <p>Suppose we sample a signal with frequency F at a sampling rate \( F_s = 3F \). What we would get is the presence of 3 samples per signal cycle, and furthermore, these occur at the same phase of the signal. In other words, a periodic pattern is created, as we can observe in Fig 9.</p>
         <div class="figure">
             <img alt="Analog signal sampled at 3 times its frequency" src="Pictures/fig9.png"/>
-            <p><st>Fig 9. An analog signal sampled at 3 times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
+            <p><st>Fig 9. Analog signal sampled at 3 times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
         </div>
         <p>And if we did the same, but now with \( F_s = 5F \), there would be 5 samples per signal cycle, with the same characteristics as the previous signal, as can be seen in the following figure.</p>
         <div class="figure">
             <img alt="Analog signal sampled at 5 times its frequency" src="Pictures/fig10.png"/>
-            <p><st>Fig 10. An analog signal sampled at 5 times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
+            <p><st>Fig 10. Analog signal sampled at 5 times its frequency. Sample distribution and linear interpolation for reconstruction</st></p>
         </div><br/>
         <p>A particularity of the examples just mentioned is that the number of samples per signal cycle is invariant. This means that, for example, in \( F_s = 3F \), there will be 3, and only 3, samples in any signal cycle. I won’t find cycles with 2, 4, or any other number of samples. In other words, there is a relationship between <em>F</em> and \( F_s \) that we can represent with the following equation:</p>
         \[ {\large F = \frac{1}{n} \cdot F_s } \]<br>
         <p>Again, this means that <strong>every 1 cycle</strong>, I will have “n” (2, 3, 4, etc.) and <strong>only “n” samples</strong>. No more, no less.<br/>We can generalize the formula and rewrite it as:</p>
         \[ {\large F = \frac{m}{n} \cdot F_s } \]<br>
-        <p>Here, <i><u>m indicates the number of cycles</u></i> in which I will find a number of <i><u>n samples</u></i>. For example, if the ratio were \( \large\frac{2}{5} \), it would mean that in 2 signal cycles, I will find exactly 5 samples.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="m/n ≤ 0.5 to avoid aliasing artifacts." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
+        <p>Here, <i><u>m indicates the number of cycles</u></i> in which I will find a number of <i><u>n samples</u></i>. For example, if the ratio were \( \large\frac{2}{5} \), it would mean that in 2 signal cycles, I will find exactly 5 samples.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="m/n ≤ 0.5 to avoid aliasing." href="#nota3">[3]</a></span><span class="only-mobile"><a href="#nota3">[3]</a></span></sup></p>
         <p>But there is another characteristic that has a very important consequence: <strong>n samples occur at the same phases of the signal every m cycles</strong>. Following the previous example, the samples will fall at the same phase of the signal every 2 cycles.</p>
         <p>But where are we going with this? What does it have to do with what I see on the screen? A little more patience, and we’re getting closer.</p>
         <h2>4. Cyclic Patterns</h2>
@@ -496,13 +540,12 @@
             <img src="Pictures/fig11a.png"/><br/>
             <img src="Pictures/fig11b.png"/><br/>
             <img src="Pictures/fig11c.png"/><br/>
-            <p><st>Fig 11. An analog signal (yellow) and its samples a) F = Fs/2 + 20, b) F = Fs/3 + 20, c) F = Fs/5 + 20. For all cases, Fs=8 kHz</st></p>
+            <p><st>Fig 11. Analog signal (yellow) and its samples a) F = Fs/2 + 20, b) F = Fs/3 + 20, c) F = Fs/5 + 20. For all cases, Fs=8 kHz</st></p>
         </div>
         <p>In Fig 11, we can observe the distribution of samples <strong>“forming” sinusoidal waves whose number corresponds to the value of the factor “<em>n</em>” and with a frequency of value <em>ε</em></strong>.</p>
         <p>In other words, in the formula \( F = {\large \frac{F_s}{2}} - 20 \), 2 waves will be formed; in \( F = {\large \frac{F_s}{3}} - 20 \), 3 waves; and in \( F = {\large \frac{F_s}{5}} - 20 \), 5 interlaced waves. All of them have a frequency of 20 Hz (as is the value of <em style="font-size: 1.3em;">ε</em>).</p>
         <p>Note that these waves are the product of a graphical distribution of the signal’s samples, and all have a frequency of <em style="font-size: 1.3em;">ε</em>. This means that <em style="font-size: 1.3em;">ε</em> is the <i><u>frequency at which the samples occur again at the same phase</u></i> of the signal. It is easy to see that if <em style="font-size: 1.3em;">ε</em>=0, the variation frequency is 0, and therefore, the samples always occur at the same phase of the signal.</p>
         <h2>5. The Reconstruction Process</h2>
-        <p>It is striking that if I wanted to reconstruct the signal by connecting the samples, I would not be obtaining the same original signal. As observed in Fig 12, if I apply the sampling process to a pure sinusoidal signal (A/D) and then, from those samples, reconstruct the signal (D/A) by connecting the samples, I would arrive at a sinusoidal signal but with a beat, which obviously is not the same as the original signal. But this would be a clear contradiction to the Nyquist theorem, which states that if I meet the condition of sampling at a rate higher than twice the maximum frequency present, I could reconstruct the original signal exactly.</p>
         <div class="figure">
             <img alt="Reconstruction process with beat" src="Pictures/fig12.png"/>
             <p><st>Fig 12. a) Analog signal b) Samples of the analog signal c) Reconstruction process. It can be observed that a) and c) are different</st></p>
@@ -520,7 +563,7 @@
         </div>
         <p>In theory, this process provides perfect reconstruction. But the problem lies in the impossibility of its implementation, as the SINC function extends from \(-\infty \) to \( +\infty \). Since this is not feasible for practical purposes, we must truncate it in time. This temporal truncation of the function will have an impact in the frequency domain, meaning that the low-pass filter response will no longer be ideal, and this will introduce “distortions” in the reconstruction of the analog signal. And it is precisely these errors that make the reconstructed signal more or less like the original.</p>
         <p>In Appendix III, you will find a practical demonstration of the impact of the SINC length on the reconstruction process.</p>
-        <h2>6. Is this artifact Real?</h2>
+        <h2>6. Is this Effect Real?</h2>
         <p>Having understood the reason for the “weird” shapes we see in the reconstruction of certain frequencies, it is worth asking whether this is a real effect or simply a visual effect. The answer is that this effect is as real as digital audio itself, so <strong>it is not only a visual perception but also an auditory one</strong>.</p>
         <p>And verifying this is not difficult at all. You can simply create a session at some audible Nyquist frequency, generate a sinusoidal signal (or any periodic signal), and listen. For example, we can test with an <em>Fs = 8000Hz</em> and use a generator to create sinusoids at <em>F = 3998 Hz and F=3999Hz</em>.</p>
         <p>Having reached this point (and hopefully understood the explanation) … what would you expect to hear? (4-second audios, be careful with the volume)</p><br/>
@@ -593,15 +636,15 @@
         <p>The measurement process consisted of generating sinusoids at different frequencies and measuring the analog audio output of the card. This is what the speakers will actually reproduce.</p><br/>
         <div class="figure">
             <img alt="Measurement with Fs=2Hz and F=1Hz" src="Pictures/fig16.png"/>
-            <p><st>Fig 16. Sampling frequency <em>Fs = 44100 Hz</em>, Signal frequency <em>F = 22049 Hz</em>. The beat can be observed at a frequency of 2 Hz. Note that the frequency of each component is 1 Hz.<br/><br/></st></p>
+            <p><st>Fig 16. <em>Fs = 44100 Hz</em>, <em>F = 22049 Hz</em>. The beat can be observed at a frequency of 2 Hz. Note that the frequency of each component is 1 Hz.<br/><br/></st></p>
         </div>
         <div class="figure">
             <img alt="Measurement with Fs=10Hz and F=5Hz" src="Pictures/fig17.png"/>
-            <p><st>Fig 17. Sampling frequency <em>Fs = 44100 Hz</em>, Signal frequency <em>F = 22045 Hz</em>. The beat can be observed at a frequency of 10 Hz. Note that the frequency of each component = 5 Hz.<br/><br/></st></p>
+            <p><st>Fig 17. <em>Fs = 44100 Hz</em>, <em>F = 22045 Hz</em>. The beat can be observed at a frequency of 10 Hz. Note that the frequency of each component = 5 Hz.<br/><br/></st></p>
         </div>
         <div class="figure">
             <img alt="Measurement with Fs=44100Hz and F=22000Hz" src="Pictures/fig18.png"/>
-            <p><st>Fig 18. Sampling frequency <em>Fs = 44100Hz</em>, Signal frequency <em>F = 15000Hz</em>. No significant beat can be observed. This confirms that moving away from the Nyquist frequency reduces the beat effect.<br/><br/></st></p>
+            <p><st>Fig 18. <em>Fs = 44100Hz</em>, <em>F = 15000Hz</em>. No significant beat can be observed. This confirms that moving away from the Nyquist frequency reduces the beat effect.<br/><br/></st></p>
         </div>
         <div class="figure">
             <img alt="Comparison of impact at different Fs" src="Pictures/fig19a.png"/><br>
@@ -638,7 +681,7 @@
         <h2>References</h2>
         <p id="nota1">[1] The beat frequency is the difference between the two signals. However, the frequency of each of the interlaced waves is half, i.e., 50Hz in our case. This relationship will be different in the sub-Nyquist effect we will see in the following sections.</p>
         <p id="nota2">[2] Matlab’s interpolation method is linear, which is why we see straight lines connecting the samples.</p>
-        <p id="nota3">[3] \(\large \frac{m}{n} \) ≤ 0.5 to avoid aliasing artifacts.</p>
+        <p id="nota3">[3] \(\large \frac{m}{n} \) ≤ 0.5 to avoid aliasing.</p>
         <p id="nota4">[4] There are several interpolation methods such as Lagrange (N-order), cubic splines (3rd order), Bezier splines, etc.</p>
         <p id="nota5">[5] Some software allows choosing the graphical interpolation mode (e.g., Ozone RX).</p>
         <p id="nota6">[6] Additionally, the beat is only perceived if its frequency is very low (no more than 15 Hz).</p>
@@ -656,7 +699,7 @@
             <li>“Modern Sampling: A Tutorial”. Jamie A.S. Angus – AES Vol 67, No 5, 2019 May</li><br/>
         </ul>
         <p><span style="font-size: 24px;">Author: Pablo Panitta / Soundins</span></p>
-        <p>Contact: <a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
+        <p>Contact: <a href="mailto:pfp2017@gmail.com">pfp2017@gmail.com</a></p>
     </div>
 </body>
 </html>

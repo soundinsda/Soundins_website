@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Version v3.9 -->
+<!DOCTYPE html><!-- Version v4.0 -->
 <html lang="es">
 <head>
     <meta charset="utf-8"/>
@@ -69,9 +69,29 @@ h1 {
     text-align: center;
     background-color: black;
     color: white;
-    padding: 10px;
+    padding: 5px; /* Reduced padding to shift name upwards */
     width: 100%;
     margin: 0 auto;
+}
+
+.author-email {
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 5px; /* Reduced padding to shift email upwards */
+    width: 100%;
+    margin: 0 auto;
+}
+
+.author-email a {
+    color: #007bff; /* Matches button color for consistency */
+    text-decoration: none;
+}
+
+.author-email a:hover {
+    text-decoration: underline;
 }
 
 h2 {
@@ -165,12 +185,12 @@ st {
     text-decoration: none;
 }
 
-/* Tooltips deshabilitados por defecto para todos los dispositivos */
+/* Tooltips disabled by default for all devices */
 .tooltip::after {
     display: none !important;
 }
 
-/* Habilitar tooltips solo para laptops/desktops (min-width: 1025px) */
+/* Enable tooltips only for laptops/desktops (min-width: 1025px) */
 @media (min-width: 1025px) {
     .tooltip::after {
         display: block !important;
@@ -207,10 +227,10 @@ st {
 
 .language-button {
     position: absolute;
-    top: 110px;
+    top: 200px;
     right: 12px;
     display: flex;
-    gap: 10px; /* Espacio entre los botones */
+    gap: 10px; /* Space between buttons */
     z-index: 100;
 }
 
@@ -223,20 +243,20 @@ st {
     padding: 8px 20px;
     cursor: pointer;
     border-radius: 5px;
-    text-decoration: none; /* Para el enlace .download-button */
-    display: inline-block; /* Para que el enlace se comporte como botón */
+    text-decoration: none; /* For the .download-button link */
+    display: inline-block; /* To make the link behave like a button */
 }
 
 .english-button:hover, .download-button:hover {
     background-color: #0056b3;
 }
 
-/* Asegurar que full-width-band sea el contenedor de referencia */
+/* Ensure full-width-band is the reference container */
 .full-width-band {
-    position: relative; /* Establece el contexto de posicionamiento */
+    position: relative; /* Establishes positioning context */
 }
 
-/* Media query para tabletas y móviles (max-width: 1024px) */
+/* Media query for tablets and mobiles (max-width: 1024px) */
 @media (max-width: 1024px) {
     body {
         max-width: 100%;
@@ -245,10 +265,14 @@ st {
         margin: 0;
     }
 
-    h1, .pablo {
-        font-size: 32px;
+    h1, .pablo, .author-email {
+        font-size: 38px;
         width: 100%;
         margin: 0 auto;
+    }
+
+    .author-email {
+        font-size: 18px;
     }
 
     .figure img {
@@ -261,7 +285,7 @@ st {
         margin: 0 auto;
     }
 
-    /* Asegurar que los tooltips estén deshabilitados para tabletas y móviles */
+    /* Ensure tooltips are disabled for tablets and mobiles */
     .tooltip::after {
         display: none !important;
     }
@@ -280,7 +304,7 @@ st {
     }
 }
 
-/* Media query para móviles (max-width: 768px) */
+/* Media query for mobiles (max-width: 768px) */
 @media (max-width: 768px) {
     .pablo span {
         font-size: 20px !important;
@@ -294,11 +318,29 @@ st {
         width: 100%;
     }
 
-    h1, .pablo {
-        font-size: 28px;
+    h1 {
+        font-size: 24px; /* Reduced title font size for mobile */
         background-color: black;
         color: white;
-        padding: 8px;
+        padding: 6px; /* Reduced padding to lower black bar height */
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .pablo {
+        font-size: 24px; /* Match title font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Further reduced padding to shift name upwards */
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .author-email {
+        font-size: 14px; /* Slightly smaller email font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Reduced padding to shift email upwards */
         width: 100%;
         margin: 0 auto;
     }
@@ -347,7 +389,7 @@ st {
         padding-left: 10px;
     }
 
-    /* Asegurar que los tooltips estén deshabilitados para móviles */
+    /* Ensure tooltips are disabled for mobiles */
     .tooltip::after {
         display: none !important;
     }
@@ -363,29 +405,28 @@ st {
         padding: 10px 12px;
     }
 
-    /* Estilos para el contenedor de botones en móviles */
+    /* Styles for the button container on mobiles */
     .language-button {
-        top: 170px; /* Valor original para portrait */
-        right: 10px; /* Valor original */
-    }
-}
-
-/* Orientación vertical (portrait) */
-@media screen and (max-width: 768px) and (orientation: portrait) {
-    .language-button {
-        top: 180px; /* Valor original para portrait */
+        top: 180px; /* Adjusted for reduced black bar height */
         right: 10px;
     }
 }
 
-/* Orientación horizontal (landscape) */
-@media screen and (max-width: 768px) and (orientation: landscape) {
+/* Portrait orientation */
+@media screen and (max-width: 768px) and (orientation: portrait) {
     .language-button {
-        top: 140px !important; /* Valor solicitado, con !important para forzar */
-        right: 10px !important;
+        top: 180px; /* Adjusted for reduced black bar height */
+        right: 10px;
     }
 }
 
+/* Landscape orientation */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .language-button {
+        top: 140px !important; /* Adjusted for reduced black bar height */
+        right: 10px !important;
+    }
+}
     </style>
     <script>
         window.addEventListener('load', function() {
@@ -414,10 +455,11 @@ st {
         <div class="full-width-band">
             <h1>Efecto de Batido en Señales sub Nyquist</h1>
             <p class="pablo"><span>Pablo Panitta</span></p>
+            <p class="author-email"><a href="mailto:soundinsda@gmail.com">pfp2017@gmail.com</a></p>
         </div>
-	<br>
+    <br>
         <h2>Introducción</h2>
-        <p>El presente trabajo tiene por objetivo estudiar los efectos en señales cuyas frecuencias estén cercanas a la de Nyquist (llamadas sub Nyquist). Comenzaremos analizando la interacción entre dos señales analógicas y los efectos que se presentan. Luego analizaremos lo que ocurre en el ámbito digital con una señal en las próximidades de la frecuencia de Nyquist. Se abordarán las implicancias en la representación gráfica de las señales y su impacto en la conversión D/A para su reproducción.</p>
+        <p>El presente trabajo tiene por objetivo el estudio de los efectos en señales cuyas frecuencias se encuentre en la vecindad inferior a la de Nyquist (llamadas sub-Nyquist). Comenzaremos analizando la interacción entre dos señales analógicas y los efectos que se presentan. Luego analizaremos lo que ocurre en el ámbito digital con una señal en la proximidad con la frecuencia de Nyquist. Se abordarán las implicancias en la representación gráfica de las señales y su impacto en la conversión D/A para su reproducción.</p>
         <h2>1. Suma de dos señales analógicas</h2>
         <p>Supongamos que tenemos 2 señales senoidales analógicas y las sumamos. ¿Qué resultado veremos en la pantalla de un osciloscopio? Si la diferencia entre ambas frecuencias es grande (digamos superior a 10 veces), veremos que la senoidal de mayor frecuencia se encontrará superpuesta sobre la de baja frecuencia.</p>
         <p>Pero a medida que dicha diferencia se achica, comenzaremos a apreciar cada vez mas, que la senoide de mayor frecuencia se encuentra <strong>“batida”</strong> por la de menor frecuencia.</p>
@@ -509,6 +551,12 @@ st {
             <img alt="Proceso de reconstrucción con batido" src="Pictures/fig12.png"/>
             <p><st>Fig 12. a) Señal analógica b) Muestras de la señal analógica c) Proceso de reconstrucción. Se puede observar que a) y c) son distintas</st></p>
         </div>
+
+
+
+
+
+
         <p>La explicación viene por el lado de cómo se realiza la reconstrucción de la señal analógica a partir de sus muestras. El proceso de interpolación consiste en reconstruir el valor de la señal entre muestras, y eso <strong>no se logra simplemente “uniendo” las muestras entre sí de manera gráfica</strong>. Existen diversas maneras de “unir” (interpolar) gráficamente las muestras. Por ejemplo, una podría ser la de hacerlo de forma lineal (línea recta), a través de un polinomio de orden N (curva), o algún otro tipo.<sup><span class="only-desktop"><a class="tooltip" data-tooltip="Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc." href="#nota4">[4]</a></span><span class="only-mobile"><a href="#nota4">[4]</a></span></sup><sup><span class="only-desktop"><a class="tooltip" data-tooltip="Algunos softwares permiten elegir el modo gráfico de interpolación (p.e Ozone RX)" href="#nota5">[5]</a></span><span class="only-mobile"><a href="#nota5">[5]</a></span></sup>Pero esos métodos no reconstruyen exactamente la señal original.</p>
         <p>El método teórico para recuperar totalmente una señal analógica (léase sin pérdidas), es a través de un proceso de convolución entre las muestras y la función SINC. Está totalmente fuera del alcance de este trabajo, explicar detalladamente el proceso de reconstrucción (interpolación), pero lo podemos pensar de la siguiente manera. Si, a una señal limitada en frecuencia (y que cumpla con los requerimientos de Nyquist) la quisiera recuperar, podría filtrarla con un filtro pasa bajo, de manera de quedarme con la banda de frecuencias por debajo de <span style="font-size: 1.1em;">\( \frac{F_s}{2} \)</span> y rechazar toda su componente espectral que esté por arriba de la misma. En la Fig 13 podemos ver el proceso.</p>
         <div class="figure">
@@ -570,7 +618,7 @@ st {
                         .catch(error => {
                             console.error("Error al reproducir " + audioId + ":", error);
                         });
-                } else {
+ уро                } else {
                     console.warn("No se encontró el audio con ID: " + audioId);
                 }
             }
@@ -638,7 +686,7 @@ st {
         </div>
         <p> El ejemplo presentado corresponde a una \( F = 48\,\text{Hz} \) y \( F_s = 100\,\text{Hz} \). Si bien estos no son valores utilizables en audio, es perfectamente válido para demostrar el efecto en cuestión.</p>
         <h2>Bibliografía</h2>
-        <p id="nota1">[1] La frecuencia de batido es la diferencia de frecuencias entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es la mitad, o sea, 50Hz para nuestro caso. Esta relación será distitna en el efecto subNyquist que veremos en las próximas secciones.</p>
+        <p id="nota1">[1] La frecuencia de batido es la diferencia de frecuencias entre ambas señales. Sin embargo, la frecuencia de cada una de las ondas entrelazadas, es la mitad, o sea, 50Hz para nuestro caso. Esta relación será distinta en el efecto subNyquist que veremos en las próximas secciones.</p>
         <p id="nota2">[2] El método de interpolación de Matlab es lineal, y es por ese motivo que vemos trazos rectos uniendo las muestras.</p>
         <p id="nota3">[3] \(\large \frac{m}{n} \) ≤ 0.5 para evitar el efecto de aliasing.</p>
         <p id="nota4">[4] Existen varios métodos de interpolación como Lagrange (orden N), cubic splines (3er orden), Bezier splines, etc.</p>
@@ -658,7 +706,6 @@ st {
             <li>“Modern Sampling: A Tutorial”. Jamie A.S. Angus – AES Vol 67, No 5, 2019 May</li><br/>
         </ul>
         <p><span style="font-size: 24px;">Autor: Pablo Panitta / Soundins</span></p>
-        <p>Contacto: <a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
     </div>
 </body>
 </html>
