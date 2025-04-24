@@ -80,7 +80,7 @@ h1 {
     text-align: center;
     background-color: black;
     color: white;
-    padding: 5px;
+    padding: 5px; /* Reduced padding to shift email upwards */
     width: 100%;
     margin: 0 auto;
 }
@@ -185,12 +185,12 @@ st {
     text-decoration: none;
 }
 
-/* Tooltips deshabilitados por defecto para todos los dispositivos */
+/* Tooltips disabled by default for all devices */
 .tooltip::after {
     display: none !important;
 }
 
-/* Habilitar tooltips solo para laptops/desktops (min-width: 1025px) */
+/* Enable tooltips only for laptops/desktops (min-width: 1025px) */
 @media (min-width: 1025px) {
     .tooltip::after {
         display: block !important;
@@ -227,10 +227,10 @@ st {
 
 .language-button {
     position: absolute;
-    top: 145px;
+    top: 170px;
     right: 12px;
     display: flex;
-    gap: 10px; /* Espacio entre los botones */
+    gap: 10px; /* Space between buttons */
     z-index: 100;
 }
 
@@ -243,20 +243,20 @@ st {
     padding: 8px 20px;
     cursor: pointer;
     border-radius: 5px;
-    text-decoration: none; /* Para el enlace .download-button */
-    display: inline-block; /* Para que el enlace se comporte como botón */
+    text-decoration: none; /* For the .download-button link */
+    display: inline-block; /* To make the link behave like a button */
 }
 
 .english-button:hover, .download-button:hover {
     background-color: #0056b3;
 }
 
-/* Asegurar que full-width-band sea el contenedor de referencia */
+/* Ensure full-width-band is the reference container */
 .full-width-band {
-    position: relative; /* Establece el contexto de posicionamiento */
+    position: relative; /* Establishes positioning context */
 }
 
-/* Media query para tabletas y móviles (max-width: 1024px) */
+/* Media query for tablets and mobiles (max-width: 1024px) */
 @media (max-width: 1024px) {
     body {
         max-width: 100%;
@@ -285,7 +285,7 @@ st {
         margin: 0 auto;
     }
 
-    /* Asegurar que los tooltips estén deshabilitados para tabletas y móviles */
+    /* Ensure tooltips are disabled for tablets and mobiles */
     .tooltip::after {
         display: none !important;
     }
@@ -304,7 +304,7 @@ st {
     }
 }
 
-/* Media query para móviles (max-width: 768px) */
+/* Media query for mobiles (max-width: 768px) */
 @media (max-width: 768px) {
     .pablo span {
         font-size: 20px !important;
@@ -318,17 +318,31 @@ st {
         width: 100%;
     }
 
-    h1, .pablo, .author-email {
-        font-size: 28px;
+    h1 {
+        font-size: 24px; /* Reduced title font size for mobile */
         background-color: black;
         color: white;
-        padding: 8px;
+        padding: 6px; /* Reduced padding to lower black bar height */
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .pablo {
+        font-size: 24px; /* Match title font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Further reduced padding to shift name upwards */
         width: 100%;
         margin: 0 auto;
     }
 
     .author-email {
-        font-size: 16px;
+        font-size: 14px; /* Slightly smaller email font size */
+        background-color: black;
+        color: white;
+        padding: 3px; /* Reduced padding to shift email upwards */
+        width: 100%;
+        margin: 0 auto;
     }
 
     h2 {
@@ -375,7 +389,7 @@ st {
         padding-left: 10px;
     }
 
-    /* Asegurar que los tooltips estén deshabilitados para móviles */
+    /* Ensure tooltips are disabled for mobiles */
     .tooltip::after {
         display: none !important;
     }
@@ -391,25 +405,25 @@ st {
         padding: 10px 12px;
     }
 
-    /* Estilos para el contenedor de botones en móviles */
+    /* Styles for the button container on mobiles */
     .language-button {
-        top: 200px; /* Adjusted for added email line */
+        top: 180px; /* Adjusted for reduced black bar height */
         right: 10px;
     }
 }
 
-/* Orientación vertical (portrait) */
+/* Portrait orientation */
 @media screen and (max-width: 768px) and (orientation: portrait) {
     .language-button {
-        top: 200px; /* Adjusted for added email line */
+        top: 180px; /* Adjusted for reduced black bar height */
         right: 10px;
     }
 }
 
-/* Orientación horizontal (landscape) */
+/* Landscape orientation */
 @media screen and (max-width: 768px) and (orientation: landscape) {
     .language-button {
-        top: 160px !important; /* Adjusted for added email line */
+        top: 140px !important; /* Adjusted for reduced black bar height */
         right: 10px !important;
     }
 }
