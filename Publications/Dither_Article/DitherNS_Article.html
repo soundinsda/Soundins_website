@@ -222,7 +222,7 @@
                 </div>
             </div>
             <p>En la Figura 1 podemos ver el impacto en la distorsión en las señales cuantizadas a 16-bits con el agregado de dither.
-            Vemos como la <span class="bold">distorsión se reduce drásticamente</span> (o se anula) con respecto a la señal original sin dither. <em>¡Exactamente lo que queríamos lograr!</em><br><br>
+            Vemos como la <span class="bold">distorsión se reduce drásticamente</span> (o se anula a los fines prácticos) con respecto a la señal original sin dither. <em>¡Exactamente lo que queríamos lograr!</em><br><br>
             En la Figura 2 vemos el precio a pagar por esa reducción. Se observa fácilmente la <span class="bold">degradación de la relación SNR</span>, debido al haber introducido el dither (aka ruido).<br><br>
             Vemos también que hay algunos procesadores que arrojan unos resultados particulares (Waves L2, Weiss DS1 v2.6.1, Maxim).<br><br>
             En relación a estos, me gustaría solo comentar el caso del plugin de Softube Weiss DS1, en el cuál la versión actual (v2.6.1) incorpora autoblanking mientras que la anterior (v2.5.9) no lo tenía. Esto hace que para los niveles muy bajos de señal (como los utilizados en estas mediciones), la nueva versión no aplique dithering y, por lo ende, vemos los mismos valores de distorsión y SNR que en la señal de 16-bits sin dither.<sup><a href="#nota3-es">[3]</a></sup> Por tal motivo, el comportamiento de ambas versiones es diferente para estos niveles.<br><br>
@@ -259,7 +259,7 @@
             Si bien se puede acceder desde cualquier dispositivo, se recomienda ingresar desde una PC ya que se accederá a la versión completa. El acceso desde un dispositivo móvil, redireccionará a la versión reducida de la herramienta.<br><br>
             <a href="https://www.soundins.com.ar/Publications/Dither/DitherNS_Tool_Main.html" target="_blank">Dither & NS Benchmark Tool</a><br><br>
             Ing. Pablo Panitta<br>
-            Soundins<br>Soundins<br><a href="mailto:soundinsda@gmail.com">email: soundinsda@gmail.com</a><br>March 2025</p><br>Marzo 2025</p>
+            Soundins<br><a href="mailto:soundinsda@gmail.com">email: soundinsda@gmail.com</a><br>March 2025</p>
 
             <h2>Notas</h2>
             <p id="nota1-es">[1] Importante: El presente trabajo no constituye ninguna representación, recomendación o preferencia hacia ninguna marca o modelo mencionado. No se realiza un ranking de mejor o peor funcionamiento, sino solamente se exponen los resultados.</p>
@@ -289,7 +289,7 @@
             Adding white noise to eliminate 'quantization noise'? This does not seem to make much sense. And it is true, at first glance, this does not seem to be a very useful process.<br><br>
             The reality is that the so-called "quantization noise" <span class="bold">is not noise</span> as such, but rather a <span class="bold">distortion</span>. By definition, for a signal to be considered noise, it must be random and, therefore, not related (correlated) to other variables. And it turns out that quantization noise is related, and its relationship is with the level of the signal to be quantized.<br><br>
             Therefore, what we aim to achieve with the <span class="bold">Dithering process</span> is <span class="bold">replace distortion for noise</span>.<sup><a href="#nota2-en">[2]</a></sup><br><br>
-            And why would that be a good change? Well, it turns out that human psychoacoustics tolerates noise better than distortion. The latter is much more annoying and distracting than noise itself.</p>
+            And why would that be a good change? Well, it turns out that human psychoacoustics tolerate noise better than distortion. The latter is much more annoying and distracting than the noise itself.</p>
 
             <h2>Dithering in Practice</h2>
             <p>The following are the results of measurements made with a 24-bit 997Hz signal at 2LSB (least significant bits) that has been processed with different plugins or DAWs to convert it to 16-bits. As mentioned above, with the process we try to lower the distortion at the cost of increased noise, and therefore we can measure parameters related to these phenomena, namely: TD (Total Distortion) and SNR (Signal to Noise Ratio).<br><br></p>
@@ -303,9 +303,9 @@
                     <p class="caption">Figure 2: Noise to Signal Ratio (SNR). If the process doesn’t significantly reduce the distortion, SNR is not measured and indicated as “na”.</p>
                 </div>
             </div>
-            <p>In Figure 1 we can see the impact on the distortion in the 16-bit quantized signals with the addition of dither. We see how the distortion is <span class="bold">drastically reduced</span> (or canceled) with respect to the original signal without dither. <em>This is exactly what we wanted to achieve!</em><br><br>
+            <p>In Figure 1 we can see the impact on the distortion in the 16-bit quantized signals with the addition of dither. We see how the distortion is <span class="bold">drastically reduced</span> (or canceled for practical porpuse) with respect to the original signal without dither. <em>This is exactly what we wanted to achieve!</em><br><br>
             In Figure 2 we see the price to pay for that reduction. The <span class="bold">degradation of the SNR ratio</span>, easily observed, due to the introduction of dither (aka noise).<br><br>
-            We also see that there are some processors that give particular results (Waves L2, Weiss DS1 v2.6.1, Maxim).<br><br>
+            We also see that there are some processors that give peculiar results (Waves L2, Weiss DS1 v2.6.1, Maxim).<br><br>
             In relation to these, I would like to comment only the case of the Softube Weiss DS1 plugin, in which the current version (v2.6.1) incorporates autoblanking while the previous one (v2.5.9) did not. This means that for very low signal levels (such as those used in these measurements), the new version does not apply dithering and, therefore, we see the same distortion and SNR values as in the 16-bit signal without dither. For this reason, the behavior of each versions is different at these levels.<sup><a href="#nota3-en">[3]</a></sup><br><br>
             The selection of the dither intensity (in those plugins that allow it), affects the percentage of samples that change state, or in other words, that modify their level with respect to the original signal. Typical values for low intensity dither are around 20%, for medium 30% and high 35% and above.<sup><a href="#nota4-en">[4]</a></sup><br><br>
             Something interesting to mention is that the application of dither <em>is independent in each channel</em>. For example, in the case of stereo dithering processing, the one generated for the left channel will be independent of the one generated for the right.<br><br></p>
@@ -316,9 +316,9 @@
             In theory, the total noise power remains unchanged (there is only redistribution) but in practical implementation it increases after applying noise shaping. However, this is transparent to listening, since the listener will effectively perceive a reduction of noise in front of the useful signal, achieving a noticeable improvement in the overall perceived quality.<br><br>
             The different levels of noise shaping (if selectable), have to do with the amount of power displaced towards the psychoacoustically less sensitive frequencies.<br><br>
             Unlike Dither, which does not have much possible customization<sup><a href="#nota5-en">[5]</a></sup>, Noise shaping can (and in fact does) have significant adjustment work. Many manufacturers use noise distribution based on models developed by them in order to optimize psychoacoustic effects. This is how we see acronyms such as: POWr, MBIT, IDR, UV22, etc.<br><br>
-            In a simple way, you can insert a spectrum analyzer, and analyze the noise curves of the different brands and models of plugins.<br><br></p>
+            Very easily, you can insert a spectrum analyzer to analyze the noise curves of different plugin brands and models..<br><br></p>
 
-            <h2>Results</h2>
+            <h2>Measurements Results</h2>
             <p>In Figure 3, we see reflected the values obtained for Noise Power (Npow) and Noise to Mask Ratio (NMR)<sup><a href="#nota6-en">[6]</a></sup> for different levels of dithering of the measured plugins. The labeling convention is:<br><br>
             Plugin Name / Dither Type / Noise Shaping Intensity.<br><br>
             For example: Ozone / Medium / Low:<br>
@@ -342,7 +342,7 @@
             Soundins<br><a href="mailto:soundinsda@gmail.com">email: soundinsda@gmail.com</a><br>March 2025</p>
 
             <h2>Notes</h2>
-            <p id="nota1-en">[1] Important: This work does not constitute any representation, recommendation, or preference towards any brand or model mentioned. No ranking of better or worse performance is made, but only the results are presented.</p>
+            <p id="nota1-en">[1] Important disclosure: This work does not constitute any representation, recommendation, or preference towards any brand or model mentioned. No ranking of better or worse performance is made, but only the results are presented.</p>
             <p id="nota2-en">[2] The addition of noise to the signal being requantized decorrelates the quantization error from the signal level, and therefore, we transform it into true noise instead of distortion.</p>
             <p id="nota3-en">[3] Softube engineers have confirmed that this change was introduced in order to reduce CPU consumption for signals with such low input levels.</p>
             <p id="nota4-en">[4] Dither intensity can also be related to the added LSBs (level) (typically 1, 2, or 3 LSBs). Generally, for triangular distributions, 2 LSBs is the common choice.</p>
