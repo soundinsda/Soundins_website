@@ -217,7 +217,22 @@ Soundins<br><br>
 <p id="nota1">[5] Parámetros que pueden variar en el Dither son su intensidad y su distribución (Rectangular, Triangular, Gaussiana). En audio, el uso común y recomendado es la distribución triangular (aunque unos pocos plugin permiten seleccionar el tipo a aplicar)</p>
 <p id="nota2">[6] Noise to Mask Ratio (NMR) es una medida de enmascaramiento del ruido. Valores más negativos indican que el perfil de ruido se encuentra más alejado del umbral de enmascaramiento, presentando una menor percepción psicoacústica.</p>
 
-
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const elements = document.querySelectorAll("footer, div, p");
+    let count = 0;
+    elements.forEach((el) => {
+      if (el.textContent.includes("Soundins Marzo2025")) {
+        count++;
+        if (count > 1) {
+          el.remove(); // Elimina la segunda instancia
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
 
 
 </body>
