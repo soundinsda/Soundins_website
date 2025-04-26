@@ -1003,6 +1003,16 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
 
     async function playAudioFromMemory(audioData, rect) {
       if (isIOS) {
+        // Ensure AudioContext is initialized and resumed
+        if (!audioContext || !analyser || !gainNode) {
+          console.log("Reinitializing AudioContext for iOS...");
+          initializeAudioContext();
+        }
+        await resumeAudioContext();
+
+        // Stop any previous audio and clean up
+        stopAudio();
+
         const blob = new Blob([audioData], { type: "audio/flac" });
         const audioURL = URL.createObjectURL(blob);
         const iosAudio = document.getElementById("ios-audio");
@@ -1010,22 +1020,27 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         iosAudio.src = audioURL;
         iosAudio.load();
 
-        // Connect the audio element to the analyser for spectrum visualization
-        if (audioContext && analyser) {
+        // Create and connect a new MediaElementSource for spectrum visualization
+        try {
           mediaSource = audioContext.createMediaElementSource(iosAudio);
           mediaSource.connect(analyser);
           analyser.connect(gainNode);
           gainNode.connect(audioContext.destination);
+          console.log("MediaElementSource connected for iOS.");
+        } catch (e) {
+          console.error("Error connecting MediaElementSource:", e);
         }
 
         iosAudio.play().then(() => {
           console.log("iOS audio playing.");
           iosAudio.onended = () => {
             if (rect) rect.classList.remove("green");
+            stopAudio();
           };
         }).catch(error => {
           console.error("iOS audio playback failed:", error);
           if (rect) rect.classList.remove("green");
+          stopAudio();
         });
 
         return;
@@ -1074,14 +1089,19 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         const iosAudio = document.getElementById("ios-audio");
         if (iosAudio) {
           iosAudio.pause();
-          iosAudio.src = "";
-          console.log("iOS audio stopped.");
+          iosAudio.src = ""; // Clear the source
+          iosAudio.load(); // Reset the audio element
+          console.log("iOS audio stopped and reset.");
         }
         // Disconnect mediaSource if it exists
         if (mediaSource) {
-          mediaSource.disconnect();
+          try {
+            mediaSource.disconnect();
+            console.log("MediaElementSource disconnected.");
+          } catch (e) {
+            console.log("MediaElementSource already disconnected:", e);
+          }
           mediaSource = null;
-          console.log("MediaElementSource disconnected.");
         }
       }
       if (sourceNode) {
@@ -1095,12 +1115,20 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         sourceNode = null;
       }
       if (analyser && analyser.context.state !== "closed") {
-        analyser.disconnect();
-        console.log("Analyser disconnected.");
+        try {
+          analyser.disconnect();
+          console.log("Analyser disconnected.");
+        } catch (e) {
+          console.log("Analyser already disconnected:", e);
+        }
       }
       if (gainNode && gainNode.context.state !== "closed") {
-        gainNode.disconnect();
-        console.log("GainNode disconnected.");
+        try {
+          gainNode.disconnect();
+          console.log("GainNode disconnected.");
+        } catch (e) {
+          console.log("GainNode already disconnected:", e);
+        }
       }
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
