@@ -202,7 +202,7 @@
             Esto es producto de realizar un <em>“truncado”</em> (sacar los 8 bits menos significativos) de la señal de 24 y así llegar a la de 16 bits. A fin de reducir los efectos adversos de este proceso, es que aplicamos una técnica llamada <strong>“Dithering”</strong>.<br><br>
             Este artículo no intenta presentar la teoría detallada del proceso (que por cierto hay muchísima bibliografía al respecto), sino darle un abordaje más práctico, el cual es un poco más difícil de encontrar.<sup><a href="#nota1-es">[1]</a></sup></p>
             
-            <h2>Dither: Un poco de teoría</h2>
+            <h2>Dither: Teoría Básica</h2>
             <p>Ya dijimos que el “ruido de cuantización” es un efecto que aparece luego de haber reducido la cantidad de bits a través del truncado la señal. La forma de minimizar este ruido de cuantización es a través del proceso de Dithering el cuál es simplemente el agregado de ruido blanco (aleatorio y uniformemente distribuido) a la señal original, antes de la reducción.<br><br>
             ¿Agrego ruido blanco para eliminar “ruido de cuantización”? Esto no parece tener mucho sentido. Y es verdad, en una primera lectura, esto no parece ser un proceso muy útil.<br><br>
             La realidad es que el llamado “ruido de cuantización” <span class="bold">no es un ruido</span> como tal, sino más bien una <span class="bold">distorsión</span>. Por definición, para que una señal sea considerada como ruido, debe ser aleatoria y, por lo tanto, no debe estar relacionada (correlacionada) con otras variables. Y resulta ser que el ruido de cuantización, si lo está, y su relación es con el nivel de la señal a cuantizar.<br><br>
@@ -210,7 +210,9 @@
             ¿Y por qué eso sería un buen cambio? Bueno, resulta que la psicoacústica humana tolera mejor el ruido que la distorsión. Esta última resulta mucho más molesta y distractiva que el ruido en sí mismo.</p>
 
             <h2>Dither: La práctica</h2>
-            <p>A continuación se presentan los resultados de mediciones realizadas con una señal de 24-bits 997Hz a 2LSB (least significant bits) a la que se ha procesado con distintos plugins o DAWs, para convertirla a 16-bits. Como se mencionó anteriormente, con el proceso intentamos bajar la distorsión a costa de un mayor ruido, y por lo tanto podemos medir parámetros relacionados con estos fenómenos, a saber: TD (Total Distortion) y SNR (Signal to Noise Ratio).<br><br></p>
+            <p>A continuación se presentan los resultados de mediciones realizadas con una señal de 24-bits 997Hz a 2LSB (least significant bits) a la que se ha procesado con distintos plugins o DAWs, para convertirla a 16-bits. Como se mencionó anteriormente, con el proceso intentamos bajar la distorsión a costa de un mayor ruido, y por lo tanto podemos medir parámetros relacionados con estos fenómenos, a saber: TD (Total Distortion) y SNR (Signal to Noise Ratio).<br></p>
+
+	<p>A los fines de considerar qué es distorsión y qué es ruido, he seleccionada el siguiente criterio: si las señales presentes están a un nivel mayor de -30dBc,son consideradas como distorsión. Para las restantes, su clasificación será como ruido.</p>	
             <div class="image-container">
                 <div class="image-wrapper">
                     <img src="Figure1.png" alt="Distorsión total (TD) en la señal convertida a 16 bits">
@@ -237,12 +239,17 @@
             A diferencia del Dither, que no tiene mucha personalización posible<sup><a href="#nota5-es">[5]</a></sup>, el Noise shaping sí puede tener (y de hecho lo tiene) un trabajo de ajuste importante. Muchos de los fabricantes utilizan distribución de ruido basada en modelos desarrollados por ellos de manera de optimizar los efectos psicoacústicos. Es así que vemos siglas como: POWr, MBIT, IDR, UV22, etc.<br><br>
             De forma sencilla se puede insertar un analizador de espectro, y analizar las curvas de ruido de las distintas marcas y modelos de plugins.<br><br></p>
 
-            <h2>Resultados</h2>
-            <p>En la Figura 3, vemos reflejado los valores obtenidos de Noise Power (Npow) y Noise to Mask Ratio (NMR)<sup><a href="#nota6-es">[6]</a></sup> para distintos niveles de dithering de los plugins medidos.
+            <h2>Resultados de Mediciones</h2>
+           
+<p>Se procedió a medir 2 indicadores, a saber:<br><br>
+•<strong>Noise Power</strong> (NPow) [dBFS]: indica la potencia total de ruido.<br>
+•<strong>Noise to Mask Ratio</strong> (NMR) [dB]: indica el enmascaramiento del ruido.<br><br>
+Ambos indicadores se evaluán en el espectro completo (10Hz – 22050Hz)</p>
+
+		 <p>En la Figura 3, vemos reflejado los valores obtenidos de Noise Power (Npow) y Noise to Mask Ratio (NMR)<sup><a href="#nota6-es">[6]</a></sup> para distintos niveles de dithering de los plugins medidos.
             La convención de etiquetado es:<br><br>
             Nombre plugin / Tipo de Dither / Intensidad Noise Shaping.<br><br>
-            Por ejemplo: Ozone / Medium / Low:<br>
-            indica que corresponde al plugin Ozone con un Dither Medium y una intensidad de Noise Shaping Low.<br><br></p>
+            Por ejemplo: Ozone / Medium / Low: indica que corresponde al plugin Ozone con un Dither Medium y una intensidad de Noise Shaping Low.<br><br></p>
             <div style="text-align: center; margin-top: 20px;">
                 <img src="Figure3.png" alt="Niveles de Noise Power y Noise to Mask Ratio" style="width: 70%; height: auto;">
                 <p class="caption">Figura 3: Niveles de Noise Power y Noise to Mask Ratio para cada combinación medida. Si el procesador presenta autoblanking, no se muestra en el gráfico.</p>
@@ -284,7 +291,7 @@
             <p>When reducing the bit depth of a digital signal (e.g., from 24 to 16), what is known as <em>“quantization noise"</em> will occur. This is a result of performing a "truncation" (removing the 8 least significant bits) of the 24-bit signal to convert it to 16-bit word length signal. In order to reduce the adverse effects of this process, a technique called <strong>“Dithering”</strong> is applied.<br><br>
             This article does not attempt to address the theory of the process (of which there is plenty of literature on the subject), but rather to give it a more practical approach, which is a little more difficult to find.<sup><a href="#nota1-en">[1]</a></sup></p>
             
-            <h2>Dither: A Little Bit of Theory</h2>
+            <h2>Dither: The Basic Theory</h2>
             <p>As we mentioned, "quantization noise" is an artifact that appears after reducing the number of bits by truncating the signal. The way to minimize this quantization noise is through the process of Dithering, which is simply the addition of white noise (random and uniformly distributed) to the original signal before the reduction.<br><br>
             Adding white noise to eliminate 'quantization noise'? This does not seem to make much sense. And it is true, at first glance, this does not seem to be a very useful process.<br><br>
             The reality is that the so-called "quantization noise" <span class="bold">is not noise</span> as such, but rather a <span class="bold">distortion</span>. By definition, for a signal to be considered noise, it must be random and, therefore, not related (correlated) to other variables. And it turns out that quantization noise is related, and its relationship is with the level of the signal to be quantized.<br><br>
@@ -292,7 +299,8 @@
             And why would that be a good change? Well, it turns out that human psychoacoustics tolerate noise better than distortion. The latter is much more annoying and distracting than the noise itself.</p>
 
             <h2>Dithering in Practice</h2>
-            <p>The following are the results of measurements made with a 24-bit 997Hz signal at 2LSB (least significant bits) that has been processed with different plugins or DAWs to convert it to 16-bits. As mentioned above, with the process we try to lower the distortion at the cost of increased noise, and therefore we can measure parameters related to these phenomena, namely: TD (Total Distortion) and SNR (Signal to Noise Ratio).<br><br></p>
+            <p>The following are the results of measurements made with a 24-bit 997Hz signal at 2LSB (least significant bits) that has been processed with different plugins or DAWs to convert it to 16-bits. As mentioned above, with the process we try to lower the distortion at the cost of increased noise, and therefore we can measure parameters related to these phenomena, namely: TD (Total Distortion) and SNR (Signal to Noise Ratio).<br></p>
+            <p>For the purpose of considering what constitutes distortion and what constitutes noise, I have selected the following criterion: if the present signals are at alevel greater than -30dBc, they are considered as distortion. For the remaining signals, their classification will be as noise<br></p>
             <div class="image-container">
                 <div class="image-wrapper">
                     <img src="Figure1.png" alt="Total Distortion (TD) above-30dBc">
@@ -319,10 +327,13 @@
             Very easily, you can insert a spectrum analyzer to analyze the noise curves of different plugin brands and models..<br><br></p>
 
             <h2>Measurements Results</h2>
+<p> Two indicators were measured, namely:<br><br>
+•<strong> Noise Power</strong> (NPow) [dBFS]: indicates the total noise power.<br>
+•<strong> Noise to Mask Ratio</strong> (NMR) [dB]: indicates the masking of the noise.<br><br>
+Both indicators are evaluated across the full spectrum (10Hz – 22050Hz).<br></p>
             <p>In Figure 3, we see reflected the values obtained for Noise Power (Npow) and Noise to Mask Ratio (NMR)<sup><a href="#nota6-en">[6]</a></sup> for different levels of dithering of the measured plugins. The labeling convention is:<br><br>
             Plugin Name / Dither Type / Noise Shaping Intensity.<br><br>
-            For example: Ozone / Medium / Low:<br>
-            indicates that it corresponds to the Ozone plugin with a Medium Dither and a Low Noise Shaping intensity.<br><br></p>
+            For example: Ozone / Medium / Low: indicates that it corresponds to the Ozone plugin with a Medium Dither and a Low Noise Shaping intensity.<br><br></p>
             <div style="text-align: center; margin-top: 20px;">
                 <img src="Figure3.png" alt="Noise Power level and Noise Masking Ratio" style="width: 70%; height: auto;">
                 <p class="caption">Figure 3: Noise Power level and Noise Masking Ratio for each process tested.</p>
