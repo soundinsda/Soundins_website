@@ -759,13 +759,6 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
           window.isDrawing = true;
           drawSpectrum();
         }
-        if (isIOS) {
-          const iosAudio = document.getElementById("ios-audio");
-          sourceNode = audioContext.createMediaElementSource(iosAudio);
-          sourceNode.connect(analyser);
-          analyser.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-        }
       } catch (e) {
         console.error("Error initializing AudioContext:", e);
       }
@@ -1016,15 +1009,14 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
         iosAudio.load();
         iosAudio.play().then(() => {
           console.log("iOS audio playing.");
-          if (!sourceNode && audioContext && analyser && gainNode) {
-            sourceNode = audioContext.createMediaElementSource(iosAudio);
-            sourceNode.connect(analyser);
-            analyser.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+          // Connect iosAudio to analyser for spectrum display
+          if (audioContext && analyser) {
+            const mediaSource = audioContext.createMediaElementSource(iosAudio);
+            mediaSource.connect(analyser);
+            analyser.connect(audioContext.destination);
           }
           iosAudio.onended = () => {
             if (rect) rect.classList.remove("green");
-            stopAudio();
           };
         }).catch(error => {
           console.error("iOS audio playback failed:", error);
@@ -1083,7 +1075,7 @@ body.dark-mode #table-container::-webkit-scrollbar-thumb {
       }
       if (sourceNode) {
         try {
-          if (!isIOS) sourceNode.stop();
+          sourceNode.stop();
           console.log("SourceNode stopped.");
         } catch (e) {
           console.log("SourceNode already stopped:", e);
