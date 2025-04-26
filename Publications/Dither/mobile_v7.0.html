@@ -7,7 +7,49 @@
   <title>Soundins - Dither & NS Benchmarker (Mobile)</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
-    /* Estilos omitidos para brevedad, son idénticos al original */
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f0f0f0; color: #333; }
+    #header-container { position: relative; text-align: center; padding: 10px 0; background-color: #0078d4; }
+    #header-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('background.png') no-repeat center; background-size: cover; opacity: 0.1; z-index: 0; }
+    #logo { width: 50px; height: auto; position: absolute; top: 10px; left: 10px; z-index: 2; }
+    h1 { margin: 0; font-size: 18px; color: white; position: relative; z-index: 2; }
+    #version-text { position: absolute; top: 10px; right: 10px; color: white; font-size: 12px; z-index: 2; }
+    #fullscreen-btn { position: absolute; top: 10px; right: 40px; background: none; border: none; font-size: 20px; color: white; cursor: pointer; z-index: 2; }
+    #readme-link { position: absolute; top: 10px; left: 70px; color: white; font-size: 12px; cursor: pointer; z-index: 2; }
+    #language-menu { display: none; position: absolute; top: 30px; left: 70px; background: white; border: 1px solid #ccc; z-index: 3; }
+    #language-menu button { display: block; width: 100%; padding: 5px; border: none; background: white; cursor: pointer; }
+    #language-menu button:hover { background: #f0f0f0; }
+    #mode-toggle-container { position: absolute; bottom: 10px; right: 10px; z-index: 2; }
+    #mode-toggle-btn { background: none; border: none; cursor: pointer; padding: 0; }
+    #mode-icon { width: 24px; height: 24px; }
+    #rotation-message { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); color: white; justify-content: center; align-items: center; z-index: 1000; }
+    #rotation-text { text-align: center; font-size: 20px; }
+    #main-content { display: none; padding: 10px; }
+    #progress-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 100; }
+    #progress-bar { width: 100%; height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; }
+    #progress-fill { width: 0; height: 100%; background: #0078d4; transition: width 0.3s; }
+    #progress-text { text-align: center; margin-top: 10px; }
+    #main-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 10px 0; }
+    .source-group { display: flex; flex-direction: column; align-items: center; margin-right: 10px; }
+    .source-label { font-size: 14px; margin-bottom: 5px; }
+    .source-btn { width: 80px; height: 30px; margin: 2px; background: #ccc; border: 1px solid #999; cursor: pointer; text-align: center; line-height: 30px; font-size: 12px; }
+    .source-btn.active { background: #0078d4; color: white; }
+    .rect { width: 80px; height: 60px; margin: 5px; background: #ddd; border: 1px solid #999; cursor: pointer; text-align: center; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+    .rect.green { background: #00cc00; color: white; }
+    #toggle-btn { width: 60px; height: 60px; margin: 5px; background: url('play.png') no-repeat center; background-size: 40%; border: 1px solid #999; cursor: pointer; }
+    #stop-btn { width: 60px; height: 60px; margin: 5px; background: url('stop.png') no-repeat center; background-size: 40%; border: 1px solid #999; cursor: pointer; }
+    #table-container { overflow-x: auto; margin: 10px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #999; padding: 5px; text-align: center; font-size: 12px; }
+    th { background: #0078d4; color: white; }
+    #spectrum-container { width: 100%; background: #fff; border: 1px solid #999; margin-top: 10px; }
+    #spectrum-header { display: flex; justify-content: space-between; align-items: center; padding: 5px; background: #0078d4; color: white; }
+    #spectrum-title { font-size: 14px; }
+    #spectrum-buttons { display: flex; }
+    #minimize-btn { width: 20px; height: 20px; background: url('minimize.png') no-repeat center; background-size: 60%; border: none; cursor: pointer; }
+    #maximize-btn { width: 20px; height: 20px; background: url('maximize.png') no-repeat center; background-size: 60%; border: none; cursor: pointer; }
+    #spectrumCanvas { width: 100%; height: 80px; display: block; }
+    @media (orientation: portrait) { #rotation-message { display: flex; } #main-content { display: none; } }
+    @media (orientation: landscape) { #rotation-message { display: none; } #main-content { display: block; } }
   </style>
 </head>
 <body>
@@ -103,17 +145,32 @@
 
   <script>
     const audioMapping = {
-      // Mapeo de audio omitido para brevedad, es idéntico al original
+      "rect-24bits": { "Sine": { "NA": "sine_24bits.flac" }, "flaute": { "NA": "flaute_24bits.flac" } },
+      "rect-main": { "Sine": { "997(act)": "sine_16bits_no_dither_997hz.flac", "997(no)": "sine_16bits_no_dither.flac" }, "flaute": { "NA": "flaute_16bits_no_dither.flac" } },
+      "rect-1": { "Sine": { "997(act)": "sine_ozone11_low_off_997hz.flac", "997(no)": "sine_ozone11_low_off.flac" }, "flaute": { "NA": "flaute_ozone11_low_off.flac" } },
+      "rect-2": { "Sine": { "997(act)": "sine_ozone11_strong_off_997hz.flac", "997(no)": "sine_ozone11_strong_off.flac" }, "flaute": { "NA": "flaute_ozone11_strong_off.flac" } },
+      "rect-3": { "Sine": { "997(act)": "sine_prol2_on_off_997hz.flac", "997(no)": "sine_prol2_on_off.flac" }, "flaute": { "NA": "flaute_prol2_on_off.flac" } },
+      "rect-4": { "Sine": { "997(act)": "sine_l2_t1_off_997hz.flac", "997(no)": "sine_l2_t1_off.flac" }, "flaute": { "NA": "flaute_l2_t1_off.flac" } },
+      "rect-5": { "Sine": { "997(act)": "sine_l2_t2_off_997hz.flac", "997(no)": "sine_l2_t2_off.flac" }, "flaute": { "NA": "flaute_l2_t2_off.flac" } },
+      "rect-8": { "Sine": { "997(act)": "sine_reaper_on_off_997hz.flac", "997(no)": "sine_reaper_on_off.flac" }, "flaute": { "NA": "flaute_reaper_on_off.flac" } },
+      "rect-9": { "Sine": { "997(act)": "sine_live_tpdf_off_997hz.flac", "997(no)": "sine_live_tpdf_off.flac" }, "flaute": { "NA": "flaute_live_tpdf_off.flac" } },
+      "rect-10": { "Sine": { "997(act)": "sine_protools_maxim_on_off_997hz.flac", "997(no)": "sine_protools_maxim_on_off.flac" }, "flaute": { "NA": "flaute_protools_maxim_on_off.flac" } },
+      "rect-31": { "Sine": { "997(act)": "sine_ozone11_low_max_997hz.flac", "997(no)": "sine_ozone11_low_max.flac" }, "flaute": { "NA": "flaute_ozone11_low_max.flac" } },
+      "rect-32": { "Sine": { "997(act)": "sine_ozone11_strong_max_997hz.flac", "997(no)": "sine_ozone11_strong_max.flac" }, "flaute": { "NA": "flaute_ozone11_strong_max.flac" } },
+      "rect-33": { "Sine": { "997(act)": "sine_prol2_on_weighted_997hz.flac", "997(no)": "sine_prol2_on_weighted.flac" }, "flaute": { "NA": "flaute_prol2_on_weighted.flac" } },
+      "rect-34": { "Sine": { "997(act)": "sine_l2_t1_ultra_997hz.flac", "997(no)": "sine_l2_t1_ultra.flac" }, "flaute": { "NA": "flaute_l2_t1_ultra.flac" } },
+      "rect-35": { "Sine": { "997(act)": "sine_l2_t2_ultra_997hz.flac", "997(no)": "sine_l2_t2_ultra.flac" }, "flaute": { "NA": "flaute_l2_t2_ultra.flac" } },
+      "rect-38": { "Sine": { "997(act)": "sine_reaper_on_on_997hz.flac", "997(no)": "sine_reaper_on_on.flac" }, "flaute": { "NA": "flaute_reaper_on_on.flac" } },
+      "rect-39": { "Sine": { "997(act)": "sine_live_tpdf_powr3_997hz.flac", "997(no)": "sine_live_tpdf_powr3.flac" }, "flaute": { "NA": "flaute_live_tpdf_powr3.flac" } },
+      "rect-40": { "Sine": { "997(act)": "sine_protools_dither_on_type3_997hz.flac", "997(no)": "sine_protools_dither_on_type3.flac" }, "flaute": { "NA": "flaute_protools_dither_on_type3.flac" } }
     };
 
     let isToggleEnabled = true;
     let currentActiveRect = null;
-    let lastActiveRect = null;
     let currentSource = "Sine";
     const audioPlayers = {};
     let preloadPromise = null;
     let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    let hasProgressBarBeenShown = false;
 
     const sourceSine = document.getElementById("source-Sine");
     const sourceFlaute = document.getElementById("source-flaute");
@@ -132,7 +189,7 @@
     let analyser = null;
     let sourceNode = null;
     let gainNode = null;
-    let mediaSource = null; // Para iOS, se recreará por cada reproducción
+    let mediaSource = null;
     const canvas = document.getElementById("spectrumCanvas");
     const ctx = canvas.getContext("2d");
     canvas.width = 250;
@@ -142,54 +199,37 @@
     let dataHistory = [];
 
     function initializeAudioContext() {
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 16384;
-        analyser.smoothingTimeConstant = 0.1;
-        analyser.minDecibels = -110;
-        analyser.maxDecibels = -60;
-        gainNode = audioContext.createGain();
-        gainNode.gain.setValueAtTime(isIOS ? 2.0 : 1.0, audioContext.currentTime);
-        analyser.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        smoothedData = new Float32Array(analyser.frequencyBinCount);
-        console.log("AudioContext initialized. State:", audioContext.state);
-        resumeAudioContext();
-        if (!window.isDrawing) {
-          window.isDrawing = true;
-          drawSpectrum();
-        }
-      } catch (e) {
-        console.error("Error initializing AudioContext:", e);
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 16384;
+      analyser.smoothingTimeConstant = 0.1;
+      analyser.minDecibels = -110;
+      analyser.maxDecibels = -60;
+      gainNode = audioContext.createGain();
+      gainNode.gain.setValueAtTime(isIOS ? 2.0 : 1.0, audioContext.currentTime);
+      smoothedData = new Float32Array(analyser.frequencyBinCount);
+      resumeAudioContext();
+      if (!window.isDrawing) {
+        window.isDrawing = true;
+        drawSpectrum();
       }
     }
 
     async function resumeAudioContext() {
-      if (audioContext && audioContext.state === 'suspended') {
-        try {
-          await audioContext.resume();
-          console.log("AudioContext resumed. State:", audioContext.state);
-        } catch (e) {
-          console.error("Error resuming AudioContext:", e);
-        }
+      if (audioContext && audioContext.state === "suspended") {
+        await audioContext.resume();
       }
     }
 
     function drawSpectrum() {
-      if (!analyser) {
-        console.error("Analyser not defined.");
-        return;
-      }
+      if (!analyser) return;
 
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       analyser.getByteFrequencyData(dataArray);
 
       dataHistory.push(new Uint8Array(dataArray));
-      if (dataHistory.length > smoothingWindow) {
-        dataHistory.shift();
-      }
+      if (dataHistory.length > smoothingWindow) dataHistory.shift();
 
       for (let i = 0; i < bufferLength; i++) {
         let sum = 0;
@@ -202,43 +242,37 @@
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "rgb(0, 255, 0)";
-      ctx.beginPath();
+      if (sourceNode || mediaSource) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgb(0, 255, 0)";
+        ctx.beginPath();
 
-      const sampleRate = audioContext.sampleRate;
-      const freqMax = sampleRate / 2;
-      const freqStep = freqMax / bufferLength;
+        const sampleRate = audioContext.sampleRate;
+        const freqMax = sampleRate / 2;
+        const freqStep = freqMax / bufferLength;
 
-      const minFreq = 20;
-      const maxFreq = 20000;
-      const logMin = Math.log10(minFreq);
-      const logMax = Math.log10(maxFreq);
-      const logRange = logMax - logMin;
+        const minFreq = 20;
+        const maxFreq = 20000;
+        const logMin = Math.log10(minFreq);
+        const logMax = Math.log10(maxFreq);
+        const logRange = logMax - logMin;
 
-      let hasData = false;
-      ctx.moveTo(0, canvas.height);
+        ctx.moveTo(0, canvas.height);
+        for (let i = 0; i < bufferLength; i++) {
+          const freq = i * freqStep;
+          if (freq < minFreq || freq > maxFreq) continue;
 
-      for (let i = 0; i < bufferLength; i++) {
-        const freq = i * freqStep;
-        if (freq < minFreq || freq > maxFreq) continue;
-
-        const logFreq = Math.log10(freq);
-        const x = canvas.width * (logFreq - logMin) / logRange;
-        const value = smoothedData[i] / 255;
-        const y = canvas.height * (1 - value);
-
-        if (smoothedData[i] > 0) hasData = true;
-        ctx.lineTo(x, y);
+          const logFreq = Math.log10(freq);
+          const x = canvas.width * (logFreq - logMin) / logRange;
+          const value = smoothedData[i] / 255;
+          const y = canvas.height * (1 - value);
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
       }
-
-      ctx.stroke();
-      console.log("Spectrum drawn. Data present:", hasData);
 
       requestAnimationFrame(drawSpectrum);
     }
-
-    // Funciones de UI omitidas para brevedad, son idénticas al original
 
     async function preloadAllAudio() {
       const totalFiles = Object.values(audioMapping).reduce((sum, sources) => sum + Object.values(sources).reduce((subSum, states) => subSum + Object.keys(states).length, 0), 0);
@@ -253,22 +287,16 @@
             const url = audioMapping[rectId][source][state];
             loadPromises.push(
               fetch(url)
-                .then(response => {
-                  if (!response.ok) throw new Error(`Error fetching ${url}: ${response.statusText}`);
-                  return response.arrayBuffer();
-                })
+                .then(response => response.arrayBuffer())
                 .then(arrayBuffer => {
                   audioPlayers[rectId][source][state] = { buffer: arrayBuffer };
                   loadedFiles++;
-                  const progressPercentage = (loadedFiles / totalFiles) * 100;
-                  progressFill.style.width = `${progressPercentage}%`;
-                  console.log(`Loaded ${url}`);
+                  progressFill.style.width = `${(loadedFiles / totalFiles) * 100}%`;
                 })
                 .catch(error => {
                   console.error(`Error preloading ${url}:`, error);
                   loadedFiles++;
-                  const progressPercentage = (loadedFiles / totalFiles) * 100;
-                  progressFill.style.width = `${progressPercentage}%`;
+                  progressFill.style.width = `${(loadedFiles / totalFiles) * 100}%`;
                 })
             );
           }
@@ -276,20 +304,10 @@
       }
 
       await Promise.all(loadPromises);
-      setTimeout(() => {
-        progressContainer.style.display = "none";
-      }, 200);
+      setTimeout(() => progressContainer.style.display = "none", 200);
     }
 
     async function playAudioFromMemory(audioData, rect) {
-      if (!audioContext || !analyser || !gainNode) {
-        console.log("Reinitializing AudioContext...");
-        initializeAudioContext();
-      }
-
-      await resumeAudioContext();
-      stopAudio();
-
       if (isIOS) {
         const blob = new Blob([audioData], { type: "audio/flac" });
         const audioURL = URL.createObjectURL(blob);
@@ -298,39 +316,43 @@
         iosAudio.src = audioURL;
         iosAudio.load();
 
-        // Crear un nuevo MediaElementSource para cada reproducción
-        mediaSource = audioContext.createMediaElementSource(iosAudio);
-        mediaSource.connect(analyser);
+        if (audioContext && analyser) {
+          mediaSource = audioContext.createMediaElementSource(iosAudio);
+          mediaSource.connect(analyser);
+          analyser.connect(audioContext.destination);
+        }
 
         iosAudio.play().then(() => {
-          console.log("iOS audio playing.");
+          rect.classList.add("green");
           iosAudio.onended = () => {
-            if (rect) rect.classList.remove("green");
+            rect.classList.remove("green");
             stopAudio();
           };
         }).catch(error => {
           console.error("iOS audio playback failed:", error);
-          if (rect) rect.classList.remove("green");
+          rect.classList.remove("green");
         });
-
         return;
       }
 
-      // Para Android
-      try {
-        const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
-        sourceNode = audioContext.createBufferSource();
-        sourceNode.buffer = audioBuffer;
-        sourceNode.connect(analyser);
-        sourceNode.start();
-        sourceNode.onended = () => {
-          if (rect) rect.classList.remove("green");
-          stopAudio();
-        };
-      } catch (e) {
-        console.error("Error decoding or playing audio:", e);
-        if (rect) rect.classList.remove("green");
-      }
+      if (!audioContext) initializeAudioContext();
+      await resumeAudioContext();
+      stopAudio();
+
+      const audioBuffer = await audioContext.decodeAudioData(audioData.slice(0));
+      sourceNode = audioContext.createBufferSource();
+      sourceNode.buffer = audioBuffer;
+
+      sourceNode.connect(analyser);
+      analyser.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      sourceNode.start();
+      rect.classList.add("green");
+      sourceNode.onended = () => {
+        rect.classList.remove("green");
+        stopAudio();
+      };
     }
 
     function stopAudio() {
@@ -339,63 +361,67 @@
         if (iosAudio) {
           iosAudio.pause();
           iosAudio.src = "";
-          console.log("iOS audio stopped.");
         }
         if (mediaSource) {
           mediaSource.disconnect();
           mediaSource = null;
-          console.log("MediaElementSource disconnected.");
         }
       }
       if (sourceNode) {
-        try {
-          sourceNode.stop();
-          console.log("SourceNode stopped.");
-        } catch (e) {
-          console.log("SourceNode already stopped:", e);
-        }
+        sourceNode.stop();
         sourceNode.disconnect();
         sourceNode = null;
       }
+      if (analyser) analyser.disconnect();
+      if (gainNode) gainNode.disconnect();
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       dataHistory = [];
-      console.log("Audio resources cleared.");
-    }
-
-    function stopAllAudio() {
-      stopAudio();
-      document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
-      currentActiveRect = null;
-      console.log("All audio stopped.");
     }
 
     async function playAudio(rect) {
-      if (!audioContext) {
-        console.log("Initializing AudioContext for playback...");
-        initializeAudioContext();
-      }
+      if (!audioContext) initializeAudioContext();
       await resumeAudioContext();
       const rectId = rect.id;
       const state = rectId === "rect-24bits" && currentSource === "Sine" ? "NA" : (isToggleEnabled ? "997(act)" : "997(no)");
       const audioData = audioPlayers[rectId]?.[currentSource]?.[currentSource === "Sine" ? state : "NA"]?.buffer;
       if (audioData) {
         stopAudio();
-        rect.classList.add("green");
         currentActiveRect = rect;
-        console.log(`Playing audio for ${rectId}, source: ${currentSource}, state: ${state}`);
         await playAudioFromMemory(audioData, rect);
-      } else {
-        console.error(`No audio found for ${rectId}, source: ${currentSource}, state: ${state}`);
       }
     }
 
-    // Resto de funciones de UI y eventos omitidas para brevedad, son idénticas al original
+    sourceSine.addEventListener("click", () => {
+      currentSource = "Sine";
+      sourceSine.classList.add("active");
+      sourceFlaute.classList.remove("active");
+    });
 
-    document.addEventListener('touchstart', function initAudioOnTouch() {
-      if (!audioContext) {
-        initializeAudioContext();
-      }
+    sourceFlaute.addEventListener("click", () => {
+      currentSource = "flaute";
+      sourceFlaute.classList.add("active");
+      sourceSine.classList.remove("active");
+    });
+
+    toggleBtn.addEventListener("click", () => {
+      isToggleEnabled = !isToggleEnabled;
+      toggleBtn.textContent = isToggleEnabled ? "997Hz" : "No 997Hz";
+    });
+
+    stopBtn.addEventListener("click", () => {
+      stopAudio();
+      document.querySelectorAll(".rect.green").forEach(rect => rect.classList.remove("green"));
+      currentActiveRect = null;
+    });
+
+    rectsToLoad.forEach(id => {
+      const rect = document.getElementById(id);
+      rect.addEventListener("click", () => playAudio(rect));
+    });
+
+    document.addEventListener('touchstart', () => {
+      if (!audioContext) initializeAudioContext();
     }, { once: true });
 
     preloadPromise = preloadAllAudio();
