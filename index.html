@@ -157,7 +157,7 @@
         .submenu-item:hover {
             background-color: #555;
         }
-        #codalyzer-message, #codalyzer-coming-soon {
+        #codalyzer-message {
             display: none;
             position: fixed;
             top: 50%;
@@ -228,7 +228,6 @@
                 margin: 10px 0;
             }
         }
-        /* Ajustes para orientación horizontal en móviles */
         @media only screen and (max-width: 1024px) and (orientation: landscape) {
             body {
                 height: auto;
@@ -280,7 +279,6 @@
                 margin-top: 0vh;
             }
         }
-        /* Ajustes para orientación vertical en móviles */
         @media only screen and (max-width: 768px) and (orientation: portrait) {
             body {
                 padding: 0;
@@ -346,28 +344,24 @@
     <div id="codalyzer-message">
         Esta app no está disponible en versión móvil / This app is not available for mobile version
     </div>
-    <div id="codalyzer-coming-soon">
-        Próximo lanzamiento / Coming soon
-    </div>
+    
     <img id="logo" alt="Soundins Logo">
     <p id="credit">by Pablo Panitta</p>
     <p id="email"><a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Menu toggle for mobile
+            // Elementos
             const menu = document.getElementById("menu");
             const menuTitle = document.getElementById("menu-title");
             const ditherBtn = document.getElementById("dither-btn");
             const ditherMenu = document.getElementById("dither-menu");
-            const ditherSubmenu = document.getElementById("dither-submenu");
             const applications = document.getElementById("applications");
             const applicationsTitle = document.getElementById("applications-title");
             const codalyzerItem = document.getElementById("codalyzer-item");
             const codalyzerMessage = document.getElementById("codalyzer-message");
-            const codalyzerComingSoon = document.getElementById("codalyzer-coming-soon");
 
-            // Toggle Publications menu
+            // Toggle Publications
             menuTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 menu.classList.toggle("active");
@@ -380,19 +374,19 @@
                 ditherMenu.classList.toggle("active");
             });
 
-            // Toggle Applications menu
+            // Toggle Applications
             applicationsTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 applications.classList.toggle("active");
                 menu.classList.remove("active");
             });
 
-            // Detectar si es móvil o tablet
+            // Detectar móvil
             function isMobileDevice() {
                 return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 1024;
             }
 
-            // Mostrar mensaje según dispositivo al hacer clic en Codalyzer
+            // Codalyzer: abrir app o mostrar mensaje
             codalyzerItem.addEventListener("click", function(e) {
                 e.preventDefault();
                 if (isMobileDevice()) {
@@ -401,25 +395,36 @@
                         codalyzerMessage.style.display = "none";
                     }, 3000);
                 } else {
-                    codalyzerComingSoon.style.display = "block";
-                    setTimeout(() => {
-                        codalyzerComingSoon.style.display = "none";
-                    }, 3000);
+                    window.open("application/Codalyzer/index.html", "_blank");
                 }
             });
 
-            // Close menus and messages when clicking outside
+            // Cerrar menús al hacer clic fuera
             document.addEventListener("click", function(e) {
-                if (!menu.contains(e.target) && !applications.contains(e.target) && !codalyzerMessage.contains(e.target) && !codalyzerComingSoon.contains(e.target)) {
+                if (!menu.contains(e.target) && !applications.contains(e.target) && !codalyzerMessage.contains(e.target)) {
                     menu.classList.remove("active");
                     ditherMenu.classList.remove("active");
                     applications.classList.remove("active");
                     codalyzerMessage.style.display = "none";
-                    codalyzerComingSoon.style.display = "none";
                 }
             });
 
-            // Logo loading
+            // Cargar versión en el menú (opcional)
+            fetch('application/Codalyzer/data/version.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('No version');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.version) {
+                        codalyzerItem.innerHTML = `Codalyzer <small style="color:#aaa;">v${data.version}</small>`;
+                    }
+                })
+                .catch(() => {
+                    // Silencioso si no hay versión
+                });
+
+            // Cargar logo
             var logo = document.getElementById("logo");
             var possiblePaths = [
                 "Soundins.png",
