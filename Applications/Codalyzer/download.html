@@ -38,6 +38,44 @@
             color: #aaa;
         }
         
+        /* Debug Console */
+        #debug-console {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.95);
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 2px solid #0f0;
+            z-index: 9999;
+        }
+        
+        #debug-console .log-entry {
+            margin: 3px 0;
+            padding: 2px 5px;
+        }
+        
+        #debug-console .log-info {
+            color: #0ff;
+        }
+        
+        #debug-console .log-error {
+            color: #f00;
+        }
+        
+        #debug-console .log-success {
+            color: #0f0;
+        }
+        
+        #debug-console .log-warning {
+            color: #ff0;
+        }
+        
         .downloads-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -106,6 +144,7 @@
         
         .back-link {
             margin-top: 50px;
+            margin-bottom: 250px;
             text-align: center;
         }
         
@@ -138,6 +177,11 @@
     </style>
 </head>
 <body>
+    <!-- Debug Console -->
+    <div id="debug-console">
+        <div class="log-entry log-info">🔍 Debug Console Initialized</div>
+    </div>
+
     <div class="header">
         <h1>Codalyzer</h1>
         <p>Download the version you need</p>
@@ -145,40 +189,165 @@
     
     <div class="downloads-container">
         <!-- MAC Installer -->
-        <div class="download-card">
+        <div class="download-card" data-file="mac">
             <span class="download-icon mac-icon">🍎</span>
             <h2>Mac Installer</h2>
             <p>For macOS systems</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.rar" class="download-button" download>Download .rar</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.rar" 
+               class="download-button" 
+               data-filename="Codalyzer_Installer_MAC.rar"
+               download>Download .rar</a>
         </div>
         
         <!-- Windows Installer -->
-        <div class="download-card">
+        <div class="download-card" data-file="windows">
             <span class="download-icon windows-icon">🪟</span>
             <h2>Windows Installer</h2>
             <p>For Windows systems</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.zip" class="download-button" download>Download .zip</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.zip" 
+               class="download-button" 
+               data-filename="Codalyzer_Installer_WIN.zip"
+               download>Download .zip</a>
         </div>
         
         <!-- Change Log -->
-        <div class="download-card">
+        <div class="download-card" data-file="changelog">
             <span class="download-icon text-icon">📝</span>
             <h2>Change Log</h2>
             <p>Version history and updates</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" class="download-button" target="_blank">View/Download</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
+               class="download-button" 
+               data-filename="Change_Log.txt"
+               target="_blank">View/Download</a>
         </div>
         
         <!-- Version JSON -->
-        <div class="download-card">
+        <div class="download-card" data-file="version">
             <span class="download-icon json-icon">⚙️</span>
             <h2>Version Info</h2>
             <p>Current version data</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/version.json" class="download-button" target="_blank">Download .json</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/version.json" 
+               class="download-button" 
+               data-filename="version.json"
+               target="_blank">Download .json</a>
         </div>
     </div>
     
     <div class="back-link">
-        <a href="index.html">← Back to main site</a>
+        <a href="index.html" id="back-link">← Back to main site</a>
     </div>
+
+    <script>
+        // Logger utility
+        const logger = {
+            console: document.getElementById('debug-console'),
+            
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const entry = document.createElement('div');
+                entry.className = `log-entry log-${type}`;
+                entry.textContent = `[${timestamp}] ${message}`;
+                this.console.appendChild(entry);
+                this.console.scrollTop = this.console.scrollHeight;
+                
+                // Also log to browser console
+                console.log(`[${type.toUpperCase()}] ${message}`);
+            },
+            
+            info(msg) { this.log(msg, 'info'); },
+            error(msg) { this.log(msg, 'error'); },
+            success(msg) { this.log(msg, 'success'); },
+            warning(msg) { this.log(msg, 'warning'); }
+        };
+
+        // Page load info
+        logger.info('📄 Page loaded: ' + window.location.href);
+        logger.info('🌐 Protocol: ' + window.location.protocol);
+        logger.info('🏠 Host: ' + window.location.host);
+        logger.info('📂 Pathname: ' + window.location.pathname);
+        logger.info('🔗 Origin: ' + window.location.origin);
+
+        // Check if files are being served correctly
+        document.addEventListener('DOMContentLoaded', function() {
+            logger.success('✅ DOM Content Loaded');
+            
+            // Get all download buttons
+            const downloadButtons = document.querySelectorAll('.download-button');
+            logger.info(`🔍 Found ${downloadButtons.length} download buttons`);
+            
+            downloadButtons.forEach((button, index) => {
+                const href = button.getAttribute('href');
+                const filename = button.getAttribute('data-filename');
+                const card = button.closest('.download-card');
+                const cardType = card.getAttribute('data-file');
+                
+                logger.info(`📦 Button ${index + 1} [${cardType}]: ${filename}`);
+                logger.info(`   └─ URL: ${href}`);
+                
+                // Add click listener to each button
+                button.addEventListener('click', function(e) {
+                    logger.warning(`🖱️ CLICK on ${filename}`);
+                    logger.info(`   └─ Target URL: ${this.href}`);
+                    logger.info(`   └─ Download attribute: ${this.hasAttribute('download')}`);
+                    logger.info(`   └─ Target attribute: ${this.getAttribute('target')}`);
+                    
+                    // Check if URL is accessible
+                    fetch(this.href, { method: 'HEAD' })
+                        .then(response => {
+                            if (response.ok) {
+                                logger.success(`✅ File found: ${filename} (Status: ${response.status})`);
+                            } else {
+                                logger.error(`❌ File not found: ${filename} (Status: ${response.status})`);
+                            }
+                        })
+                        .catch(error => {
+                            logger.error(`❌ Network error for ${filename}: ${error.message}`);
+                        });
+                });
+                
+                // Add hover listener
+                button.addEventListener('mouseenter', function() {
+                    logger.info(`👆 Hovering over: ${filename}`);
+                });
+            });
+            
+            // Back link logger
+            const backLink = document.getElementById('back-link');
+            backLink.addEventListener('click', function(e) {
+                logger.info('🔙 Navigating back to: ' + this.href);
+            });
+            
+            // Test file accessibility on load
+            logger.warning('🔍 Testing file accessibility...');
+            downloadButtons.forEach((button) => {
+                const href = button.getAttribute('href');
+                const filename = button.getAttribute('data-filename');
+                
+                fetch(href, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            logger.success(`✅ ${filename} is accessible (${response.status})`);
+                        } else {
+                            logger.error(`❌ ${filename} returned ${response.status}`);
+                        }
+                    })
+                    .catch(error => {
+                        logger.error(`❌ Cannot reach ${filename}: ${error.message}`);
+                    });
+            });
+        });
+
+        // Log any errors
+        window.addEventListener('error', function(e) {
+            logger.error(`💥 JavaScript Error: ${e.message}`);
+            logger.error(`   └─ File: ${e.filename}`);
+            logger.error(`   └─ Line: ${e.lineno}:${e.colno}`);
+        });
+
+        // Log unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(e) {
+            logger.error(`💥 Unhandled Promise Rejection: ${e.reason}`);
+        });
+    </script>
 </body>
 </html>
