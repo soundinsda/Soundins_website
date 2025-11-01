@@ -6,12 +6,12 @@
     <title>Codalyzer - Downloads</title>
     
     <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMDC82JCM2"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-511257991"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-ZMDC82JCM2');
+        gtag('config', 'G-511257991');
         
         // Función para trackear descargas
         function trackDownload(fileName, downloadType) {
@@ -23,6 +23,27 @@
             });
             console.log('Download tracked:', fileName);
         }
+        
+        // Detección de dispositivos móviles/tablets
+        function isMobileOrTablet() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(userAgent);
+            const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            const isSmallScreen = window.innerWidth <= 1024;
+            
+            return isMobile || (isTouch && isSmallScreen);
+        }
+        
+        // Mostrar la página apropiada al cargar
+        window.addEventListener('DOMContentLoaded', function() {
+            if (isMobileOrTablet()) {
+                document.getElementById('desktop-content').style.display = 'none';
+                document.getElementById('mobile-warning').style.display = 'flex';
+            } else {
+                document.getElementById('desktop-content').style.display = 'flex';
+                document.getElementById('mobile-warning').style.display = 'none';
+            }
+        });
     </script>
     
     <style>
@@ -37,10 +58,18 @@
             color: white;
             font-family: Arial, sans-serif;
             min-height: 100vh;
+        }
+        
+        /* ========================================== */
+        /* ESTILOS PARA LA PÁGINA DE ESCRITORIO       */
+        /* ========================================== */
+        
+        #desktop-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
+            min-height: 100vh;
         }
         
         .header {
@@ -150,121 +179,251 @@
             text-decoration: underline;
         }
         
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 36px;
+        /* ========================================== */
+        /* ESTILOS PARA LA PÁGINA MÓVIL               */
+        /* ========================================== */
+        
+        #mobile-warning {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+        
+        .warning-container {
+            max-width: 500px;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 50px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid #333;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            .downloads-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-            
-            .download-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 60px;
+        }
+        
+        .warning-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
             }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
+        .warning-title {
+            font-size: 32px;
+            color: #4a9eff;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .warning-message {
+            font-size: 18px;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .warning-submessage {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .device-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            opacity: 0.6;
+        }
+        
+        .device-icons span {
+            font-size: 40px;
+        }
+        
+        .desktop-icon {
+            color: #4a9eff;
+        }
+        
+        .mobile-icon {
+            color: #ff4a4a;
+            text-decoration: line-through;
+        }
+        
+        .warning-footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+        
+        .warning-footer p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .warning-footer a {
+            color: #4a9eff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .warning-footer a:hover {
+            color: #357abd;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Codalyzer <span id="version">loading...</span></h1>
-        <p>Download the system version you need</p>
-    </div>
     
-    <div class="downloads-container">
-        
-        <!-- ============================================ -->
-        <!-- ARCHIVO 1: MAC INSTALLER                     -->
-        <!-- ============================================ -->
-        <div class="download-card">
-            <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
-            <h2>Mac Installer</h2>
-            <p>For macOS 10.15 and later. Intel & arm64</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" 
-               class="download-button" 
-               download
-               onclick="trackDownload('Codalyzer_Installer_MAC.zip', 'Mac Installer')">Download</a>
+    <!-- ========================================== -->
+    <!-- CONTENIDO PARA ESCRITORIO                  -->
+    <!-- ========================================== -->
+    
+    <div id="desktop-content">
+        <div class="header">
+            <h1>Codalyzer <span id="version">loading...</span></h1>
+            <p>Download the system version you need</p>
         </div>
         
-        <!-- ============================================ -->
-        <!-- ARCHIVO 2: WINDOWS INSTALLER                 -->
-        <!-- ============================================ -->
-        <div class="download-card">
-            <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
-            <h2>Windows Installer</h2>
-            <p>For Windows 10 & 11</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" 
-               class="download-button" 
-               download
-               onclick="trackDownload('Codalyzer_Installer_WIN.rar', 'Windows Installer')">Download</a>
-        </div>
-        
-        <!-- ============================================ -->
-        <!-- ARCHIVO 3: CHANGE LOG                        -->
-        <!-- ============================================ -->
-        <div class="download-card">
-            <span class="download-icon text-icon">📋</span>
-            <h2>Change Log</h2>
-            <p>Version history and updates</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
-               class="download-button" 
-               target="_blank"
-               onclick="trackDownload('Change_Log.txt', 'Change Log')">View</a>
-        </div>
+        <div class="downloads-container">
+            
+            <!-- MAC INSTALLER -->
+            <div class="download-card">
+                <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
+                <h2>Mac Installer</h2>
+                <p>For macOS 10.15 and later. Intel & arm64.</p>
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" 
+                   class="download-button" 
+                   download
+                   onclick="trackDownload('Codalyzer_Installer_MAC.zip', 'Mac Installer')">Download</a>
+            </div>
+            
+            <!-- WINDOWS INSTALLER -->
+            <div class="download-card">
+                <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
+                <h2>Windows Installer</h2>
+                <p>For Windows 10 & 11</p>
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" 
+                   class="download-button" 
+                   download
+                   onclick="trackDownload('Codalyzer_Installer_WIN.rar', 'Windows Installer')">Download</a>
+            </div>
+            
+            <!-- CHANGE LOG -->
+            <div class="download-card">
+                <span class="download-icon text-icon">📋</span>
+                <h2>Change Log</h2>
+                <p>Version history and updates</p>
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
+                   class="download-button" 
+                   target="_blank"
+                   onclick="trackDownload('Change_Log.txt', 'Change Log')">View</a>
+            </div>
 
+        </div>
+        
+        <div class="back-link">
+            <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main page</a>
+        </div>
     </div>
     
-    <div class="back-link">
-        <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main page</a>
+    <!-- ========================================== -->
+    <!-- CONTENIDO PARA MÓVIL/TABLET                -->
+    <!-- ========================================== -->
+    
+    <div id="mobile-warning">
+        <div class="warning-container">
+            <div class="warning-icon">💻</div>
+            <h1 class="warning-title">Desktop Only</h1>
+            <p class="warning-message">
+                This app is not available for mobile or tablet devices
+            </p>
+            <p class="warning-submessage">
+                Codalyzer is a desktop application designed for Windows and macOS systems. 
+                Please visit this page from a desktop or laptop computer to download.
+            </p>
+            
+            <div class="device-icons">
+                <span class="desktop-icon">🖥️</span>
+                <span class="mobile-icon">📱</span>
+            </div>
+            
+            <div class="warning-footer">
+                <p>Need help? Visit our <a href="https://soundinsda.github.io/Soundins_website/index.html">main page</a></p>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Fetch version from version.json
-        console.log('Starting to fetch version.json');
-        fetch('version.json')
-            .then(response => {
-                console.log('Fetch response:', response);
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                return response.json();
-            })
-            .then(data => {
-                console.log('JSON data received:', data);
-                console.log('data.version:', data.version);
-                
-                // Extract the three numbers separated by dots
-                let versionString = '';
-                
-                // Try different possible JSON structures
-                if (data.version) {
-                    versionString = data.version;
-                    console.log('Found version in data.version:', versionString);
-                } else if (data.Version) {
-                    versionString = data.Version;
-                    console.log('Found version in data.Version:', versionString);
-                } else if (Array.isArray(data) && data.length >= 3) {
-                    versionString = data.slice(0, 3).join('.');
-                    console.log('Found version in array:', versionString);
-                } else {
-                    // If it's just numbers in the first property
-                    const firstKey = Object.keys(data)[0];
-                    versionString = data[firstKey];
-                    console.log('Found version in first key:', versionString);
-                }
-                
-                // Display the version
-                const finalVersion = 'v' + versionString;
-                console.log('Setting version text to:', finalVersion);
-                document.getElementById('version').textContent = finalVersion;
-            })
-            .catch(error => {
-                console.error('Error loading version:', error);
-                console.error('Error details:', error.message);
-                document.getElementById('version').textContent = '';
-            });
+        // Fetch version from version.json (solo para desktop)
+        if (!isMobileOrTablet()) {
+            console.log('Starting to fetch version.json');
+            fetch('version.json')
+                .then(response => {
+                    console.log('Fetch response:', response);
+                    console.log('Response status:', response.status);
+                    console.log('Response ok:', response.ok);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('JSON data received:', data);
+                    console.log('data.version:', data.version);
+                    
+                    // Extract the three numbers separated by dots
+                    let versionString = '';
+                    
+                    // Try different possible JSON structures
+                    if (data.version) {
+                        versionString = data.version;
+                        console.log('Found version in data.version:', versionString);
+                    } else if (data.Version) {
+                        versionString = data.Version;
+                        console.log('Found version in data.Version:', versionString);
+                    } else if (Array.isArray(data) && data.length >= 3) {
+                        versionString = data.slice(0, 3).join('.');
+                        console.log('Found version in array:', versionString);
+                    } else {
+                        // If it's just numbers in the first property
+                        const firstKey = Object.keys(data)[0];
+                        versionString = data[firstKey];
+                        console.log('Found version in first key:', versionString);
+                    }
+                    
+                    // Display the version
+                    const finalVersion = 'v' + versionString;
+                    console.log('Setting version text to:', finalVersion);
+                    document.getElementById('version').textContent = finalVersion;
+                })
+                .catch(error => {
+                    console.error('Error loading version:', error);
+                    console.error('Error details:', error.message);
+                    document.getElementById('version').textContent = '';
+                });
+        }
     </script>
 </body>
 </html>
