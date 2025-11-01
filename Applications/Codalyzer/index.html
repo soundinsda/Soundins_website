@@ -38,6 +38,12 @@
             color: #aaa;
         }
         
+        #version {
+            color: #aaa;
+            font-size: 0.6em;
+            font-weight: normal;
+        }
+        
         .downloads-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -138,8 +144,8 @@
 </head>
 <body>
     <div class="header">
-        <h1>Codalyzer</h1>
-        <p>Download the version you need</p>
+        <h1>Codalyzer <span id="version">loading...</span></h1>
+        <p>Download the system version you need</p>
     </div>
     
     <div class="downloads-container">
@@ -151,8 +157,8 @@
         <div class="download-card">
             <span class="download-icon mac-icon">🍎</span>
             <h2>Mac Installer</h2>
-            <p>For macOS systems</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.rar" class="download-button" download>Download .rar</a>
+            <p>For macOS 10.15 and later</p>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" class="download-button" download>Download</a>
         </div>
         
         <!-- ============================================ -->
@@ -162,8 +168,8 @@
         <div class="download-card">
             <span class="download-icon windows-icon">🪟</span>
             <h2>Windows Installer</h2>
-            <p>For Windows systems</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.zip" class="download-button" download>Download .zip</a>
+            <p>For Windows 10 & 11</p>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" class="download-button" download>Download</a>
         </div>
         
         <!-- ============================================ -->
@@ -180,7 +186,53 @@
     </div>
     
     <div class="back-link">
-        <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main site</a>
+        <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main page</a>
     </div>
+
+    <script>
+        // Fetch version from version.json
+        console.log('Starting to fetch version.json');
+        fetch('version.json')
+            .then(response => {
+                console.log('Fetch response:', response);
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                return response.json();
+            })
+            .then(data => {
+                console.log('JSON data received:', data);
+                console.log('data.version:', data.version);
+                
+                // Extract the three numbers separated by dots
+                let versionString = '';
+                
+                // Try different possible JSON structures
+                if (data.version) {
+                    versionString = data.version;
+                    console.log('Found version in data.version:', versionString);
+                } else if (data.Version) {
+                    versionString = data.Version;
+                    console.log('Found version in data.Version:', versionString);
+                } else if (Array.isArray(data) && data.length >= 3) {
+                    versionString = data.slice(0, 3).join('.');
+                    console.log('Found version in array:', versionString);
+                } else {
+                    // If it's just numbers in the first property
+                    const firstKey = Object.keys(data)[0];
+                    versionString = data[firstKey];
+                    console.log('Found version in first key:', versionString);
+                }
+                
+                // Display the version
+                const finalVersion = 'v' + versionString;
+                console.log('Setting version text to:', finalVersion);
+                document.getElementById('version').textContent = finalVersion;
+            })
+            .catch(error => {
+                console.error('Error loading version:', error);
+                console.error('Error details:', error.message);
+                document.getElementById('version').textContent = '';
+            });
+    </script>
 </body>
 </html>
