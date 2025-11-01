@@ -70,9 +70,12 @@
         }
         
         .download-icon {
+            width: 80px;
+            height: 80px;
             font-size: 80px;
-            margin-bottom: 20px;
+            margin: 0 auto 20px;
             display: block;
+            object-fit: contain;
         }
         
         .mac-icon { color: #999; }
@@ -137,6 +140,8 @@
             }
             
             .download-icon {
+                width: 60px;
+                height: 60px;
                 font-size: 60px;
             }
         }
@@ -153,9 +158,9 @@
         <!-- ============================================ -->
         <!-- ARCHIVO 1: MAC INSTALLER                     -->
         <!-- ============================================ -->
-        <!-- Para cambiar el nombre del archivo, edita la parte después de "Codalyzer/" -->
+        <!-- Para cambiar la imagen: cambia "apple_icon.png" por tu archivo PNG -->
         <div class="download-card">
-            <span class="download-icon mac-icon">🍎</span>
+            <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
             <h2>Mac Installer</h2>
             <p>For macOS 10.15 and later</p>
             <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" class="download-button" download>Download</a>
@@ -166,7 +171,7 @@
         <!-- ============================================ -->
         <!-- Para cambiar el nombre del archivo, edita la parte después de "Codalyzer/" -->
         <div class="download-card">
-            <span class="download-icon windows-icon">🪟</span>
+            <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
             <h2>Windows Installer</h2>
             <p>For Windows 10 & 11</p>
             <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" class="download-button" download>Download</a>
