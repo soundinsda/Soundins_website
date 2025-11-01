@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codalyzer - Downloads</title>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+        
+        // Función para trackear descargas
+        function trackDownload(fileName, downloadType) {
+            gtag('event', 'download', {
+                'event_category': 'Downloads',
+                'event_label': fileName,
+                'download_type': downloadType,
+                'value': 1
+            });
+            console.log('Download tracked:', fileName);
+        }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -158,34 +179,40 @@
         <!-- ============================================ -->
         <!-- ARCHIVO 1: MAC INSTALLER                     -->
         <!-- ============================================ -->
-        <!-- Para cambiar la imagen: cambia "apple_icon.png" por tu archivo PNG -->
         <div class="download-card">
             <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
             <h2>Mac Installer</h2>
             <p>For macOS 10.15 and later</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" class="download-button" download>Download</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" 
+               class="download-button" 
+               download
+               onclick="trackDownload('Codalyzer_Installer_MAC.zip', 'Mac Installer')">Download</a>
         </div>
         
         <!-- ============================================ -->
         <!-- ARCHIVO 2: WINDOWS INSTALLER                 -->
         <!-- ============================================ -->
-        <!-- Para cambiar el nombre del archivo, edita la parte después de "Codalyzer/" -->
         <div class="download-card">
             <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
             <h2>Windows Installer</h2>
             <p>For Windows 10 & 11</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" class="download-button" download>Download</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" 
+               class="download-button" 
+               download
+               onclick="trackDownload('Codalyzer_Installer_WIN.rar', 'Windows Installer')">Download</a>
         </div>
         
         <!-- ============================================ -->
         <!-- ARCHIVO 3: CHANGE LOG                        -->
         <!-- ============================================ -->
-        <!-- Para cambiar el nombre del archivo, edita la parte después de "Codalyzer/" -->
         <div class="download-card">
-            <span class="download-icon text-icon">📝</span>
+            <span class="download-icon text-icon">📋</span>
             <h2>Change Log</h2>
             <p>Version history and updates</p>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" class="download-button" target="_blank">View</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
+               class="download-button" 
+               target="_blank"
+               onclick="trackDownload('Change_Log.txt', 'Change Log')">View</a>
         </div>
 
     </div>
