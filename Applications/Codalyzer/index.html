@@ -305,7 +305,7 @@
     
     <div id="desktop-content">
         <div class="header">
-            <h1>Codalyzer <span id="version">loading...</span></h1>
+            <h1>Codalyzer <span id="version">v1.2.0</span></h1>
             <p>Download the system version you need</p>
         </div>
         
@@ -421,7 +421,8 @@
                 .catch(error => {
                     console.error('Error loading version:', error);
                     console.error('Error details:', error.message);
-                    document.getElementById('version').textContent = '';
+                    // Si falla, mostrar versión por defecto
+                    document.getElementById('version').textContent = 'v1.2.0';
                 });
         }
     </script>
