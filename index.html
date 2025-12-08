@@ -1,430 +1,411 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!--v3.11-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codalyzer - Downloads</title>
+    <title>Soundins</title>
     
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMDC82JCM2"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGYL42Z2XP"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-ZMDC82JCM2');
-        
-        // Función para trackear descargas
-        function trackDownload(fileName, downloadType) {
-            gtag('event', 'download', {
-                'event_category': 'Downloads',
-                'event_label': fileName,
-                'download_type': downloadType,
-                'value': 1
-            });
-            console.log('Download tracked:', fileName);
-        }
-        
-        // Detección de dispositivos móviles/tablets
-        function isMobileOrTablet() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(userAgent);
-            const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            const isSmallScreen = window.innerWidth <= 1024;
-            
-            return isMobile || (isTouch && isSmallScreen);
-        }
-        
-        // Mostrar la página apropiada al cargar
-        window.addEventListener('DOMContentLoaded', function() {
-            if (isMobileOrTablet()) {
-                document.getElementById('desktop-content').style.display = 'none';
-                document.getElementById('mobile-warning').style.display = 'flex';
-            } else {
-                document.getElementById('desktop-content').style.display = 'flex';
-                document.getElementById('mobile-warning').style.display = 'none';
-            }
-        });
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FGYL42Z2XP');
     </script>
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+        }
+        h1 {
+            position: absolute;
+            top: 5px;
+            font-size: 24px;
+            z-index: 2;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            animation: wave 2s infinite ease-in-out;
+        }
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(2deg); }
+            50% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+        #credit {
             color: white;
             font-family: Arial, sans-serif;
-            min-height: 100vh;
-        }
-        
-        /* ========================================== */
-        /* ESTILOS PARA LA PÁGINA DE ESCRITORIO       */
-        /* ========================================== */
-        
-        #desktop-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
-        
-        .header {
+            font-size: 20px;
+            margin-top: -10px;
             text-align: center;
-            margin-bottom: 50px;
         }
-        
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            color: #4a9eff;
+        #email {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            margin-top: 10px;
+            text-align: center;
         }
-        
-        .header p {
-            font-size: 18px;
-            color: #aaa;
+        #email a {
+            color: blue;
+            text-decoration: none;
         }
-        
-        #version {
-            color: #4a9eff;
-            font-size: 0.6em;
-            font-weight: normal;
+        #email a:hover {
+            text-decoration: underline;
         }
-        
-        .downloads-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+        #menu-bar {
+            position: absolute;
+            top: 50px;
+            left: 0;
             width: 100%;
-            padding: 20px;
+            height: 50px;
+            background-color: #1a2b5f;
+            z-index: 1;
         }
-        
-        .download-card {
-            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            border: 2px solid #333;
+        #menu, #applications {
+            position: absolute;
+            top: 50px;
+            z-index: 3;
         }
-        
-        .download-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.3);
-            border-color: #4a9eff;
-        }
-        
-        .download-icon {
-            width: 80px;
-            height: 80px;
-            font-size: 80px;
-            margin: 0 auto 20px;
-            display: block;
-            object-fit: contain;
-        }
-        
-        .mac-icon { color: #999; }
-        .windows-icon { color: #00adef; }
-        .text-icon { color: #ffcc00; }
-        
-        .download-card h2 {
+        #menu { left: 20px; }
+        #applications { left: 180px; }
+        #menu-title, #applications-title {
             font-size: 24px;
-            margin-bottom: 10px;
-            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            color: white;
+            transition: color 0.3s;
         }
-        
-        .download-card p {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 20px;
+        #menu-title:hover, #applications-title:hover {
+            color: #ccc;
         }
-        
-        .download-button {
-            background-color: #4a9eff;
+        #menu-content, #applications-content {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background-color: #353535;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        #menu.active #menu-content, #applications.active #applications-content {
+            display: block;
+        }
+        #dither-menu {
+            position: relative;
+        }
+        #dither-btn {
+            background-color: transparent;
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 10px;
             cursor: pointer;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            width: 100%;
             transition: background-color 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .download-button:hover {
-            background-color: #357abd;
-        }
-        
-        .back-link {
-            margin-top: 50px;
-            text-align: center;
-        }
-        
-        .back-link a {
-            color: #4a9eff;
-            text-decoration: none;
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-        
-        .back-link a:hover {
-            color: #357abd;
-            text-decoration: underline;
-        }
-        
-        /* ========================================== */
-        /* ESTILOS PARA LA PÁGINA MÓVIL               */
-        /* ========================================== */
-        
-        #mobile-warning {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-        }
-        
-        .warning-container {
-            max-width: 500px;
-            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-            border-radius: 20px;
-            padding: 50px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 2px solid #333;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .warning-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-        }
-        
-        .warning-title {
-            font-size: 32px;
-            color: #4a9eff;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .warning-message {
-            font-size: 18px;
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .warning-submessage {
-            font-size: 15px;
-            color: #888;
-            margin-bottom: 30px;
+            font-size: 16px;
+            box-sizing: border-box;
             line-height: 1.5;
         }
-        
-        .device-icons {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            opacity: 0.6;
+        #dither-btn:hover {
+            background-color: #555;
         }
-        
-        .device-icons span {
-            font-size: 40px;
+        #dither-submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #353535;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            white-space: nowrap;
         }
-        
-        .desktop-icon {
-            color: #4a9eff;
+        #dither-menu.active #dither-submenu {
+            display: block;
         }
-        
-        .mobile-icon {
-            color: #ff4a4a;
-            text-decoration: line-through;
-        }
-        
-        .warning-footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #333;
-        }
-        
-        .warning-footer p {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .warning-footer a {
-            color: #4a9eff;
+        .submenu-item {
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            width: 100%;
+            transition: background-color 0.3s;
+            display: block;
             text-decoration: none;
-            transition: color 0.3s;
+            font-size: 16px;
+            box-sizing: border-box;
+            line-height: 1.5;
         }
-        
-        .warning-footer a:hover {
-            color: #357abd;
-            text-decoration: underline;
+        .submenu-item:hover {
+            background-color: #555;
+        }
+        /* Media queries para móviles */
+        @media only screen and (max-width: 768px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 10px;
+                overflow-y: auto;
+            }
+            h1 {
+                position: static;
+                font-size: 18px;
+                margin: 10px 0;
+            }
+            #menu-bar {
+                position: static;
+                height: 80px;
+                margin: 10px 0;
+            }
+            #menu, #applications {
+                position: static;
+                left: 0;
+                width: 100%;
+            }
+            #menu-title, #applications-title {
+                font-size: 18px;
+                padding: 8px;
+                background-color: #1a2b5f;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            #menu-content, #applications-content {
+                top: 100%;
+                width: 100%;
+                left: 0;
+                position: relative;
+                border-radius: 0;
+            }
+            #dither-submenu {
+                position: static;
+                width: 100%;
+                left: 0;
+            }
+            img {
+                max-width: 60%;
+                margin: 20px 0;
+            }
+            #credit {
+                font-size: 16px;
+                margin: 10px 0;
+            }
+            #email {
+                font-size: 20px;
+                margin: 10px 0;
+            }
+        }
+        /* Ajustes para orientación horizontal en móviles */
+        @media only screen and (max-width: 1024px) and (orientation: landscape) {
+            body {
+                height: auto;
+                overflow-y: auto;
+            }
+            h1 {
+                position: absolute;
+                top: 5px;
+                left: 0;
+                width: 100%;
+                font-size: 18px;
+                margin: 0;
+            }
+            #menu-bar {
+                position: absolute;
+                top: 20px;
+                left: 0;
+                width: 100%;
+                height: 40px;
+            }
+            #menu, #applications {
+                position: absolute;
+                top: 30px;
+                width: auto;
+            }
+            #menu { left: 10px; }
+            #applications { left: 170px; }
+            #menu-title, #applications-title {
+                font-size: 18px;
+                padding: 10px;
+            }
+            #menu-content, #applications-content {
+                top: 40px;
+                left: 0;
+                width: 200px;
+            }
+            #dither-submenu {
+                left: 100%;
+                top: 0;
+                width: 200px;
+            }
+            img {
+                margin-top: 10px;
+            }
+            #credit {
+                margin-top: -10vh;
+            }
+            #email {
+                margin-top: 0vh;
+            }
+        }
+        /* Ajustes para orientación vertical en móviles */
+        @media only screen and (max-width: 768px) and (orientation: portrait) {
+            body {
+                padding: 0;
+            }
+            h1 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                margin: 5px 0;
+                font-size: 18px;
+            }
+            #menu-bar {
+                position: absolute;
+                top: 50px;
+                height: 50px;
+                margin: 0;
+            }
+            #menu, #applications {
+                position: absolute;
+                width: auto;
+            }
+            #menu { 
+                top: 50px; 
+                left: 10px; 
+            }
+            #applications { 
+                top: 50px; 
+                left: 160px; 
+            }
+            #menu-title, #applications-title {
+                font-size: 18px;
+                padding: 5px 10px;
+            }
+            img {
+                margin-top: -30px;
+            }
         }
     </style>
 </head>
 <body>
-    
-    <!-- ========================================== -->
-    <!-- CONTENIDO PARA ESCRITORIO                  -->
-    <!-- ========================================== -->
-    
-    <div id="desktop-content">
-        <div class="header">
-            <h1>Codalyzer <span id="version">v1.2.0</span></h1>
-            <p>Download the system version you need</p>
-        </div>
-        
-        <div class="downloads-container">
-            
-            <!-- MAC INSTALLER -->
-            <div class="download-card">
-                <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
-                <h2>Mac Installer</h2>
-                <p>For macOS 10.15 and later. Intel & arm64.</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" 
-                   class="download-button" 
-                   download
-                   onclick="trackDownload('Codalyzer_Installer_MAC.zip', 'Mac Installer')">Download</a>
+    <h1>Site under construction</h1>
+    <div id="menu-bar"></div>
+    <div id="menu">
+        <div id="menu-title">Publications</div>
+        <div id="menu-content">
+            <div id="dither-menu">
+                <button id="dither-btn">Dither</button>
+                <div id="dither-submenu">
+                    <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither_Article/DitherNS_Article.html" target="_blank" class="submenu-item" id="dither-article">Dither & NS Article</a>
+                    <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither/DitherNS_Tool_Main.html" target="_blank" class="submenu-item" id="dither-tool">Dither & NS Benchmark Tool</a>
+                </div>
             </div>
-            
-            <!-- WINDOWS INSTALLER -->
-            <div class="download-card">
-                <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
-                <h2>Windows Installer</h2>
-                <p>For Windows 10 & 11</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" 
-                   class="download-button" 
-                   download
-                   onclick="trackDownload('Codalyzer_Installer_WIN.rar', 'Windows Installer')">Download</a>
-            </div>
-            
-            <!-- CHANGE LOG -->
-            <div class="download-card">
-                <span class="download-icon text-icon">📋</span>
-                <h2>Change Log</h2>
-                <p>Version history and updates</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
-                   class="download-button" 
-                   target="_blank"
-                   onclick="trackDownload('Change_Log.txt', 'Change Log')">View</a>
-            </div>
-
-        </div>
-        
-        <div class="back-link">
-            <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main page</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</a>
         </div>
     </div>
-    
-    <!-- ========================================== -->
-    <!-- CONTENIDO PARA MÓVIL/TABLET                -->
-    <!-- ========================================== -->
-    
-    <div id="mobile-warning">
-        <div class="warning-container">
-            <div class="warning-icon">💻</div>
-            <h1 class="warning-title">Desktop Only</h1>
-            <p class="warning-message">
-                This app is not available for mobile or tablet devices
-            </p>
-            <p class="warning-submessage">
-                Codalyzer is a desktop application designed for Windows and macOS systems. 
-                Please visit this page from a desktop or laptop computer to download.
-            </p>
-            
-            <div class="device-icons">
-                <span class="desktop-icon">🖥️</span>
-                <span class="mobile-icon">📱</span>
-            </div>
-            
-            <div class="warning-footer">
-                <p>Back to <a href="https://soundinsda.github.io/Soundins_website/index.html">main page</a></p>
-            </div>
+    <div id="applications">
+        <div id="applications-title">Applications</div>
+        <div id="applications-content">
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/" class="submenu-item" id="codalyzer-item">Codalyzer</a>
         </div>
     </div>
-
+    <img id="logo" alt="Soundins Logo">
+    <p id="credit">by Pablo Panitta</p>
+    <p id="email"><a href="mailto:soundinsda@gmail.com">soundinsda@gmail.com</a></p>
+    
     <script>
-        // Fetch version from version.json (solo para desktop)
-        if (!isMobileOrTablet()) {
-            console.log('Starting to fetch version.json');
-            fetch('version.json')
-                .then(response => {
-                    console.log('Fetch response:', response);
-                    console.log('Response status:', response.status);
-                    console.log('Response ok:', response.ok);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('JSON data received:', data);
-                    console.log('data.version:', data.version);
-                    
-                    // Extract the three numbers separated by dots
-                    let versionString = '';
-                    
-                    // Try different possible JSON structures
-                    if (data.version) {
-                        versionString = data.version;
-                        console.log('Found version in data.version:', versionString);
-                    } else if (data.Version) {
-                        versionString = data.Version;
-                        console.log('Found version in data.Version:', versionString);
-                    } else if (Array.isArray(data) && data.length >= 3) {
-                        versionString = data.slice(0, 3).join('.');
-                        console.log('Found version in array:', versionString);
+        document.addEventListener("DOMContentLoaded", function() {
+            // Menu toggle for mobile
+            const menu = document.getElementById("menu");
+            const menuTitle = document.getElementById("menu-title");
+            const ditherBtn = document.getElementById("dither-btn");
+            const ditherMenu = document.getElementById("dither-menu");
+            const ditherSubmenu = document.getElementById("dither-submenu");
+            const applications = document.getElementById("applications");
+            const applicationsTitle = document.getElementById("applications-title");
+
+            // Toggle Publications menu
+            menuTitle.addEventListener("click", function(e) {
+                e.preventDefault();
+                menu.classList.toggle("active");
+                applications.classList.remove("active");
+            });
+
+            // Toggle Dither submenu
+            ditherBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                ditherMenu.classList.toggle("active");
+            });
+
+            // Toggle Applications menu
+            applicationsTitle.addEventListener("click", function(e) {
+                e.preventDefault();
+                applications.classList.toggle("active");
+                menu.classList.remove("active");
+            });
+
+            // Close menus when clicking outside
+            document.addEventListener("click", function(e) {
+                if (!menu.contains(e.target) && !applications.contains(e.target)) {
+                    menu.classList.remove("active");
+                    ditherMenu.classList.remove("active");
+                    applications.classList.remove("active");
+                }
+            });
+
+            // Logo loading
+            var logo = document.getElementById("logo");
+            var possiblePaths = [
+                "Soundins.png",
+                "./Soundins.png",
+                "/Soundins.png",
+                "assets/Soundins.png",
+                "images/Soundins.png"
+            ];
+
+            function checkImage(url, callback) {
+                var img = new Image();
+                img.onload = function() { callback(true, url); };
+                img.onerror = function() { callback(false, url); };
+                img.src = url;
+            }
+
+            function findValidImage(paths) {
+                if (paths.length === 0) {
+                    console.error("No valid image found in any of the specified paths.");
+                    logo.alt = "Image not found";
+                    return;
+                }
+                var path = paths.shift();
+                checkImage(path, function(success, validUrl) {
+                    if (success) {
+                        logo.src = validUrl;
                     } else {
-                        // If it's just numbers in the first property
-                        const firstKey = Object.keys(data)[0];
-                        versionString = data[firstKey];
-                        console.log('Found version in first key:', versionString);
+                        findValidImage(paths);
                     }
-                    
-                    // Display the version
-                    const finalVersion = 'v' + versionString;
-                    console.log('Setting version text to:', finalVersion);
-                    document.getElementById('version').textContent = finalVersion;
-                })
-                .catch(error => {
-                    console.error('Error loading version:', error);
-                    console.error('Error details:', error.message);
-                    // Si falla, mostrar versión por defecto
-                    document.getElementById('version').textContent = 'v1.2.0';
                 });
-        }
+            }
+
+            findValidImage(possiblePaths);
+        });
     </script>
 </body>
 </html>
