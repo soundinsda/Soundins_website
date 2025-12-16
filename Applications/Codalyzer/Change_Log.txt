@@ -1,4 +1,13 @@
 Version		Changes
 
-1.1.1		Initial release
+1.0.0		- Initial Release
+
+1.1.0		- Internal version (not released)
+
+1.2.0		- Addition of tabs for visualization of wav/flac and encoded analysis simulation with Link Tab capability (New)
+		- Export clipping list to .txt file (New)
+		- Selection of Clipping / Max Peaks visualization (New)
+		- Freeze visualization (New)
+		- Improvements in graphics rendering (Improvement)
+			
 
