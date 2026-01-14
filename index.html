@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v3.11-->
+<!DOCTYPE html><!--v3.12-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,14 +73,15 @@
             background-color: #1a2b5f;
             z-index: 1;
         }
-        #menu, #applications {
+        #menu, #applications, #plugins {
             position: absolute;
             top: 50px;
             z-index: 3;
         }
         #menu { left: 20px; }
-        #applications { left: 180px; }
-        #menu-title, #applications-title {
+        #plugins { left: 180px; }
+        #applications { left: 310px; }
+        #menu-title, #applications-title, #plugins-title {
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
@@ -88,10 +89,10 @@
             color: white;
             transition: color 0.3s;
         }
-        #menu-title:hover, #applications-title:hover {
+        #menu-title:hover, #applications-title:hover, #plugins-title:hover {
             color: #ccc;
         }
-        #menu-content, #applications-content {
+        #menu-content, #applications-content, #plugins-content {
             display: none;
             position: absolute;
             top: 40px;
@@ -101,7 +102,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
         }
-        #menu.active #menu-content, #applications.active #applications-content {
+        #menu.active #menu-content, #applications.active #applications-content, #plugins.active #plugins-content {
             display: block;
         }
         #dither-menu {
@@ -172,22 +173,22 @@
             }
             #menu-bar {
                 position: static;
-                height: 80px;
+                height: 120px;
                 margin: 10px 0;
             }
-            #menu, #applications {
+            #menu, #applications, #plugins {
                 position: static;
                 left: 0;
                 width: 100%;
             }
-            #menu-title, #applications-title {
+            #menu-title, #applications-title, #plugins-title {
                 font-size: 18px;
                 padding: 8px;
                 background-color: #1a2b5f;
                 width: 100%;
                 box-sizing: border-box;
             }
-            #menu-content, #applications-content {
+            #menu-content, #applications-content, #plugins-content {
                 top: 100%;
                 width: 100%;
                 left: 0;
@@ -233,18 +234,19 @@
                 width: 100%;
                 height: 40px;
             }
-            #menu, #applications {
+            #menu, #applications, #plugins {
                 position: absolute;
                 top: 30px;
                 width: auto;
             }
             #menu { left: 10px; }
-            #applications { left: 170px; }
-            #menu-title, #applications-title {
+            #plugins { left: 170px; }
+            #applications { left: 280px; }
+            #menu-title, #applications-title, #plugins-title {
                 font-size: 18px;
                 padding: 10px;
             }
-            #menu-content, #applications-content {
+            #menu-content, #applications-content, #plugins-content {
                 top: 40px;
                 left: 0;
                 width: 200px;
@@ -283,7 +285,7 @@
                 height: 50px;
                 margin: 0;
             }
-            #menu, #applications {
+            #menu, #applications, #plugins {
                 position: absolute;
                 width: auto;
             }
@@ -291,11 +293,15 @@
                 top: 50px; 
                 left: 10px; 
             }
-            #applications { 
+            #plugins { 
                 top: 50px; 
                 left: 160px; 
             }
-            #menu-title, #applications-title {
+            #applications { 
+                top: 50px; 
+                left: 270px; 
+            }
+            #menu-title, #applications-title, #plugins-title {
                 font-size: 18px;
                 padding: 5px 10px;
             }
@@ -321,6 +327,12 @@
             <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</a>
         </div>
     </div>
+    <div id="plugins">
+        <div id="plugins-title">Plugins</div>
+        <div id="plugins-content">
+            <a href="Plugins/OmniPass/index.html" class="submenu-item" id="omnipass-item">OmniPass</a>
+        </div>
+    </div>
     <div id="applications">
         <div id="applications-title">Applications</div>
         <div id="applications-content">
@@ -341,11 +353,14 @@
             const ditherSubmenu = document.getElementById("dither-submenu");
             const applications = document.getElementById("applications");
             const applicationsTitle = document.getElementById("applications-title");
+            const plugins = document.getElementById("plugins");
+            const pluginsTitle = document.getElementById("plugins-title");
 
             // Toggle Publications menu
             menuTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 menu.classList.toggle("active");
+                plugins.classList.remove("active");
                 applications.classList.remove("active");
             });
 
@@ -355,19 +370,29 @@
                 ditherMenu.classList.toggle("active");
             });
 
+            // Toggle Plugins menu
+            pluginsTitle.addEventListener("click", function(e) {
+                e.preventDefault();
+                plugins.classList.toggle("active");
+                menu.classList.remove("active");
+                applications.classList.remove("active");
+            });
+
             // Toggle Applications menu
             applicationsTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 applications.classList.toggle("active");
                 menu.classList.remove("active");
+                plugins.classList.remove("active");
             });
 
             // Close menus when clicking outside
             document.addEventListener("click", function(e) {
-                if (!menu.contains(e.target) && !applications.contains(e.target)) {
+                if (!menu.contains(e.target) && !applications.contains(e.target) && !plugins.contains(e.target)) {
                     menu.classList.remove("active");
                     ditherMenu.classList.remove("active");
                     applications.classList.remove("active");
+                    plugins.classList.remove("active");
                 }
             });
 
