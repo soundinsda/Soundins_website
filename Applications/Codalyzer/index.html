@@ -3,432 +3,680 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codalyzer - Downloads</title>
-    
-    <!-- Google Analytics 4 -->
+    <title>Codalyzer — Codec Analyzer Toolbox</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMDC82JCM2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-ZMDC82JCM2');
-        
-        // Función para trackear descargas
         function trackDownload(fileName, downloadType) {
-            gtag('event', 'download', {
-                'event_category': 'Downloads',
-                'event_label': fileName,
-                'download_type': downloadType,
-                'value': 1
-            });
-            console.log('Download tracked:', fileName);
+            gtag('event', 'download', { 'event_category': 'Downloads', 'event_label': fileName, 'download_type': downloadType, 'value': 1 });
         }
-        
-        // Detección de dispositivos móviles/tablets
         function isMobileOrTablet() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(userAgent);
+            const ua = navigator.userAgent.toLowerCase();
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
             const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            const isSmallScreen = window.innerWidth <= 1024;
-            
-            return isMobile || (isTouch && isSmallScreen);
+            return isMobile || (isTouch && window.innerWidth <= 1024);
         }
-        
-        // Mostrar la página apropiada al cargar
         window.addEventListener('DOMContentLoaded', function() {
             if (isMobileOrTablet()) {
                 document.getElementById('desktop-content').style.display = 'none';
                 document.getElementById('mobile-warning').style.display = 'flex';
-            } else {
-                document.getElementById('desktop-content').style.display = 'flex';
-                document.getElementById('mobile-warning').style.display = 'none';
             }
         });
     </script>
-    
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --black:   #050506;
+            --dark1:   #0c0c0e;
+            --dark2:   #121214;
+            --border:  rgba(255,255,255,0.06);
+            --border2: rgba(255,255,255,0.13);
+            --red:     #e02020;
+            --red2:    #ff2828;
+            --text1:   #f4f4f6;
+            --text2:   #aaaabc;
+            --text3:   #606070;
+            --mono:    'Share Tech Mono', monospace;
         }
-        
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
         body {
-            background-color: #0a0a0a;
-            color: white;
-            font-family: Arial, sans-serif;
+            background: var(--black);
+            color: var(--text1);
+            font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        /* ========================================== */
-        /* ESTILOS PARA LA PÁGINA DE ESCRITORIO       */
-        /* ========================================== */
-        
-        #desktop-content {
+
+        body::after {
+            content:'';
+            position:fixed; inset:0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.022;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ══ NAV ══ */
+        nav {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            min-height: 100vh;
+            justify-content: space-between;
+            padding: 0 52px;
+            height: 56px;
+            background: rgba(5,5,6,0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            animation: fadeDown 0.4s ease both;
         }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
+            letter-spacing: 0.18em;
+            color: var(--red);
         }
-        
-        .header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            color: #4a9eff;
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        
-        .header p {
-            font-size: 18px;
-            color: #aaa;
+
+        .nav-back {
+            font-family: var(--mono);
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            color: var(--text2);
+            text-decoration: none;
+            transition: color 0.15s;
         }
-        
-        #version {
-            color: #4a9eff;
-            font-size: 0.6em;
-            font-weight: normal;
+        .nav-back:hover { color: var(--text1); }
+
+        .lang-switcher {
+            display: flex;
+            border: 1px solid var(--border2);
+            border-radius: 3px;
+            overflow: hidden;
         }
-        
-        .downloads-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            width: 100%;
-            padding: 20px;
-        }
-        
-        .download-card {
-            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            border: 2px solid #333;
-        }
-        
-        .download-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.3);
-            border-color: #4a9eff;
-        }
-        
-        .download-icon {
-            width: 80px;
-            height: 80px;
-            font-size: 80px;
-            margin: 0 auto 20px;
-            display: block;
-            object-fit: contain;
-        }
-        
-        .mac-icon { color: #999; }
-        .windows-icon { color: #00adef; }
-        .text-icon { color: #ffcc00; }
-        
-        .download-card h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        
-        .download-card p {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 20px;
-        }
-        
-        .download-button {
-            background-color: #4a9eff;
-            color: white;
+        .lang-btn {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            padding: 5px 14px;
+            background: transparent;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
+            color: var(--text2);
             cursor: pointer;
-            transition: background-color 0.3s;
-            text-decoration: none;
-            display: inline-block;
+            transition: all 0.15s;
         }
-        
-        .download-button:hover {
-            background-color: #357abd;
+        .lang-btn + .lang-btn { border-left: 1px solid var(--border2); }
+        .lang-btn:hover { color: var(--text1); background: rgba(255,255,255,0.05); }
+        .lang-btn.active { background: var(--red); color: #fff; }
+
+        /* ══ HERO + DOWNLOAD: two-column layout ══ */
+        .hero-row {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            min-height: 360px;
+            border-bottom: 1px solid var(--border);
+            animation: fadeDown 0.5s 0.05s ease both;
+            position: relative;
+            align-items: start;
+            padding-right: 32px;
         }
-        
-        .back-link {
-            margin-top: 50px;
-            text-align: center;
-        }
-        
-        .back-link a {
-            color: #4a9eff;
-            text-decoration: none;
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-        
-        .back-link a:hover {
-            color: #357abd;
-            text-decoration: underline;
-        }
-        
-        /* ========================================== */
-        /* ESTILOS PARA LA PÁGINA MÓVIL               */
-        /* ========================================== */
-        
-        #mobile-warning {
-            display: none;
+
+        /* Left: hero */
+        .hero {
+            position: relative;
+            display: flex;
             flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            padding: 20px 52px 40px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 80% at 30% 50%, rgba(180,20,20,0.09) 0%, transparent 65%),
+                linear-gradient(180deg, var(--dark1) 0%, var(--black) 100%);
+        }
+        .hero-bg::after {
+            content:'';
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent, transparent 3px,
+                rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px
+            );
+        }
+
+		.hero-content { position: relative; z-index: 1; }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 16px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--red2);
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 140px;
+            line-height: 0.88;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            margin-bottom: 18px;
+        }
+
+        .hero-version {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            color: var(--text3);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border2);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 22px;
+        }
+
+        .hero-tagline {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text2);
+            line-height: 1.6;
+            max-width: 520px;
+        }
+
+        /* Right: download panel */
+        .download-panel {
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+            background: var(--dark1);
+            margin-top: 48px;
+            margin-right: 32px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(180,180,190,0.22);
+            border-radius: 6px;
+            overflow: hidden;
+            align-self: flex-start;
+        }
+
+        .dl-panel-header {
+            padding: 20px 28px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dl-panel-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 0.18em;
+            color: var(--text1);
+        }
+
+        .dl-panel-items {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .dl-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 28px;
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .dl-item:last-child { border-bottom: none; }
+        .dl-item:hover { background: rgba(255,255,255,0.04); }
+
+        .dl-item img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            filter: brightness(0.5) saturate(0);
+            transition: filter 0.15s;
+            flex-shrink: 0;
+        }
+        .dl-item:hover img { filter: brightness(1) saturate(1); }
+
+        .dl-emoji {
+            font-size: 32px;
+            opacity: 0.4;
+            line-height: 1;
+            flex-shrink: 0;
+            width: 36px;
+            text-align: center;
+            transition: opacity 0.15s;
+        }
+        .dl-item:hover .dl-emoji { opacity: 1; }
+
+        .dl-info {}
+        .dl-name {
+            font-family: var(--mono);
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text1);
+            display: block;
+            margin-bottom: 3px;
+        }
+        .dl-sub {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: var(--text3);
+        }
+
+        /* ══ DESCRIPTION ══ */
+        .desc-section {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 56px 52px 48px;
+            animation: fadeDown 0.5s 0.1s ease both;
+        }
+
+        .overview-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            letter-spacing: 0.1em;
+            color: var(--text1);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .overview-label::after {
+            content:'';
+            flex:1;
+            height: 1px;
+            background: var(--border2);
+        }
+
+        .desc-lang { display: none; }
+        .desc-lang.active { display: block; }
+
+        .desc-body {
+            font-size: 19px;
+            font-weight: 300;
+            line-height: 1.85;
+            color: var(--text2);
+        }
+
+        .format-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 36px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+        .format-col-title {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--red2);
+            margin-bottom: 10px;
+        }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            font-family: var(--mono);
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 2px;
+            border: 1px solid var(--border2);
+            color: var(--text1);
+            background: rgba(255,255,255,0.04);
+            letter-spacing: 0.05em;
+        }
+
+        /* ══ SCREENSHOTS ══ */
+        .screenshots-section {
+            padding: 0 52px 64px;
+            max-width: 860px;
+            margin: 0 auto;
+            animation: fadeDown 0.5s 0.15s ease both;
+        }
+
+        .section-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .section-label::after {
+            content:'';
+            flex:1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .shot-card {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--dark2);
+            cursor: zoom-in;
+            transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+        }
+        .shot-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .shot-card img {
+            width: 100%;
+            display: block;
+            opacity: 0.82;
+            transition: opacity 0.22s;
+        }
+        .shot-card:hover img { opacity: 1; }
+        .shot-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 10px 14px;
+            background: linear-gradient(0deg, rgba(5,5,6,0.9) 0%, transparent 100%);
+        }
+        .shot-caption {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            color: var(--text2);
+            text-transform: uppercase;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(5,5,6,0.97);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            cursor: zoom-out;
         }
-        
-        .warning-container {
-            max-width: 500px;
-            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-            border-radius: 20px;
-            padding: 50px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 2px solid #333;
-            animation: fadeInUp 0.6s ease-out;
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 92vw; max-height: 88vh; border: 1px solid var(--border2); border-radius: 4px; }
+        .lightbox-close {
+            position: fixed; top: 20px; right: 28px;
+            font-family: var(--mono); font-size: 20px;
+            color: var(--text3); cursor: pointer; transition: color 0.15s;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .warning-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-        }
-        
-        .warning-title {
-            font-size: 32px;
-            color: #4a9eff;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .warning-message {
-            font-size: 18px;
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .warning-submessage {
-            font-size: 15px;
-            color: #888;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        
-        .device-icons {
+        .lightbox-close:hover { color: var(--text1); }
+
+        /* ══ FOOTER ══ */
+        footer {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            opacity: 0.6;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 52px;
+            border-top: 1px solid var(--border);
+            background: var(--black);
         }
-        
-        .device-icons span {
-            font-size: 40px;
+        .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.18em; color: var(--red); opacity: 0.7; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-link {
+            font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em;
+            color: var(--text2); text-decoration: none; transition: color 0.15s;
         }
-        
-        .desktop-icon {
-            color: #4a9eff;
+        .footer-link:hover { color: var(--text1); }
+
+        @keyframes fadeDown {
+            from { opacity:0; transform: translateY(-10px); }
+            to   { opacity:1; transform: translateY(0); }
         }
-        
-        .mobile-icon {
-            color: #ff4a4a;
-            text-decoration: line-through;
+
+        /* ══ MOBILE ══ */
+        #mobile-warning {
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh; padding: 40px 20px; text-align: center;
         }
-        
-        .warning-footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #333;
+        .warning-container {
+            max-width: 420px; background: var(--dark2); border-radius: 8px;
+            padding: 48px 28px; border: 1px solid var(--border2); animation: fadeDown 0.5s ease both;
         }
-        
-        .warning-footer p {
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .warning-footer a {
-            color: #4a9eff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .warning-footer a:hover {
-            color: #357abd;
-            text-decoration: underline;
-        }
+        .warning-icon { font-size: 56px; margin-bottom: 22px; }
+        .warning-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.1em; color: var(--red2); margin-bottom: 14px; }
+        .warning-message { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+        .warning-submessage { font-size: 13px; color: var(--text3); line-height: 1.5; }
+        .device-icons { display:flex; justify-content:center; gap:24px; margin-top:22px; opacity:0.35; font-size:32px; }
+        .warning-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border); }
+        .warning-footer p { font-size: 13px; color: var(--text3); }
+        .warning-footer a { color: var(--red2); text-decoration: none; }
     </style>
 </head>
 <body>
-    
-    <!-- ========================================== -->
-    <!-- CONTENIDO PARA ESCRITORIO                  -->
-    <!-- ========================================== -->
-    
-    <div id="desktop-content">
-        <div class="header">
-            <h1>Codalyzer <span id="version">v1.2.0</span></h1>
-            <p>Download the system version you need</p>
-        </div>
-        
-        <div class="downloads-container">
-            
-            <!-- MAC INSTALLER -->
-            <div class="download-card">
-                <img src="apple_icon.png" alt="Mac" class="download-icon mac-icon">
-                <h2>Mac Installer</h2>
-                <p>For macOS 10.15 and later. Intel & arm64.</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip" 
-                   class="download-button" 
-                   download
-                   onclick="trackDownload('Codalyzer_Installer_MAC.zip', 'Mac Installer')">Download</a>
-            </div>
-            
-            <!-- WINDOWS INSTALLER -->
-            <div class="download-card">
-                <img src="windows_icon.png" alt="Win" class="download-icon windows-icon">
-                <h2>Windows Installer</h2>
-                <p>For Windows 10 & 11</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar" 
-                   class="download-button" 
-                   download
-                   onclick="trackDownload('Codalyzer_Installer_WIN.rar', 'Windows Installer')">Download</a>
-            </div>
-            
-            <!-- CHANGE LOG -->
-            <div class="download-card">
-                <span class="download-icon text-icon">📋</span>
-                <h2>Change Log</h2>
-                <p>Version history and updates</p>
-                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt" 
-                   class="download-button" 
-                   target="_blank"
-                   onclick="trackDownload('Change_Log.txt', 'Change Log')">View</a>
-            </div>
 
-        </div>
-        
-        <div class="back-link">
-            <a href="https://soundinsda.github.io/Soundins_website/index.html">← Back to main page</a>
-            <span style="margin: 0 15px; color: #666;">|</span>
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Previous_Versions/" 
-               target="_blank"
-               onclick="trackDownload('Previous_Versions', 'Previous Versions')">Previous versions</a>
-        </div>
-    </div>
-    
-    <!-- ========================================== -->
-    <!-- CONTENIDO PARA MÓVIL/TABLET                -->
-    <!-- ========================================== -->
-    
-    <div id="mobile-warning">
-        <div class="warning-container">
-            <div class="warning-icon">💻</div>
-            <h1 class="warning-title">Desktop Only</h1>
-            <p class="warning-message">
-                This app is not available for mobile or tablet devices
-            </p>
-            <p class="warning-submessage">
-                Codalyzer is a desktop application designed for Windows and macOS systems. 
-                Please visit this page from a desktop or laptop computer to download.
-            </p>
-            
-            <div class="device-icons">
-                <span class="desktop-icon">🖥️</span>
-                <span class="mobile-icon">📱</span>
+<div id="desktop-content">
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">Soundins</div>
+        <div class="nav-right">
+            <a href="https://soundinsda.github.io/Soundins_website/index.html" class="nav-back">← Main Page</a>
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btn-en" onclick="setLang('en')">ENG</button>
+                <button class="lang-btn" id="btn-es" onclick="setLang('es')">ESP</button>
             </div>
-            
-            <div class="warning-footer">
-                <p>Back to <a href="https://soundinsda.github.io/Soundins_website/index.html">main page</a></p>
+        </div>
+    </nav>
+
+    <!-- HERO ROW: title left, downloads right -->
+    <div class="hero-row">
+
+        <div class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <div class="hero-eyebrow">Codec Analyzer Toolbox</div>
+                <h1 class="hero-title">CODALYZER</h1>
+                <div class="hero-version" id="version">v1.2.0</div>
+                <p class="hero-tagline" id="tagline-en">Know exactly what lossy codecs do to your masters — before it's too late.</p>
+                <p class="hero-tagline" id="tagline-es" style="display:none">Sabé exactamente qué hacen los codecs con pérdida a tus masters — antes de que sea tarde.</p>
+            </div>
+        </div>
+
+        <!-- DOWNLOAD PANEL -->
+        <div class="download-panel">
+            <div class="dl-panel-header">
+                <span class="dl-panel-title">Download</span>
+            </div>
+            <div class="dl-panel-items">
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip"
+                   class="dl-item" download
+                   onclick="trackDownload('Codalyzer_Installer_MAC.zip','Mac Installer')">
+                    <img src="apple_icon.png" alt="Mac">
+                    <div class="dl-info">
+                        <span class="dl-name">macOS</span>
+                        <span class="dl-sub">10.15+ · Intel · ARM</span>
+                    </div>
+                </a>
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar"
+                   class="dl-item" download
+                   onclick="trackDownload('Codalyzer_Installer_WIN.rar','Windows Installer')">
+                    <img src="windows_icon.png" alt="Win">
+                    <div class="dl-info">
+                        <span class="dl-name">Windows</span>
+                        <span class="dl-sub">Windows 10 / 11</span>
+                    </div>
+                </a>
+                <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt"
+                   class="dl-item" target="_blank"
+                   onclick="trackDownload('Change_Log.txt','Change Log')">
+                    <span class="dl-emoji">📋</span>
+                    <div class="dl-info">
+                        <span class="dl-name">Change Log</span>
+                        <span class="dl-sub">Version history</span>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Fetch version from version.json (solo para desktop)
-        if (!isMobileOrTablet()) {
-            console.log('Starting to fetch version.json');
-            fetch('version.json')
-                .then(response => {
-                    console.log('Fetch response:', response);
-                    console.log('Response status:', response.status);
-                    console.log('Response ok:', response.ok);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('JSON data received:', data);
-                    console.log('data.version:', data.version);
-                    
-                    // Extract the three numbers separated by dots
-                    let versionString = '';
-                    
-                    // Try different possible JSON structures
-                    if (data.version) {
-                        versionString = data.version;
-                        console.log('Found version in data.version:', versionString);
-                    } else if (data.Version) {
-                        versionString = data.Version;
-                        console.log('Found version in data.Version:', versionString);
-                    } else if (Array.isArray(data) && data.length >= 3) {
-                        versionString = data.slice(0, 3).join('.');
-                        console.log('Found version in array:', versionString);
-                    } else {
-                        // If it's just numbers in the first property
-                        const firstKey = Object.keys(data)[0];
-                        versionString = data[firstKey];
-                        console.log('Found version in first key:', versionString);
-                    }
-                    
-                    // Display the version
-                    const finalVersion = 'v' + versionString;
-                    console.log('Setting version text to:', finalVersion);
-                    document.getElementById('version').textContent = finalVersion;
-                })
-                .catch(error => {
-                    console.error('Error loading version:', error);
-                    console.error('Error details:', error.message);
-                    // Si falla, mostrar versión por defecto
-                    document.getElementById('version').textContent = 'v1.2.0';
-                });
-        }
-    </script>
+    <!-- DESCRIPTION -->
+    <div class="desc-section">
+        <div class="overview-label">Overview</div>
+
+        <div class="desc-lang active" id="desc-en">
+            <p class="desc-body">
+                Codalyzer is a tool designed to analyze the impact that codecs have on WAV and FLAC files.
+                It features an analysis window displaying the most important parameters to evaluate during the encoding process.
+                Values such as True Peak, Peak, RMS, etc., are measured before and after the conversion process.
+                <br><br>
+                It also includes a very comprehensive Waveform window where you can visualize the signal levels
+                with and without loss, making it possible to identify potential clipping in the lossy versions —
+                and all of this down to sample level.
+                <br><br>
+                It is a tool intended for mastering engineers to evaluate the degradations that their original
+                masters may suffer when subjected to lossy codecs.
+            </p>
+            <div class="format-row">
+                <div>
+                    <div class="format-col-title">Input</div>
+                    <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
+                </div>
+                <div>
+                    <div class="format-col-title">Output Codecs</div>
+                    <div class="tags">
+                        <span class="tag">MP3</span><span class="tag">AAC</span>
+                        <span class="tag">Vorbis</span><span class="tag">Opus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="desc-lang" id="desc-es">
+            <p class="desc-body">
+                Codalyzer es una herramienta orientada a analizar el impacto que los códecs realizan sobre archivos WAV y FLAC.
+                Posee una ventana de análisis de los parámetros más importantes a evaluar en el proceso de codificación.
+                Valores tales como True Peak, Peak, RMS, etc., son medidos antes y después del proceso de conversión.
+                <br><br>
+                Posee además una ventana de Waveform muy completa en donde se puede visualizar el nivel de las señales
+                con y sin pérdida, de manera de poder identificar los posibles clippings en estas últimas. Y todo esto hasta nivel de muestra.
+                <br><br>
+                Es una herramienta pensada para que los masterizadores puedan evaluar las degradaciones que puedan tener
+                sus masters originales al momento de ser sometidos a códecs con pérdida.
+            </p>
+            <div class="format-row">
+                <div>
+                    <div class="format-col-title">Entrada</div>
+                    <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
+                </div>
+                <div>
+                    <div class="format-col-title">Codecs de Salida</div>
+                    <div class="tags">
+                        <span class="tag">MP3</span><span class="tag">AAC</span>
+                        <span class="tag">Vorbis</span><span class="tag">Opus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREENSHOTS -->
+    <section class="screenshots-section">
+        <div class="section-label">Screenshots</div>
+        <div class="screenshots-grid">
+            <div class="shot-card" onclick="openLightbox('Codalizer_Pict1.png')">
+                <img src="Codalizer_Pict1.png" alt="Codalyzer Analysis Results">
+                <div class="shot-overlay"><span class="shot-caption">Analysis Results Panel</span></div>
+            </div>
+            <div class="shot-card" onclick="openLightbox('Codalizer_Pict2.png')">
+                <img src="Codalizer_Pict2.png" alt="Codalyzer Waveform View">
+                <div class="shot-overlay"><span class="shot-caption">Waveform Comparison View</span></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span class="footer-brand">Soundins</span>
+        <div class="footer-links">
+            <a href="https://soundinsda.github.io/Soundins_website/index.html" class="footer-link">← Main Page</a>
+            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Previous_Versions/"
+               target="_blank" class="footer-link"
+               onclick="trackDownload('Previous_Versions','Previous Versions')">Previous Versions</a>
+        </div>
+    </footer>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<div id="mobile-warning">
+    <div class="warning-container">
+        <div class="warning-icon">💻</div>
+        <h1 class="warning-title">Desktop Only</h1>
+        <p class="warning-message">This app is not available for mobile or tablet devices.</p>
+        <p class="warning-submessage">Codalyzer is a desktop application for Windows and macOS. Please visit from a desktop or laptop computer.</p>
+        <div class="device-icons"><span>🖥️</span><span>📱</span></div>
+        <div class="warning-footer"><p>Back to <a href="https://soundinsda.github.io/Soundins_website/index.html">main page</a></p></div>
+    </div>
+</div>
+
+<script>
+    function setLang(lang) {
+        const isEn = lang === 'en';
+        document.getElementById('desc-en').classList.toggle('active', isEn);
+        document.getElementById('desc-es').classList.toggle('active', !isEn);
+        document.getElementById('btn-en').classList.toggle('active', isEn);
+        document.getElementById('btn-es').classList.toggle('active', !isEn);
+        document.getElementById('tagline-en').style.display = isEn ? '' : 'none';
+        document.getElementById('tagline-es').style.display = isEn ? 'none' : '';
+    }
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+    if (!isMobileOrTablet()) {
+        fetch('version.json')
+            .then(r => r.json())
+            .then(d => {
+                const v = d.version || d.Version || Object.values(d)[0];
+                document.getElementById('version').textContent = 'v' + v;
+            })
+            .catch(() => {});
+    }
+</script>
 </body>
 </html>
