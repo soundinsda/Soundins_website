@@ -24,12 +24,14 @@
             const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
             return isMobile || (isTouch && window.innerWidth <= 1024);
         }
-        window.addEventListener('DOMContentLoaded', function() {
+        function handleDownloadClick(e, fileName, downloadType) {
             if (isMobileOrTablet()) {
-                document.getElementById('desktop-content').style.display = 'none';
-                document.getElementById('mobile-warning').style.display = 'flex';
+                e.preventDefault();
+                document.getElementById('mobile-overlay').style.display = 'flex';
+                return false;
             }
-        });
+            trackDownload(fileName, downloadType);
+        }
     </script>
 
     <style>
@@ -82,13 +84,43 @@
             animation: fadeDown 0.4s ease both;
         }
 
-        .nav-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 26px;
-            letter-spacing: 0.18em;
-            color: var(--red);
+        .nav-logo img {
+            height: 72px;
+            width: auto;
+            display: block;
         }
 
+        .hero-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 140px;
+            line-height: 0.88;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+		/* Pict3 banner between hero and overview */
+		.pict3-section {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			padding: 8px 52px 40px;
+			background: var(--black);
+		}
+		.pict3-section img {
+			max-width: 550px;
+			width: 100%;
+			height: auto;
+			display: block;
+			opacity: 0.93;
+			border: 1px solid rgba(255,255,255,0.15);
+			border-radius: 4px;
+		}
         .nav-right {
             display: flex;
             align-items: center;
@@ -97,7 +129,7 @@
 
         .nav-back {
             font-family: var(--mono);
-            font-size: 13px;
+            font-size: 18px;
             letter-spacing: 0.08em;
             color: var(--text2);
             text-decoration: none;
@@ -113,7 +145,7 @@
         }
         .lang-btn {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: 18px;
             letter-spacing: 0.1em;
             padding: 5px 14px;
             background: transparent;
@@ -166,7 +198,14 @@
             );
         }
 
-		.hero-content { position: relative; z-index: 1; }
+        .hero-content { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; }
+        .hero-inner {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+			padding-left: 25%;
+        }
 
         .hero-eyebrow {
             font-family: var(--mono);
@@ -184,14 +223,15 @@
             letter-spacing: 0.05em;
             color: #ffffff;
             margin-bottom: 18px;
+			/*transform: translateX(180px)*/
         }
 
         .hero-version {
             font-family: var(--mono);
             font-size: 12px;
             letter-spacing: 0.18em;
-            color: var(--text3);
-            background: rgba(255,255,255,0.04);
+            color: var(--text2);
+            background: rgba(255,255,255,0.06);
             border: 1px solid var(--border2);
             display: inline-block;
             padding: 4px 14px;
@@ -295,7 +335,7 @@
         .desc-section {
             max-width: 860px;
             margin: 0 auto;
-            padding: 56px 52px 48px;
+            padding: 48px 28px 48px;
             animation: fadeDown 0.5s 0.1s ease both;
         }
 
@@ -335,7 +375,7 @@
         }
         .format-col-title {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: 14px;
             letter-spacing: 0.22em;
             text-transform: uppercase;
             color: var(--red2);
@@ -460,23 +500,73 @@
             to   { opacity:1; transform: translateY(0); }
         }
 
-        /* ══ MOBILE ══ */
-        #mobile-warning {
-            display: none; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 100vh; padding: 40px 20px; text-align: center;
+        /* ══ MOBILE OVERLAY (shown when mobile taps download) ══ */
+        #mobile-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(5,5,6,0.97);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
         }
-        .warning-container {
-            max-width: 420px; background: var(--dark2); border-radius: 8px;
-            padding: 48px 28px; border: 1px solid var(--border2); animation: fadeDown 0.5s ease both;
+        .overlay-container {
+            max-width: 380px;
+            background: var(--dark2);
+            border-radius: 8px;
+            padding: 44px 28px;
+            border: 1px solid var(--border2);
+            animation: fadeDown 0.3s ease both;
         }
-        .warning-icon { font-size: 56px; margin-bottom: 22px; }
-        .warning-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 0.1em; color: var(--red2); margin-bottom: 14px; }
-        .warning-message { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
-        .warning-submessage { font-size: 13px; color: var(--text3); line-height: 1.5; }
-        .device-icons { display:flex; justify-content:center; gap:24px; margin-top:22px; opacity:0.35; font-size:32px; }
-        .warning-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border); }
-        .warning-footer p { font-size: 13px; color: var(--text3); }
-        .warning-footer a { color: var(--red2); text-decoration: none; }
+        .overlay-icon { font-size: 52px; margin-bottom: 20px; }
+        .overlay-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px; letter-spacing: 0.1em;
+            color: var(--red2); margin-bottom: 14px;
+        }
+        .overlay-message { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+        .overlay-sub { font-size: 13px; color: var(--text3); line-height: 1.5; margin-bottom: 28px; }
+        .overlay-close {
+            font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
+            color: var(--text2); background: transparent;
+            border: 1px solid var(--border2); border-radius: 3px;
+            padding: 8px 20px; cursor: pointer; transition: all 0.15s;
+        }
+        .overlay-close:hover { color: var(--text1); border-color: var(--text1); }
+
+        /* ══ RESPONSIVE ══ */
+        @media (max-width: 900px) {
+            .hero-row {
+                grid-template-columns: 1fr;
+            }
+            .download-panel {
+                margin: 0 20px 32px;
+                align-self: stretch;
+            }
+            .hero {
+                padding: 20px 24px 32px;
+            }
+            .hero-title { font-size: 80px; }
+            .hero-eyebrow { font-size: 12px; }
+            .hero-pict3 { height: 64px; }
+            nav { padding: 0 24px; }
+            .desc-section, .screenshots-section {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .screenshots-grid { grid-template-columns: 1fr; }
+            footer { padding: 18px 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 60px; }
+            .hero-title-row { gap: 12px; }
+            .hero-pict3 { height: 48px; }
+            .overview-label { font-size: 32px; }
+            .desc-body { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -485,7 +575,7 @@
 
     <!-- NAV -->
     <nav>
-        <div class="nav-logo">Soundins</div>
+        <div class="nav-logo"><img src="Soundins.png" alt="Soundins"></div>
         <div class="nav-right">
             <a href="https://soundinsda.github.io/Soundins_website/index.html" class="nav-back">← Main Page</a>
             <div class="lang-switcher">
@@ -501,11 +591,15 @@
         <div class="hero">
             <div class="hero-bg"></div>
             <div class="hero-content">
-                <div class="hero-eyebrow">Codec Analyzer Toolbox</div>
-                <h1 class="hero-title">CODALYZER</h1>
-                <div class="hero-version" id="version">v1.2.0</div>
-                <p class="hero-tagline" id="tagline-en">Know exactly what lossy codecs do to your masters — before it's too late.</p>
-                <p class="hero-tagline" id="tagline-es" style="display:none">Sabé exactamente qué hacen los codecs con pérdida a tus masters — antes de que sea tarde.</p>
+                <div class="hero-inner">
+                    <div class="hero-eyebrow">Codec Analyzer Toolbox</div>
+                    <div class="hero-title-row">
+                        <h1 class="hero-title">CODALYZER</h1>
+                    </div>
+                    <div class="hero-version" id="version">v1.2.0</div>
+                    <p class="hero-tagline" id="tagline-en">Know exactly what lossy codecs do to your masters — before it's too late.</p>
+                    <p class="hero-tagline" id="tagline-es" style="display:none">Sabé exactamente qué le hacen los codecs con pérdida a tus masters — antes de que sea tarde.</p>
+                </div>
             </div>
         </div>
 
@@ -517,7 +611,7 @@
             <div class="dl-panel-items">
                 <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_MAC.zip"
                    class="dl-item" download
-                   onclick="trackDownload('Codalyzer_Installer_MAC.zip','Mac Installer')">
+                   onclick="return handleDownloadClick(event, 'Codalyzer_Installer_MAC.zip', 'Mac Installer')">
                     <img src="apple_icon.png" alt="Mac">
                     <div class="dl-info">
                         <span class="dl-name">macOS</span>
@@ -526,7 +620,7 @@
                 </a>
                 <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Codalyzer_Installer_WIN.rar"
                    class="dl-item" download
-                   onclick="trackDownload('Codalyzer_Installer_WIN.rar','Windows Installer')">
+                   onclick="return handleDownloadClick(event, 'Codalyzer_Installer_WIN.rar', 'Windows Installer')">
                     <img src="windows_icon.png" alt="Win">
                     <div class="dl-info">
                         <span class="dl-name">Windows</span>
@@ -544,6 +638,11 @@
                 </a>
             </div>
         </div>
+    </div>
+
+    <!-- PICT3 BANNER -->
+    <div class="pict3-section">
+        <img src="Codalizer_Pict3.png" alt="Codalyzer">
     </div>
 
     <!-- DESCRIPTION -->
@@ -622,7 +721,7 @@
     </section>
 
     <footer>
-        <span class="footer-brand">Soundins</span>
+        <div class="footer-brand"><img src="Soundins.png" alt="Soundins" style="height:30px; width:auto; opacity:0.7;"></div>
         <div class="footer-links">
             <a href="https://soundinsda.github.io/Soundins_website/index.html" class="footer-link">← Main Page</a>
             <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Previous_Versions/"
@@ -637,14 +736,14 @@
     <img id="lightbox-img" src="" alt="">
 </div>
 
-<div id="mobile-warning">
-    <div class="warning-container">
-        <div class="warning-icon">💻</div>
-        <h1 class="warning-title">Desktop Only</h1>
-        <p class="warning-message">This app is not available for mobile or tablet devices.</p>
-        <p class="warning-submessage">Codalyzer is a desktop application for Windows and macOS. Please visit from a desktop or laptop computer.</p>
-        <div class="device-icons"><span>🖥️</span><span>📱</span></div>
-        <div class="warning-footer"><p>Back to <a href="https://soundinsda.github.io/Soundins_website/index.html">main page</a></p></div>
+<!-- MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
+<div id="mobile-overlay">
+    <div class="overlay-container">
+        <div class="overlay-icon">💻</div>
+        <h2 class="overlay-title">Desktop Only</h2>
+        <p class="overlay-message">This download is not available for mobile or tablet devices.</p>
+        <p class="overlay-sub">Codalyzer is a desktop application for Windows and macOS. Please visit from a desktop or laptop computer to download.</p>
+        <button class="overlay-close" onclick="document.getElementById('mobile-overlay').style.display='none'">← Go Back</button>
     </div>
 </div>
 
