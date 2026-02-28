@@ -162,16 +162,13 @@
         .hero-row {
             display: grid;
             grid-template-columns: 1fr 300px;
-            grid-template-rows: auto auto;
+            min-height: 360px;
             border-bottom: 1px solid var(--border);
             animation: fadeDown 0.5s 0.05s ease both;
             position: relative;
             align-items: start;
             padding-right: 32px;
         }
-        .hero-row .hero        { grid-column: 1; grid-row: 1; }
-        .hero-row .desc-section { grid-column: 1; grid-row: 2; }
-        .hero-row .download-panel { grid-column: 2; grid-row: 1 / 3; }
 
         /* Left: hero */
         .hero {
@@ -188,7 +185,6 @@
 .hero-bg {
     position: absolute; inset: 0;
     background: linear-gradient(180deg, var(--dark1) 0%, var(--black) 100%);
-    pointer-events: none;
 }
 .hero-bg-img {
     position: absolute;
@@ -199,9 +195,6 @@
     transform: translate(-50%, -50%);
     opacity: 0.90;
     mix-blend-mode: screen;
-    cursor: zoom-in;
-    z-index: 5;
-    pointer-events: all;
 }
         .hero-bg::after {
             content:'';
@@ -237,7 +230,7 @@
             line-height: 0.88;
             letter-spacing: 0.05em;
             color: #ffffff;
-            margin-bottom: 0px;
+            margin-bottom: 18px;
 			/*transform: translateX(180px)*/
         }
 
@@ -343,12 +336,14 @@
             font-family: var(--mono);
             font-size: 11px;
             letter-spacing: 0.05em;
-            color: var(--text2);
+            color: var(--text3);
         }
 
         /* ══ DESCRIPTION ══ */
         .desc-section {
-            padding: 60px 200px 48px 380px;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 28px 48px;
             animation: fadeDown 0.5s 0.1s ease both;
         }
 
@@ -357,7 +352,7 @@
             font-size: 48px;
             letter-spacing: 0.1em;
             color: var(--text1);
-            margin-bottom: 10px;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -377,7 +372,6 @@
             font-weight: 300;
             line-height: 1.85;
             color: var(--text2);
-			max-width: 860px;  /* ajustá a gusto */
         }
 
         .format-row {
@@ -661,17 +655,17 @@
 
         <div class="hero">
     <div class="hero-bg">
-        <img src="OmniPass_pict1.png" class="hero-bg-img" alt="" onclick="openLightbox('OmniPass_pict1.png')">
+        <img src="OmniPass_pict1.png" class="hero-bg-img" alt="">
     </div>
     <div class="hero-content">
         <div class="hero-inner">
             <div class="hero-title-row">
                 <h1 class="hero-title" style="color:#BFFBF7;">OMNIPASS</h1>
             </div>
-            <div class="hero-eyebrow" style="margin-bottom:0px; color:#ffffff;">All Pass Node</div>
+            <div class="hero-eyebrow" style="margin-bottom:10px; color:#ffffff;">All Pass Node</div>
             <div class="hero-version" id="version">v1.0.0</div>
-            <p class="hero-tagline" id="tagline-en">Total phase control over your signal alignment.</p>
-            <p class="hero-tagline" id="tagline-es" style="display:none">Total control sobre la alineación de la fase de tu señal.</p>
+            <p class="hero-tagline" id="tagline-en">Flat magnitude. Precise phase. Total control over your signal alignment.</p>
+            <p class="hero-tagline" id="tagline-es" style="display:none">Magnitud plana. Fase precisa. Control total sobre la alineación de tu señal.</p>
         </div>
     </div>
 </div>
@@ -709,18 +703,11 @@
                         <span class="dl-sub">Version history</span>
                     </div>
                 </a>
-				<a href="Manual_OmniPass.pdf" class="dl-item" download
-   onclick="trackDownload('Manual_OmniPass.pdf','Manual')">
-    <span class="dl-emoji">📄</span>
-    <div class="dl-info">
-        <span class="dl-name">User Manual</span>
-        <span class="dl-sub">User guide</span>
-    </div>
-</a>
             </div>
         </div>
+    </div>
 
-    <!-- DESCRIPTION (inside hero-row so it sits in col 1 row 2) -->
+    <!-- DESCRIPTION -->
     <div class="desc-section">
         <div class="overview-label">Overview</div>
 
@@ -761,7 +748,7 @@
         </div>
     </div>
 
-    </div><!-- end hero-row -->
+    <!-- SCREENSHOTS -->
     <section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
@@ -792,17 +779,17 @@
     <img id="lightbox-img" src="" alt="">
 </div>
 
-<MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
-< COMING SOON OVERLAY — remove comment tags below when product launches
+<!-- MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
+<!-- COMING SOON OVERLAY — remove comment tags below when product launches
 <div id="coming-soon-overlay">
     <div class="cs-container">
         <div class="cs-eyebrow">All Pass Node</div>
         <div class="cs-title">OMNIPASS</div>
-        <p class="cs-message">Coming Soon.</p>
+        <p class="cs-message">This product is currently in development and has not been released yet. Stay tuned for the official launch.</p>
         <a href="https://soundinsda.github.io/Soundins_website/index.html" class="cs-back">← Back to Main Page</a>
     </div>
 </div>
-
+-->
 
 <div id="mobile-overlay">
     <div class="overlay-container">
