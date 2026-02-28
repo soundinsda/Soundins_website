@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v5.3-->
+<!DOCTYPE html><!--v5.4-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,7 +156,7 @@
             letter-spacing: 0.1em; text-align: left;
             padding: 10px 20px; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center;
-            transition: color 0.2s, background 0.2s;
+            transition: background 0.2s;
         }
         .submenu-trigger::after { content: '›'; font-size: 16px; opacity: 0.5; }
         .submenu-trigger:hover { background: rgba(0,0,0,0.07); }
@@ -209,7 +209,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding: calc(var(--nav-h) + 60px) 48px 80px;
+            padding: calc(var(--nav-h) + 20px) 48px 80px;
             max-width: 960px;
             margin: 0 auto;
         }
@@ -264,19 +264,29 @@
             animation: fadeUp 0.9s 0.7s forwards;
         }
         .contact-label {
-            font-size: 10px; letter-spacing: 0.25em;
+            font-size: 13px; letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--text-secondary);
             margin-bottom: 10px;
         }
         .contact-email {
-            font-family: var(--font-display); font-size: 20px;
+            font-family: var(--font-display); font-size: 26px;
             font-weight: 300; letter-spacing: 0.04em;
             color: var(--text-primary); text-decoration: none;
             border-bottom: 1px solid transparent;
             transition: border-color 0.3s, color 0.3s;
+            display: block;
+            margin-bottom: 16px;
         }
         .contact-email:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .ig-link {
+            display: inline-block;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+            line-height: 1;
+        }
+        .ig-link:hover { color: var(--accent); }
 
         .credit {
             position: fixed; bottom: 22px;
@@ -402,7 +412,7 @@
             .logo-wrap { margin-bottom: 36px; }
             .logo-wrap img { width: clamp(140px, 55vw, 260px); }
             .hero-sub { max-width: 100%; font-size: 15px; }
-            .contact-email { font-size: 17px; }
+            .contact-email { font-size: 20px; }
             .credit { font-size: 9px; bottom: 16px; }
         }
 
@@ -487,6 +497,13 @@
         <div class="contact-block">
             <p class="contact-label i18n-fade" data-en="Get in touch" data-es="Contacto">Get in touch</p>
             <a class="contact-email" href="mailto:contact@soundins.com.ar">contact@soundins.com.ar</a>
+            <a href="https://www.instagram.com/soundins_" target="_blank" class="ig-link" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+            </a>
         </div>
     </main>
 
@@ -617,7 +634,8 @@
                     document.documentElement.lang = lang;
                     fadables.forEach(function (el) { el.classList.remove('switching'); });
                 }, 250);
-				localStorage.setItem('lang', lang);
+
+                localStorage.setItem('lang', lang);
                 document.getElementById('btn-en').classList.toggle('active', lang === 'en');
                 document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             }
@@ -625,10 +643,10 @@
             document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
             document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
 
-            // Auto-detect browser language
-			var saved = localStorage.getItem('lang');
-			var bl = saved || (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
-			if (bl === 'es') setLang('es');
+            // Auto-detect: saved preference > browser language > English
+            var saved = localStorage.getItem('lang');
+            var bl = saved || (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
+            if (bl === 'es') setLang('es');
         });
     </script>
 </body>
