@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v5.4-->
+<!DOCTYPE html><!--v5.6-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -133,39 +133,40 @@
         .nav-item.open .nav-trigger::after { transform: rotate(-135deg) translateY(-2px); }
         .nav-trigger:hover, .nav-item.open .nav-trigger { color: #000000; }
 
+        /* DROPDOWN — centered under trigger, white bg, black text */
         .dropdown {
             position: absolute;
-            top: 100%; right: 0;
+            top: 100%; left: 50%;
+            transform: translateX(-50%) translateY(-4px);
             min-width: 200px;
-            background: #efefef;
-            border: 1px solid rgba(0,0,0,0.1);
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.12);
             border-top: none;
             border-radius: 0 0 2px 2px;
             padding: 8px 0;
             opacity: 0; pointer-events: none;
-            transform: translateY(-4px);
             transition: opacity 0.2s, transform 0.2s;
         }
-        .nav-item.open .dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .nav-item.open .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
 
         .submenu-wrapper { position: relative; }
         .submenu-trigger {
             width: 100%; background: none; border: none;
             color: #000000;
-            font-family: var(--font-body); font-size: 14px;
+            font-family: var(--font-body); font-size: 14px; font-weight: 400;
             letter-spacing: 0.1em; text-align: left;
             padding: 10px 20px; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center;
             transition: background 0.2s;
         }
         .submenu-trigger::after { content: '›'; font-size: 16px; opacity: 0.5; }
-        .submenu-trigger:hover { background: rgba(0,0,0,0.07); }
+        .submenu-trigger:hover { background: rgba(0,0,0,0.06); }
 
         .submenu {
             position: absolute; left: 100%; top: 0;
             min-width: 220px;
-            background: #efefef;
-            border: 1px solid rgba(0,0,0,0.1);
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.12);
             border-radius: 0 0 2px 2px;
             padding: 8px 0;
             opacity: 0; pointer-events: none;
@@ -176,13 +177,15 @@
 
         .dropdown-link {
             display: block; padding: 10px 20px;
-            color: #000000; font-size: 14px;
+            color: #000000;
+            font-size: 14px; font-weight: 400;
             letter-spacing: 0.1em; text-decoration: none;
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .dropdown-link:hover { background: rgba(0,0,0,0.07); }
+        .dropdown-link:hover { background: rgba(0,0,0,0.06); }
 
+        /* LANG SWITCHER */
         .lang-switcher {
             display: flex; align-items: center;
             margin-left: 16px;
@@ -320,7 +323,7 @@
         /* TABLET */
         @media (max-width: 900px) {
             nav { padding: 0 32px; }
-            main { padding: calc(var(--nav-h) + 48px) 32px 80px; }
+            main { padding: calc(var(--nav-h) + 20px) 32px 80px; }
         }
 
         /* MOBILE */
@@ -370,9 +373,11 @@
                 border-bottom: 1px solid var(--border);
             }
             .nav-item.open .dropdown { display: block; }
+
             .dropdown-link {
                 padding: 12px 24px 12px 36px;
-                color: rgba(255,255,255,0.7);
+                color: rgba(255,255,255,0.85);
+                font-weight: 400;
                 border-bottom: 1px solid rgba(255,255,255,0.04);
                 white-space: normal;
             }
@@ -391,7 +396,8 @@
             .submenu .dropdown-link { padding-left: 48px; }
             .submenu-trigger {
                 padding: 12px 24px 12px 36px;
-                color: rgba(255,255,255,0.7);
+                color: rgba(255,255,255,0.85);
+                font-weight: 400;
                 border-bottom: 1px solid rgba(255,255,255,0.04);
             }
             .submenu-trigger:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
@@ -408,7 +414,7 @@
             .lang-btn.active { color: #ffffff; }
             .lang-sep { color: rgba(255,255,255,0.25); }
 
-            main { padding: calc(var(--nav-h) + 40px) 20px 80px; }
+            main { padding: calc(var(--nav-h) + 20px) 20px 80px; }
             .logo-wrap { margin-bottom: 36px; }
             .logo-wrap img { width: clamp(140px, 55vw, 260px); }
             .hero-sub { max-width: 100%; font-size: 15px; }
@@ -418,7 +424,7 @@
 
         @media (max-width: 380px) {
             .logo-wrap img { width: 55vw; }
-            main { padding-top: calc(var(--nav-h) + 32px); }
+            main { padding-top: calc(var(--nav-h) + 16px); }
         }
 
         .nav-overlay {
@@ -517,7 +523,6 @@
     </div>
 
     <script>
-        // Logo
         (function () {
             var logo = document.getElementById("logo");
             var paths = ["Soundins.png", "./Soundins.png", "/Soundins.png", "assets/Soundins.png", "images/Soundins.png"];
@@ -559,7 +564,6 @@
             });
             overlay.addEventListener('click', closeMenu);
 
-            // Dropdowns
             var navItems    = document.querySelectorAll('.nav-item');
             var subWrappers = document.querySelectorAll('.submenu-wrapper');
 
@@ -594,7 +598,6 @@
                 if (!isMobile()) closeMenu();
             });
 
-            // i18n
             var strings = {
                 en: {
                     headline: 'Tools for those who<br><em>care</em> about sound.',
@@ -643,7 +646,6 @@
             document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
             document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
 
-            // Auto-detect: saved preference > browser language > English
             var saved = localStorage.getItem('lang');
             var bl = saved || (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
             if (bl === 'es') setLang('es');
