@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v3.12-->
+<!DOCTYPE html><!--v3.13-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,19 +73,16 @@
             background-color: #1a2b5f;
             z-index: 1;
         }
-        #menu, #applications /*, #plugins */ {
+        #menu, #plugins, #applications {
             position: absolute;
             top: 50px;
             z-index: 3;
         }
         #menu { left: 20px; }
-        /* PLUGINS MENU - DESCOMENTAR CUANDO ESTÉ LISTO
         #plugins { left: 180px; }
         #applications { left: 310px; }
-        */
-        #applications { left: 180px; }
         
-        #menu-title, #applications-title /*, #plugins-title */ {
+        #menu-title, #plugins-title, #applications-title {
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
@@ -93,10 +90,10 @@
             color: white;
             transition: color 0.3s;
         }
-        #menu-title:hover, #applications-title:hover /*, #plugins-title:hover */ {
+        #menu-title:hover, #plugins-title:hover, #applications-title:hover {
             color: #ccc;
         }
-        #menu-content, #applications-content /*, #plugins-content */ {
+        #menu-content, #plugins-content, #applications-content {
             display: none;
             position: absolute;
             top: 40px;
@@ -106,7 +103,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 10px;
         }
-        #menu.active #menu-content, #applications.active #applications-content /*, #plugins.active #plugins-content */ {
+        #menu.active #menu-content, #plugins.active #plugins-content, #applications.active #applications-content {
             display: block;
         }
         #dither-menu {
@@ -180,19 +177,19 @@
                 height: 120px;
                 margin: 10px 0;
             }
-            #menu, #applications /*, #plugins */ {
+            #menu, #plugins, #applications {
                 position: static;
                 left: 0;
                 width: 100%;
             }
-            #menu-title, #applications-title /*, #plugins-title */ {
+            #menu-title, #plugins-title, #applications-title {
                 font-size: 18px;
                 padding: 8px;
                 background-color: #1a2b5f;
                 width: 100%;
                 box-sizing: border-box;
             }
-            #menu-content, #applications-content /*, #plugins-content */ {
+            #menu-content, #plugins-content, #applications-content {
                 top: 100%;
                 width: 100%;
                 left: 0;
@@ -238,19 +235,19 @@
                 width: 100%;
                 height: 40px;
             }
-            #menu, #applications /*, #plugins */ {
+            #menu, #plugins, #applications {
                 position: absolute;
                 top: 30px;
                 width: auto;
             }
             #menu { left: 10px; }
-            /* #plugins { left: 170px; } */
-            #applications { left: 170px; }
-            #menu-title, #applications-title /*, #plugins-title */ {
+            #plugins { left: 170px; }
+            #applications { left: 300px; }
+            #menu-title, #plugins-title, #applications-title {
                 font-size: 18px;
                 padding: 10px;
             }
-            #menu-content, #applications-content /*, #plugins-content */ {
+            #menu-content, #plugins-content, #applications-content {
                 top: 40px;
                 left: 0;
                 width: 200px;
@@ -289,7 +286,7 @@
                 height: 50px;
                 margin: 0;
             }
-            #menu, #applications /*, #plugins */ {
+            #menu, #plugins, #applications {
                 position: absolute;
                 width: auto;
             }
@@ -297,15 +294,15 @@
                 top: 50px; 
                 left: 10px; 
             }
-            /* #plugins { 
-                top: 50px; 
-                left: 160px; 
-            } */
-            #applications { 
+            #plugins { 
                 top: 50px; 
                 left: 160px; 
             }
-            #menu-title, #applications-title /*, #plugins-title */ {
+            #applications { 
+                top: 50px; 
+                left: 280px; 
+            }
+            #menu-title, #plugins-title, #applications-title {
                 font-size: 18px;
                 padding: 5px 10px;
             }
@@ -331,14 +328,14 @@
             <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</a>
         </div>
     </div>
-<!-- DESCOMENTAR CUANDO ESTÉ LISTO
-<div id="plugins">
-    <div id="plugins-title">Plugins</div>
-    <div id="plugins-content">
-        <a href="https://soundinsda.github.io/Soundins_website/Plugins/OmniPass/" class="submenu-item" id="omnipass-item">OmniPass</a>
+
+    <div id="plugins">
+        <div id="plugins-title">Plugins</div>
+        <div id="plugins-content">
+            <a href="https://soundinsda.github.io/Soundins_website/Plugins/OmniPass/" class="submenu-item" id="omnipass-item">OmniPass</a>
+        </div>
     </div>
-</div>
--->
+
     <div id="applications">
         <div id="applications-title">Applications</div>
         <div id="applications-content">
@@ -351,23 +348,20 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Menu toggle for mobile
             const menu = document.getElementById("menu");
             const menuTitle = document.getElementById("menu-title");
             const ditherBtn = document.getElementById("dither-btn");
             const ditherMenu = document.getElementById("dither-menu");
-            const ditherSubmenu = document.getElementById("dither-submenu");
+            const plugins = document.getElementById("plugins");
+            const pluginsTitle = document.getElementById("plugins-title");
             const applications = document.getElementById("applications");
             const applicationsTitle = document.getElementById("applications-title");
-            // DESCOMENTAR CUANDO PLUGINS ESTÉ LISTO
-            // const plugins = document.getElementById("plugins");
-            // const pluginsTitle = document.getElementById("plugins-title");
 
             // Toggle Publications menu
             menuTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 menu.classList.toggle("active");
-                // plugins.classList.remove("active");
+                plugins.classList.remove("active");
                 applications.classList.remove("active");
             });
 
@@ -377,8 +371,6 @@
                 ditherMenu.classList.toggle("active");
             });
 
-            // DESCOMENTAR CUANDO PLUGINS ESTÉ LISTO
-            /*
             // Toggle Plugins menu
             pluginsTitle.addEventListener("click", function(e) {
                 e.preventDefault();
@@ -386,23 +378,22 @@
                 menu.classList.remove("active");
                 applications.classList.remove("active");
             });
-            */
 
             // Toggle Applications menu
             applicationsTitle.addEventListener("click", function(e) {
                 e.preventDefault();
                 applications.classList.toggle("active");
                 menu.classList.remove("active");
-                // plugins.classList.remove("active");
+                plugins.classList.remove("active");
             });
 
             // Close menus when clicking outside
             document.addEventListener("click", function(e) {
-                if (!menu.contains(e.target) && !applications.contains(e.target) /* && !plugins.contains(e.target) */) {
+                if (!menu.contains(e.target) && !plugins.contains(e.target) && !applications.contains(e.target)) {
                     menu.classList.remove("active");
                     ditherMenu.classList.remove("active");
+                    plugins.classList.remove("active");
                     applications.classList.remove("active");
-                    // plugins.classList.remove("active");
                 }
             });
 
