@@ -1,11 +1,10 @@
-<!DOCTYPE html><!--v3.13-->
+<!DOCTYPE html><!--v5.3-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soundins</title>
-    
-    <!-- Google tag (gtag.js) -->
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGYL42Z2XP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -13,424 +12,623 @@
       gtag('js', new Date());
       gtag('config', 'G-FGYL42Z2XP');
     </script>
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d0d0d;
+            --surface: #141414;
+            --border: rgba(255,255,255,0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.75);
+            --accent: #c0292a;
+            --accent-dim: rgba(192,41,42,0.15);
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Lato', sans-serif;
+            --nav-h: 46px;
+        }
+
+        html { scroll-behavior: smooth; }
+
         body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            border-bottom: 1px solid rgba(0,0,0,0.12);
+            background: #ffffff;
+            z-index: 200;
+        }
+
+        .nav-brand {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 201;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px; height: 1.5px;
+            background: #000000;
+            transition: transform 0.3s, opacity 0.3s;
+            transform-origin: center;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav-item { position: relative; }
+
+        .nav-trigger {
+            background: none; border: none;
+            color: rgba(0,0,0,0.6);
+            font-family: var(--font-body);
+            font-size: 18px; font-weight: 400;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 8px 14px;
+            transition: color 0.25s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .nav-trigger::after {
+            content: '';
+            display: block;
+            width: 4px; height: 4px;
+            border-right: 1px solid currentColor;
+            border-bottom: 1px solid currentColor;
+            transform: rotate(45deg) translateY(-2px);
+            transition: transform 0.25s;
+        }
+        .nav-item.open .nav-trigger::after { transform: rotate(-135deg) translateY(-2px); }
+        .nav-trigger:hover, .nav-item.open .nav-trigger { color: #000000; }
+
+        .dropdown {
+            position: absolute;
+            top: 100%; right: 0;
+            min-width: 200px;
+            background: #efefef;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-top: none;
+            border-radius: 0 0 2px 2px;
+            padding: 8px 0;
+            opacity: 0; pointer-events: none;
+            transform: translateY(-4px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .nav-item.open .dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+        .submenu-wrapper { position: relative; }
+        .submenu-trigger {
+            width: 100%; background: none; border: none;
+            color: #000000;
+            font-family: var(--font-body); font-size: 14px;
+            letter-spacing: 0.1em; text-align: left;
+            padding: 10px 20px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: color 0.2s, background 0.2s;
+        }
+        .submenu-trigger::after { content: '›'; font-size: 16px; opacity: 0.5; }
+        .submenu-trigger:hover { background: rgba(0,0,0,0.07); }
+
+        .submenu {
+            position: absolute; left: 100%; top: 0;
+            min-width: 220px;
+            background: #efefef;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 0 0 2px 2px;
+            padding: 8px 0;
+            opacity: 0; pointer-events: none;
+            transform: translateX(-6px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .submenu-wrapper.open .submenu { opacity: 1; pointer-events: auto; transform: translateX(0); }
+
+        .dropdown-link {
+            display: block; padding: 10px 20px;
+            color: #000000; font-size: 14px;
+            letter-spacing: 0.1em; text-decoration: none;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .dropdown-link:hover { background: rgba(0,0,0,0.07); }
+
+        .lang-switcher {
+            display: flex; align-items: center;
+            margin-left: 16px;
+            border-left: 1px solid rgba(0,0,0,0.15);
+            padding-left: 16px;
+            gap: 2px; flex-shrink: 0;
+        }
+        .lang-btn {
+            background: none; border: none;
+            font-family: var(--font-body); font-size: 10px; font-weight: 400;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            cursor: pointer; padding: 6px 8px; border-radius: 2px;
+            transition: color 0.2s, background 0.2s;
+            color: rgba(0,0,0,0.5);
+        }
+        .lang-btn:hover { color: #000000; }
+        .lang-btn.active { color: #000000; background: var(--accent-dim); }
+        .lang-sep { color: rgba(0,0,0,0.25); font-size: 10px; user-select: none; }
+
+        /* MAIN */
+        main {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            margin: 0;
-            background-color: black;
-            color: white;
-            overflow: hidden;
+            align-items: flex-start;
+            padding: calc(var(--nav-h) + 60px) 48px 80px;
+            max-width: 960px;
+            margin: 0 auto;
         }
-        h1 {
-            position: absolute;
-            top: 5px;
-            font-size: 24px;
-            z-index: 2;
+
+        .logo-wrap {
+            opacity: 0;
+            animation: fadeUp 1s 0.1s forwards;
+            margin-bottom: 52px;
         }
-        img {
-            max-width: 80%;
+        .logo-wrap img {
+            width: clamp(180px, 30vw, 400px);
             height: auto;
-            animation: wave 2s infinite ease-in-out;
-        }
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(2deg); }
-            50% { transform: rotate(-2deg); }
-            75% { transform: rotate(2deg); }
-        }
-        #credit {
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            margin-top: -10px;
-            text-align: center;
-        }
-        #email {
-            font-family: Arial, sans-serif;
-            font-size: 30px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        #email a {
-            color: blue;
-            text-decoration: none;
-        }
-        #email a:hover {
-            text-decoration: underline;
-        }
-        #menu-bar {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #1a2b5f;
-            z-index: 1;
-        }
-        #menu, #plugins, #applications {
-            position: absolute;
-            top: 50px;
-            z-index: 3;
-        }
-        #menu { left: 20px; }
-        #plugins { left: 180px; }
-        #applications { left: 310px; }
-        
-        #menu-title, #plugins-title, #applications-title {
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px;
-            color: white;
-            transition: color 0.3s;
-        }
-        #menu-title:hover, #plugins-title:hover, #applications-title:hover {
-            color: #ccc;
-        }
-        #menu-content, #plugins-content, #applications-content {
-            display: none;
-            position: absolute;
-            top: 40px;
-            left: 0;
-            background-color: #353535;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-        }
-        #menu.active #menu-content, #plugins.active #plugins-content, #applications.active #applications-content {
+            opacity: 0.92;
+            transition: opacity 0.3s;
             display: block;
         }
-        #dither-menu {
-            position: relative;
+        .logo-wrap img:hover { opacity: 1; }
+
+        .hero-headline {
+            font-family: var(--font-display);
+            font-size: clamp(38px, 5.5vw, 80px);
+            font-weight: 300;
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            max-width: 720px;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.3s forwards;
         }
-        #dither-btn {
-            background-color: transparent;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            text-align: left;
-            width: 100%;
-            transition: background-color 0.3s;
-            font-size: 16px;
-            box-sizing: border-box;
-            line-height: 1.5;
+        .hero-headline em { font-style: italic; color: var(--accent); }
+
+        .divider {
+            width: 48px; height: 1px;
+            background: var(--accent);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.45s forwards;
         }
-        #dither-btn:hover {
-            background-color: #555;
+
+        .hero-sub {
+            font-size: 18px; line-height: 1.9;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin-bottom: 56px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.55s forwards;
         }
-        #dither-submenu {
-            display: none;
-            position: absolute;
-            left: 100%;
-            top: 0;
-            background-color: #353535;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
+
+        .contact-block {
+            opacity: 0;
+            animation: fadeUp 0.9s 0.7s forwards;
+        }
+        .contact-label {
+            font-size: 10px; letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .contact-email {
+            font-family: var(--font-display); font-size: 20px;
+            font-weight: 300; letter-spacing: 0.04em;
+            color: var(--text-primary); text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .contact-email:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+        .credit {
+            position: fixed; bottom: 22px;
+            left: 50%; transform: translateX(-50%);
+            font-size: 10px; letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            opacity: 0;
+            animation: fadeIn 1.2s 0.9s forwards;
             white-space: nowrap;
+            pointer-events: none;
         }
-        #dither-menu.active #dither-submenu {
-            display: block;
+
+        .wave-decoration {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            height: 120px; pointer-events: none; opacity: 0.06; overflow: hidden;
         }
-        .submenu-item {
-            background-color: transparent;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            text-align: left;
-            width: 100%;
-            transition: background-color 0.3s;
-            display: block;
-            text-decoration: none;
-            font-size: 16px;
-            box-sizing: border-box;
-            line-height: 1.5;
+        .wave-decoration svg { width: 100%; height: 100%; }
+
+        .i18n-fade { transition: opacity 0.25s ease; }
+        .i18n-fade.switching { opacity: 0; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-        .submenu-item:hover {
-            background-color: #555;
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
         }
-        /* Media queries para móviles */
-        @media only screen and (max-width: 768px) {
-            body {
-                height: auto;
-                min-height: 100vh;
-                padding: 10px;
+
+        /* TABLET */
+        @media (max-width: 900px) {
+            nav { padding: 0 32px; }
+            main { padding: calc(var(--nav-h) + 48px) 32px 80px; }
+        }
+
+        /* MOBILE */
+        @media (max-width: 680px) {
+            nav { padding: 0 20px; }
+            .nav-brand { font-size: 18px; letter-spacing: 0.12em; }
+            .hamburger { display: flex; }
+
+            .nav-links {
+                position: fixed;
+                top: 0; right: 0;
+                width: min(320px, 85vw);
+                height: 100vh;
+                background: #1a1a1a;
+                border-left: 1px solid var(--border);
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                padding: calc(var(--nav-h) + 24px) 0 40px;
+                gap: 0;
+                transform: translateX(100%);
+                transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
                 overflow-y: auto;
             }
-            h1 {
+            .nav-links.mobile-open {
+                transform: translateX(0);
+                box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+            }
+
+            .nav-item { width: 100%; }
+            .nav-trigger {
+                width: 100%; padding: 14px 24px;
+                font-size: 14px;
+                border-bottom: 1px solid var(--border);
+                justify-content: space-between;
+                color: rgba(255,255,255,0.7);
+            }
+            .nav-trigger:hover, .nav-item.open .nav-trigger { color: #ffffff; }
+
+            .dropdown {
                 position: static;
-                font-size: 18px;
-                margin: 10px 0;
+                opacity: 1; pointer-events: auto;
+                transform: none;
+                background: transparent;
+                border: none; padding: 0;
+                display: none;
+                border-bottom: 1px solid var(--border);
             }
-            #menu-bar {
+            .nav-item.open .dropdown { display: block; }
+            .dropdown-link {
+                padding: 12px 24px 12px 36px;
+                color: rgba(255,255,255,0.7);
+                border-bottom: 1px solid rgba(255,255,255,0.04);
+                white-space: normal;
+            }
+            .dropdown-link:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
+            .dropdown-link:last-child { border-bottom: none; }
+
+            .submenu {
                 position: static;
-                height: 120px;
-                margin: 10px 0;
+                opacity: 1; pointer-events: auto;
+                transform: none;
+                background: transparent;
+                border: none; padding: 0;
+                display: none;
             }
-            #menu, #plugins, #applications {
-                position: static;
-                left: 0;
+            .submenu-wrapper.open .submenu { display: block; }
+            .submenu .dropdown-link { padding-left: 48px; }
+            .submenu-trigger {
+                padding: 12px 24px 12px 36px;
+                color: rgba(255,255,255,0.7);
+                border-bottom: 1px solid rgba(255,255,255,0.04);
+            }
+            .submenu-trigger:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
+
+            .lang-switcher {
                 width: 100%;
+                margin: 16px 0 0;
+                border-left: none;
+                border-top: 1px solid var(--border);
+                padding: 16px 24px;
             }
-            #menu-title, #plugins-title, #applications-title {
-                font-size: 18px;
-                padding: 8px;
-                background-color: #1a2b5f;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            #menu-content, #plugins-content, #applications-content {
-                top: 100%;
-                width: 100%;
-                left: 0;
-                position: relative;
-                border-radius: 0;
-            }
-            #dither-submenu {
-                position: static;
-                width: 100%;
-                left: 0;
-            }
-            img {
-                max-width: 60%;
-                margin: 20px 0;
-            }
-            #credit {
-                font-size: 16px;
-                margin: 10px 0;
-            }
-            #email {
-                font-size: 20px;
-                margin: 10px 0;
-            }
+            .lang-btn { color: rgba(255,255,255,0.5); }
+            .lang-btn:hover { color: #ffffff; }
+            .lang-btn.active { color: #ffffff; }
+            .lang-sep { color: rgba(255,255,255,0.25); }
+
+            main { padding: calc(var(--nav-h) + 40px) 20px 80px; }
+            .logo-wrap { margin-bottom: 36px; }
+            .logo-wrap img { width: clamp(140px, 55vw, 260px); }
+            .hero-sub { max-width: 100%; font-size: 15px; }
+            .contact-email { font-size: 17px; }
+            .credit { font-size: 9px; bottom: 16px; }
         }
-        /* Ajustes para orientación horizontal en móviles */
-        @media only screen and (max-width: 1024px) and (orientation: landscape) {
-            body {
-                height: auto;
-                overflow-y: auto;
-            }
-            h1 {
-                position: absolute;
-                top: 5px;
-                left: 0;
-                width: 100%;
-                font-size: 18px;
-                margin: 0;
-            }
-            #menu-bar {
-                position: absolute;
-                top: 20px;
-                left: 0;
-                width: 100%;
-                height: 40px;
-            }
-            #menu, #plugins, #applications {
-                position: absolute;
-                top: 30px;
-                width: auto;
-            }
-            #menu { left: 10px; }
-            #plugins { left: 170px; }
-            #applications { left: 300px; }
-            #menu-title, #plugins-title, #applications-title {
-                font-size: 18px;
-                padding: 10px;
-            }
-            #menu-content, #plugins-content, #applications-content {
-                top: 40px;
-                left: 0;
-                width: 200px;
-            }
-            #dither-submenu {
-                left: 100%;
-                top: 0;
-                width: 200px;
-            }
-            img {
-                margin-top: 10px;
-            }
-            #credit {
-                margin-top: -10vh;
-            }
-            #email {
-                margin-top: 0vh;
-            }
+
+        @media (max-width: 380px) {
+            .logo-wrap img { width: 55vw; }
+            main { padding-top: calc(var(--nav-h) + 32px); }
         }
-        /* Ajustes para orientación vertical en móviles */
-        @media only screen and (max-width: 768px) and (orientation: portrait) {
-            body {
-                padding: 0;
-            }
-            h1 {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                margin: 5px 0;
-                font-size: 18px;
-            }
-            #menu-bar {
-                position: absolute;
-                top: 50px;
-                height: 50px;
-                margin: 0;
-            }
-            #menu, #plugins, #applications {
-                position: absolute;
-                width: auto;
-            }
-            #menu { 
-                top: 50px; 
-                left: 10px; 
-            }
-            #plugins { 
-                top: 50px; 
-                left: 160px; 
-            }
-            #applications { 
-                top: 50px; 
-                left: 280px; 
-            }
-            #menu-title, #plugins-title, #applications-title {
-                font-size: 18px;
-                padding: 5px 10px;
-            }
-            img {
-                margin-top: -30px;
-            }
+
+        .nav-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            z-index: 199;
         }
+        .nav-overlay.active { display: block; }
     </style>
 </head>
 <body>
-    <h1>Site under construction</h1>
-    <div id="menu-bar"></div>
-    <div id="menu">
-        <div id="menu-title">Publications</div>
-        <div id="menu-content">
-            <div id="dither-menu">
-                <button id="dither-btn">Dither</button>
-                <div id="dither-submenu">
-                    <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither_Article/DitherNS_Article.html" target="_blank" class="submenu-item" id="dither-article">Dither & NS Article</a>
-                    <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither/DitherNS_Tool_Main.html" target="_blank" class="submenu-item" id="dither-tool">Dither & NS Benchmark Tool</a>
+
+    <div class="nav-overlay" id="nav-overlay"></div>
+
+    <nav>
+        <a class="nav-brand" href="#">Soundins</a>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+
+            <div class="nav-item">
+                <button class="nav-trigger" data-en="Publications" data-es="Publicaciones">Publications</button>
+                <div class="dropdown">
+                    <div class="submenu-wrapper">
+                        <button class="submenu-trigger">Dither</button>
+                        <div class="submenu">
+                            <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither_Article/DitherNS_Article.html" target="_blank" class="dropdown-link" data-en="Dither &amp; NS Article" data-es="Artículo Dither &amp; NS">Dither &amp; NS Article</a>
+                            <a href="https://soundinsda.github.io/Soundins_website/Publications/Dither/DitherNS_Tool_Main.html" target="_blank" class="dropdown-link" data-en="Dither &amp; NS Benchmark Tool" data-es="Herramienta Dither &amp; NS">Dither &amp; NS Benchmark Tool</a>
+                        </div>
+                    </div>
+                    <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="dropdown-link" data-en="Beat sub-Nyquist Effect" data-es="Efecto sub-Nyquist">Beat sub-Nyquist Effect</a>
                 </div>
             </div>
-            <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="submenu-item" id="sub-nyquist-btn">Beat sub-Nyquist Effect</a>
+
+            <div class="nav-item">
+                <button class="nav-trigger" data-en="Plugins" data-es="Plugins">Plugins</button>
+                <div class="dropdown">
+                    <a href="https://soundinsda.github.io/Soundins_website/Plugins/OmniPass/" class="dropdown-link">OmniPass</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <button class="nav-trigger" data-en="Applications" data-es="Aplicaciones">Applications</button>
+                <div class="dropdown">
+                    <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/" class="dropdown-link">Codalyzer</a>
+                </div>
+            </div>
+
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btn-en">EN</button>
+                <span class="lang-sep">/</span>
+                <button class="lang-btn" id="btn-es">ES</button>
+            </div>
+
         </div>
+    </nav>
+
+    <main>
+        <div class="logo-wrap">
+            <img id="logo" alt="Soundins">
+        </div>
+
+        <h1 class="hero-headline i18n-fade">
+            Tools for those who<br><em>care</em> about sound.
+        </h1>
+
+        <div class="divider"></div>
+
+        <p class="hero-sub i18n-fade">
+            Plugins, applications, and research focused on professional audio engineering.
+        </p>
+
+        <div class="contact-block">
+            <p class="contact-label i18n-fade" data-en="Get in touch" data-es="Contacto">Get in touch</p>
+            <a class="contact-email" href="mailto:contact@soundins.com.ar">contact@soundins.com.ar</a>
+        </div>
+    </main>
+
+    <p class="credit"></p>
+
+    <div class="wave-decoration" aria-hidden="true">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,60 C60,30 120,90 180,60 C240,30 300,90 360,60 C420,30 480,90 540,60 C600,30 660,90 720,60 C780,30 840,90 900,60 C960,30 1020,90 1080,60 C1140,30 1200,90 1260,60 C1320,30 1380,90 1440,60" stroke="white" stroke-width="1.5" fill="none"/>
+            <path d="M0,75 C80,45 160,105 240,75 C320,45 400,105 480,75 C560,45 640,105 720,75 C800,45 880,105 960,75 C1040,45 1120,105 1200,75 C1280,45 1360,105 1440,75" stroke="white" stroke-width="0.5" fill="none" opacity="0.4"/>
+        </svg>
     </div>
 
-    <div id="plugins">
-        <div id="plugins-title">Plugins</div>
-        <div id="plugins-content">
-            <a href="https://soundinsda.github.io/Soundins_website/Plugins/OmniPass/" class="submenu-item" id="omnipass-item">OmniPass</a>
-        </div>
-    </div>
-
-    <div id="applications">
-        <div id="applications-title">Applications</div>
-        <div id="applications-content">
-            <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/" class="submenu-item" id="codalyzer-item">Codalyzer</a>
-        </div>
-    </div>
-    <img id="logo" alt="Soundins Logo">
-    <p id="credit">by Pablo Panitta</p>
-    <p id="email"><a href="mailto:contact@soundins.com.ar">contact@soundins.com.ar</a></p>
-    
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const menu = document.getElementById("menu");
-            const menuTitle = document.getElementById("menu-title");
-            const ditherBtn = document.getElementById("dither-btn");
-            const ditherMenu = document.getElementById("dither-menu");
-            const plugins = document.getElementById("plugins");
-            const pluginsTitle = document.getElementById("plugins-title");
-            const applications = document.getElementById("applications");
-            const applicationsTitle = document.getElementById("applications-title");
-
-            // Toggle Publications menu
-            menuTitle.addEventListener("click", function(e) {
-                e.preventDefault();
-                menu.classList.toggle("active");
-                plugins.classList.remove("active");
-                applications.classList.remove("active");
-            });
-
-            // Toggle Dither submenu
-            ditherBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                ditherMenu.classList.toggle("active");
-            });
-
-            // Toggle Plugins menu
-            pluginsTitle.addEventListener("click", function(e) {
-                e.preventDefault();
-                plugins.classList.toggle("active");
-                menu.classList.remove("active");
-                applications.classList.remove("active");
-            });
-
-            // Toggle Applications menu
-            applicationsTitle.addEventListener("click", function(e) {
-                e.preventDefault();
-                applications.classList.toggle("active");
-                menu.classList.remove("active");
-                plugins.classList.remove("active");
-            });
-
-            // Close menus when clicking outside
-            document.addEventListener("click", function(e) {
-                if (!menu.contains(e.target) && !plugins.contains(e.target) && !applications.contains(e.target)) {
-                    menu.classList.remove("active");
-                    ditherMenu.classList.remove("active");
-                    plugins.classList.remove("active");
-                    applications.classList.remove("active");
-                }
-            });
-
-            // Logo loading
+        // Logo
+        (function () {
             var logo = document.getElementById("logo");
-            var possiblePaths = [
-                "Soundins.png",
-                "./Soundins.png",
-                "/Soundins.png",
-                "assets/Soundins.png",
-                "images/Soundins.png"
-            ];
+            var paths = ["Soundins.png", "./Soundins.png", "/Soundins.png", "assets/Soundins.png", "images/Soundins.png"];
+            function tryNext() {
+                if (!paths.length) { logo.style.display = 'none'; return; }
+                var p = paths.shift();
+                var t = new Image();
+                t.onload = function () { logo.src = p; };
+                t.onerror = tryNext;
+                t.src = p;
+            }
+            tryNext();
+        })();
 
-            function checkImage(url, callback) {
-                var img = new Image();
-                img.onload = function() { callback(true, url); };
-                img.onerror = function() { callback(false, url); };
-                img.src = url;
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var navLinks  = document.getElementById('nav-links');
+            var hamburger = document.getElementById('hamburger');
+            var overlay   = document.getElementById('nav-overlay');
+
+            function isMobile() { return window.innerWidth <= 680; }
+
+            function openMenu() {
+                hamburger.classList.add('open');
+                navLinks.classList.add('mobile-open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMenu() {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
             }
 
-            function findValidImage(paths) {
-                if (paths.length === 0) {
-                    console.error("No valid image found in any of the specified paths.");
-                    logo.alt = "Image not found";
-                    return;
-                }
-                var path = paths.shift();
-                checkImage(path, function(success, validUrl) {
-                    if (success) {
-                        logo.src = validUrl;
-                    } else {
-                        findValidImage(paths);
-                    }
+            hamburger.addEventListener('click', function (e) {
+                e.stopPropagation();
+                navLinks.classList.contains('mobile-open') ? closeMenu() : openMenu();
+            });
+            overlay.addEventListener('click', closeMenu);
+
+            // Dropdowns
+            var navItems    = document.querySelectorAll('.nav-item');
+            var subWrappers = document.querySelectorAll('.submenu-wrapper');
+
+            navItems.forEach(function (item) {
+                var trigger = item.querySelector('.nav-trigger');
+                trigger.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var isOpen = item.classList.contains('open');
+                    navItems.forEach(function (i) { i.classList.remove('open'); });
+                    subWrappers.forEach(function (s) { s.classList.remove('open'); });
+                    if (!isOpen) item.classList.add('open');
                 });
+            });
+
+            subWrappers.forEach(function (sw) {
+                var st = sw.querySelector('.submenu-trigger');
+                st.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var isOpen = sw.classList.contains('open');
+                    subWrappers.forEach(function (s) { s.classList.remove('open'); });
+                    if (!isOpen) sw.classList.add('open');
+                });
+            });
+
+            document.addEventListener('click', function () {
+                navItems.forEach(function (i) { i.classList.remove('open'); });
+                subWrappers.forEach(function (s) { s.classList.remove('open'); });
+                if (!isMobile()) closeMenu();
+            });
+
+            window.addEventListener('resize', function () {
+                if (!isMobile()) closeMenu();
+            });
+
+            // i18n
+            var strings = {
+                en: {
+                    headline: 'Tools for those who<br><em>care</em> about sound.',
+                    sub:      'Plugins, applications, and research focused on professional audio engineering.',
+                    contact:  'Get in touch'
+                },
+                es: {
+                    headline: 'Herramientas para los<br><em>apasionados</em> del sonido.',
+                    sub:      'Plugins, aplicaciones e investigación enfocados en ingeniería de audio profesional.',
+                    contact:  'Contacto'
+                }
+            };
+
+            var currentLang = 'en';
+            var headline    = document.querySelector('.hero-headline');
+            var sub         = document.querySelector('.hero-sub');
+            var contactLbl  = document.querySelector('.contact-label');
+            var fadables    = document.querySelectorAll('.i18n-fade');
+
+            function setLang(lang) {
+                if (lang === currentLang) return;
+                currentLang = lang;
+
+                fadables.forEach(function (el) { el.classList.add('switching'); });
+
+                setTimeout(function () {
+                    headline.innerHTML     = strings[lang].headline;
+                    sub.textContent        = strings[lang].sub;
+                    contactLbl.textContent = strings[lang].contact;
+
+                    document.querySelectorAll('[data-' + lang + ']').forEach(function (el) {
+                        if (!el.classList.contains('lang-btn') && !el.classList.contains('submenu-trigger')) {
+                            el.textContent = el.getAttribute('data-' + lang);
+                        }
+                    });
+
+                    document.documentElement.lang = lang;
+                    fadables.forEach(function (el) { el.classList.remove('switching'); });
+                }, 250);
+				localStorage.setItem('lang', lang);
+                document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+                document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             }
 
-            findValidImage(possiblePaths);
+            document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
+            document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
+
+            // Auto-detect browser language
+			var saved = localStorage.getItem('lang');
+			var bl = saved || (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
+			if (bl === 'es') setLang('es');
         });
     </script>
 </body>
