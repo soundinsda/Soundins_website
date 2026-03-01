@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v5.6-->
+<!DOCTYPE html><!--v5.7-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -133,11 +133,11 @@
         .nav-item.open .nav-trigger::after { transform: rotate(-135deg) translateY(-2px); }
         .nav-trigger:hover, .nav-item.open .nav-trigger { color: #000000; }
 
-        /* DROPDOWN — centered under trigger, white bg, black text */
+        /* DROPDOWN — aligned to left of trigger, won't overflow */
         .dropdown {
             position: absolute;
-            top: 100%; left: 50%;
-            transform: translateX(-50%) translateY(-4px);
+            top: 100%; left: 0;
+            transform: translateY(-4px);
             min-width: 200px;
             background: #ffffff;
             border: 1px solid rgba(0,0,0,0.12);
@@ -147,7 +147,7 @@
             opacity: 0; pointer-events: none;
             transition: opacity 0.2s, transform 0.2s;
         }
-        .nav-item.open .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .nav-item.open .dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
         .submenu-wrapper { position: relative; }
         .submenu-trigger {
@@ -256,7 +256,7 @@
         .hero-sub {
             font-size: 18px; line-height: 1.9;
             color: var(--text-secondary);
-            max-width: 720px;
+            max-width: 960px;
             margin-bottom: 56px;
             opacity: 0;
             animation: fadeUp 0.9s 0.55s forwards;
@@ -367,12 +367,12 @@
                 position: static;
                 opacity: 1; pointer-events: auto;
                 transform: none;
-                background: transparent;
+                background: rgba(255,255,255,0.05);
                 border: none; padding: 0;
                 display: none;
                 border-bottom: 1px solid var(--border);
             }
-            .nav-item.open .dropdown { display: block; }
+            .nav-item.open .dropdown { display: block; opacity: 1; }
 
             .dropdown-link {
                 padding: 12px 24px 12px 36px;
@@ -388,11 +388,11 @@
                 position: static;
                 opacity: 1; pointer-events: auto;
                 transform: none;
-                background: transparent;
+                background: rgba(255,255,255,0.03);
                 border: none; padding: 0;
                 display: none;
             }
-            .submenu-wrapper.open .submenu { display: block; }
+            .submenu-wrapper.open .submenu { display: block; opacity: 1; }
             .submenu .dropdown-link { padding-left: 48px; }
             .submenu-trigger {
                 padding: 12px 24px 12px 36px;
@@ -460,9 +460,7 @@
                     </div>
                     <a href="https://soundinsda.github.io/Soundins_website/Publications/Sub_Nyquist/index_subNyquist.html" target="_blank" class="dropdown-link" data-en="Beat sub-Nyquist Effect" data-es="Efecto sub-Nyquist">Beat sub-Nyquist Effect</a>
                     <a href="https://www.cursosdesonido.com.ar/blog" target="_blank" class="dropdown-link" data-en="Collaborations" data-es="Colaboraciones">Collaborations</a>
-				
-				
-				</div>
+                </div>
             </div>
 
             <div class="nav-item">
@@ -603,13 +601,13 @@
 
             var strings = {
                 en: {
-                    headline: 'Tools for those who<br><em>care</em> about audio.',
-                    sub:      'Technical research, applications and plugins for professional audio engineering.',
+                    headline: 'Tools for those who<br><em>care</em> about sound.',
+                    sub:      'Plugins, applications, and research focused on professional audio engineering.',
                     contact:  'Get in touch'
                 },
                 es: {
-                    headline: 'Herramientas para los<br><em>apasionados</em> del audio.',
-                    sub:      'Investigación , aplicaciones y plugins enfocados en la ingeniería del audio profesional.',
+                    headline: 'Herramientas para los<br><em>apasionados</em> del sonido.',
+                    sub:      'Plugins, aplicaciones e investigación enfocados en ingeniería de audio profesional.',
                     contact:  'Contacto'
                 }
             };
