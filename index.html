@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--v5.7-->
+<!DOCTYPE html><!--v5.8-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -90,7 +90,7 @@
             padding: 8px;
             z-index: 201;
         }
-		.hamburger span {
+        .hamburger span {
             display: block;
             width: 24px; height: 1.5px;
             background: #333333;
@@ -101,6 +101,25 @@
         .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+        /* Lang switcher in nav bar (mobile only — hidden on desktop via media query) */
+        .lang-switcher-nav {
+            display: none;
+            align-items: center;
+            gap: 2px;
+            margin-right: 8px;
+        }
+        .lang-switcher-nav .lang-btn {
+            background: none; border: none;
+            font-family: var(--font-body); font-size: 10px; font-weight: 400;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            cursor: pointer; padding: 5px 7px; border-radius: 2px;
+            transition: color 0.2s, background 0.2s;
+            color: rgba(0,0,0,0.5);
+        }
+        .lang-switcher-nav .lang-btn:hover { color: #000000; }
+        .lang-switcher-nav .lang-btn.active { color: #000000; background: var(--accent-dim); }
+        .lang-switcher-nav .lang-sep { color: rgba(0,0,0,0.3); font-size: 10px; user-select: none; }
 
         .nav-links {
             display: flex;
@@ -134,7 +153,6 @@
         .nav-item.open .nav-trigger::after { transform: rotate(-135deg) translateY(-2px); }
         .nav-trigger:hover, .nav-item.open .nav-trigger { color: #000000; }
 
-        /* DROPDOWN — aligned to left of trigger, won't overflow */
         .dropdown {
             position: absolute;
             top: 100%; left: 0;
@@ -186,7 +204,7 @@
         }
         .dropdown-link:hover { background: rgba(0,0,0,0.06); }
 
-        /* LANG SWITCHER */
+        /* LANG SWITCHER (desktop — inside nav-links) */
         .lang-switcher {
             display: flex; align-items: center;
             margin-left: 16px;
@@ -245,8 +263,6 @@
             animation: fadeUp 0.9s 0.3s forwards;
         }
         .hero-headline em { font-style: italic; color: var(--accent); }
-
-
 
         .hero-sub {
             font-size: 18px; line-height: 1.9;
@@ -327,6 +343,12 @@
             .nav-brand { font-size: 18px; letter-spacing: 0.12em; }
             .hamburger { display: flex; }
 
+            /* Show lang switcher in nav bar on mobile */
+            .lang-switcher-nav { display: flex; }
+
+            /* Hide lang switcher inside the panel on mobile */
+            .lang-switcher { display: none; }
+
             .nav-links {
                 position: fixed;
                 top: 0; right: 0;
@@ -397,18 +419,6 @@
             }
             .submenu-trigger:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
 
-            .lang-switcher {
-                width: 100%;
-                margin: 16px 0 0;
-                border-left: none;
-                border-top: 1px solid var(--border);
-                padding: 16px 24px;
-            }
-            .lang-btn { color: rgba(255,255,255,0.5); }
-            .lang-btn:hover { color: #ffffff; }
-            .lang-btn.active { color: #ffffff; }
-            .lang-sep { color: rgba(255,255,255,0.25); }
-
             main { padding: calc(var(--nav-h) + 20px) 20px 80px; }
             .logo-wrap { margin-bottom: 36px; }
             .logo-wrap img { width: clamp(140px, 55vw, 260px); }
@@ -436,6 +446,13 @@
 
     <nav>
         <a class="nav-brand" href="#">Soundins</a>
+
+        <!-- Lang switcher visible in nav bar on mobile -->
+        <div class="lang-switcher-nav">
+            <button class="lang-btn active" id="btn-en-nav">EN</button>
+            <span class="lang-sep">/</span>
+            <button class="lang-btn" id="btn-es-nav">ES</button>
+        </div>
 
         <button class="hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
@@ -472,6 +489,7 @@
                 </div>
             </div>
 
+            <!-- Lang switcher inside panel (desktop only) -->
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btn-en">EN</button>
                 <span class="lang-sep">/</span>
@@ -487,13 +505,11 @@
         </div>
 
         <h1 class="hero-headline i18n-fade">
-            Tools for those who<br><em>care</em> about audio.
+            Tools for those who<br><em>care</em> about sound.
         </h1>
 
-
-
         <p class="hero-sub i18n-fade">
-            Technical reseach, applications and plugins for professional audio engineering.
+            Plugins, applications, and research focused on professional audio engineering.
         </p>
 
         <div class="contact-block">
@@ -596,13 +612,13 @@
 
             var strings = {
                 en: {
-                    headline: 'Tools for those who<br><em>care</em> about audio.',
-                    sub:      'Plugins, applications, and research for professional audio engineering.',
+                    headline: 'Tools for those who<br><em>care</em> about sound.',
+                    sub:      'Plugins, applications, and research focused on professional audio engineering.',
                     contact:  'Get in touch'
                 },
                 es: {
-                    headline: 'Herramientas para los<br><em>apasionados</em> del audio.',
-                    sub:      'Investigacion, aplicaciones y plugins especializados en la ingeniería de audio profesional.',
+                    headline: 'Herramientas para<br>los <em>apasionados</em><br>del audio.',
+                    sub:      'Plugins, aplicaciones e investigación enfocados en ingeniería de audio profesional.',
                     contact:  'Contacto'
                 }
             };
@@ -612,6 +628,10 @@
             var sub         = document.querySelector('.hero-sub');
             var contactLbl  = document.querySelector('.contact-label');
             var fadables    = document.querySelectorAll('.i18n-fade');
+
+            // All lang buttons (desktop panel + mobile nav bar)
+            var btnEnAll = document.querySelectorAll('[id^="btn-en"]');
+            var btnEsAll = document.querySelectorAll('[id^="btn-es"]');
 
             function setLang(lang) {
                 if (lang === currentLang) return;
@@ -635,12 +655,12 @@
                 }, 250);
 
                 localStorage.setItem('lang', lang);
-                document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-                document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+                btnEnAll.forEach(function (b) { b.classList.toggle('active', lang === 'en'); });
+                btnEsAll.forEach(function (b) { b.classList.toggle('active', lang === 'es'); });
             }
 
-            document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
-            document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
+            btnEnAll.forEach(function (b) { b.addEventListener('click', function () { setLang('en'); }); });
+            btnEsAll.forEach(function (b) { b.addEventListener('click', function () { setLang('es'); }); });
 
             var saved = localStorage.getItem('lang');
             var bl = saved || (navigator.language || navigator.userLanguage || 'en').slice(0, 2).toLowerCase();
