@@ -563,34 +563,94 @@
 
         /* ══ RESPONSIVE ══ */
         @media (max-width: 900px) {
+            /* NAV */
+            nav {
+                padding: 0 20px;
+                height: 52px;
+            }
+            .nav-logo img { height: 54px; }
+            .nav-back { font-size: 14px; }
+            .lang-btn { font-size: 14px; padding: 4px 10px; }
+
+            /* HERO ROW: stack vertically */
             .hero-row {
                 grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                padding-right: 0;
             }
-            .download-panel {
-                margin: 0 20px 32px;
-                align-self: stretch;
-            }
+            .hero-row .hero           { grid-column: 1; grid-row: 1; }
+            .hero-row .desc-section   { grid-column: 1; grid-row: 3; }
+            .hero-row .download-panel { grid-column: 1; grid-row: 2; }
+
+            /* HERO */
             .hero {
-                padding: 20px 24px 32px;
+                padding: 28px 20px 32px;
+                min-height: unset;
             }
-            .hero-title { font-size: 80px; }
-            .hero-eyebrow { font-size: 12px; }
-            .hero-pict3 { height: 64px; }
-            nav { padding: 0 24px; }
-            .desc-section, .screenshots-section {
-                padding-left: 24px;
-                padding-right: 24px;
+            .hero-inner {
+                padding-left: 0;
+                width: 100%;
+            }
+            .hero-bg-img {
+                display: none;
+            }
+            .hero-title { font-size: 72px; }
+            .hero-eyebrow { font-size: 12px; letter-spacing: 0.22em; }
+            .hero-tagline { font-size: 16px; max-width: 100%; }
+            .hero-version { font-size: 11px; }
+            .hero-pict3 { width: 160px; }
+
+            /* DOWNLOAD PANEL */
+            .download-panel {
+                margin: 0 20px;
+                align-self: stretch;
+                border-radius: 6px;
+            }
+            .dl-item { padding: 16px 20px; gap: 14px; }
+            .dl-panel-header { padding: 14px 20px 12px; }
+
+            /* DESC SECTION */
+            .desc-section {
+                padding: 40px 20px 40px 20px;
+            }
+            .overview-label { font-size: 38px; }
+            .desc-body { font-size: 17px; }
+
+            /* PICT3 SECTION */
+            .pict3-section { padding: 0 20px 32px; }
+
+            /* SCREENSHOTS */
+            .screenshots-section {
+                padding: 0 20px 48px;
+                max-width: 100%;
             }
             .screenshots-grid { grid-template-columns: 1fr; }
-            footer { padding: 18px 24px; }
+
+            /* FOOTER */
+            footer {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            .footer-links { justify-content: center; }
         }
 
         @media (max-width: 480px) {
-            .hero-title { font-size: 60px; }
-            .hero-title-row { gap: 12px; }
-            .hero-pict3 { height: 48px; }
-            .overview-label { font-size: 32px; }
-            .desc-body { font-size: 16px; }
+            nav { height: 48px; }
+            .nav-logo img { height: 44px; }
+            .nav-back { display: none; }
+
+            .hero-title { font-size: 52px; }
+            .hero-title-row { gap: 10px; }
+            .hero-pict3 { width: 120px; }
+            .hero-tagline { font-size: 15px; }
+
+            .overview-label { font-size: 30px; }
+            .desc-body { font-size: 15px; line-height: 1.75; }
+
+            .dl-item { padding: 14px 16px; }
+            .dl-panel-header { padding: 12px 16px 10px; }
         }
     </style>
 </head>
