@@ -90,13 +90,14 @@
             padding: 8px;
             z-index: 201;
         }
-        .hamburger span {
+		.hamburger span {
             display: block;
             width: 24px; height: 1.5px;
-            background: #eeeeee;
+            background: #333333;
             transition: transform 0.3s, opacity 0.3s;
             transform-origin: center;
         }
+        .hamburger.open span { background: #eeeeee; }
         .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
