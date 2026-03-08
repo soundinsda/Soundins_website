@@ -90,7 +90,7 @@
             padding: 8px;
             z-index: 201;
         }
-        .hamburger span {
+		.hamburger span {
             display: block;
             width: 24px; height: 1.5px;
             background: #333333;
@@ -101,25 +101,6 @@
         .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
-
-        /* Lang switcher in nav bar (mobile only — hidden on desktop via media query) */
-        .lang-switcher-nav {
-            display: none;
-            align-items: center;
-            gap: 2px;
-            margin-right: 8px;
-        }
-        .lang-switcher-nav .lang-btn {
-            background: none; border: none;
-            font-family: var(--font-body); font-size: 10px; font-weight: 400;
-            letter-spacing: 0.18em; text-transform: uppercase;
-            cursor: pointer; padding: 5px 7px; border-radius: 2px;
-            transition: color 0.2s, background 0.2s;
-            color: rgba(0,0,0,0.5);
-        }
-        .lang-switcher-nav .lang-btn:hover { color: #000000; }
-        .lang-switcher-nav .lang-btn.active { color: #000000; background: var(--accent-dim); }
-        .lang-switcher-nav .lang-sep { color: rgba(0,0,0,0.3); font-size: 10px; user-select: none; }
 
         .nav-links {
             display: flex;
@@ -153,6 +134,7 @@
         .nav-item.open .nav-trigger::after { transform: rotate(-135deg) translateY(-2px); }
         .nav-trigger:hover, .nav-item.open .nav-trigger { color: #000000; }
 
+        /* DROPDOWN — aligned to left of trigger, won't overflow */
         .dropdown {
             position: absolute;
             top: 100%; left: 0;
@@ -204,7 +186,7 @@
         }
         .dropdown-link:hover { background: rgba(0,0,0,0.06); }
 
-        /* LANG SWITCHER (desktop — inside nav-links) */
+        /* LANG SWITCHER */
         .lang-switcher {
             display: flex; align-items: center;
             margin-left: 16px;
@@ -263,6 +245,8 @@
             animation: fadeUp 0.9s 0.3s forwards;
         }
         .hero-headline em { font-style: italic; color: var(--accent); }
+
+
 
         .hero-sub {
             font-size: 18px; line-height: 1.9;
@@ -343,12 +327,6 @@
             .nav-brand { font-size: 18px; letter-spacing: 0.12em; }
             .hamburger { display: flex; }
 
-            /* Show lang switcher in nav bar on mobile */
-            .lang-switcher-nav { display: flex; }
-
-            /* Hide lang switcher inside the panel on mobile */
-            .lang-switcher { display: none; }
-
             .nav-links {
                 position: fixed;
                 top: 0; right: 0;
@@ -419,9 +397,19 @@
             }
             .submenu-trigger:hover { color: #ffffff; background: rgba(255,255,255,0.05); }
 
-            main { padding: calc(var(--nav-h) + 12px) 20px 80px;
-					justify-content: flex-start;			}
-			
+            .lang-switcher {
+                width: 100%;
+                margin: 16px 0 0;
+                border-left: none;
+                border-top: 1px solid var(--border);
+                padding: 16px 24px;
+            }
+            .lang-btn { color: rgba(255,255,255,0.5); }
+            .lang-btn:hover { color: #ffffff; }
+            .lang-btn.active { color: #ffffff; }
+            .lang-sep { color: rgba(255,255,255,0.25); }
+
+            main { padding: calc(var(--nav-h) + 20px) 20px 80px; }
             .logo-wrap { margin-bottom: 36px; }
             .logo-wrap img { width: clamp(140px, 55vw, 260px); }
             .hero-sub { max-width: 100%; font-size: 15px; }
@@ -448,13 +436,6 @@
 
     <nav>
         <a class="nav-brand" href="#">Soundins</a>
-
-        <!-- Lang switcher visible in nav bar on mobile -->
-        <div class="lang-switcher-nav">
-            <button class="lang-btn active" id="btn-en-nav">EN</button>
-            <span class="lang-sep">/</span>
-            <button class="lang-btn" id="btn-es-nav">ES</button>
-        </div>
 
         <button class="hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
@@ -491,7 +472,6 @@
                 </div>
             </div>
 
-            <!-- Lang switcher inside panel (desktop only) -->
             <div class="lang-switcher">
                 <button class="lang-btn active" id="btn-en">EN</button>
                 <span class="lang-sep">/</span>
@@ -510,13 +490,15 @@
             Tools for those who<br><em>care</em> about audio.
         </h1>
 
+
+
         <p class="hero-sub i18n-fade">
-            Technical research, applications and plugins tailored to professional audio engineering.
+            Technical reseach, applications and plugins for professional audio engineering.
         </p>
 
         <div class="contact-block">
             <p class="contact-label i18n-fade" data-en="Get in touch" data-es="Contacto">Get in touch</p>
-            <a class="contact-email" href="/cdn-cgi/l/email-protection#a7c4c8c9d3c6c4d3e7d4c8d2c9c3cec9d489c4c8ca89c6d5"><span class="__cf_email__" data-cfemail="24474b4a5045475064574b514a404d4a570a474b490a4556">[email&#160;protected]</span></a>
+            <a class="contact-email" href="/cdn-cgi/l/email-protection#8deee2e3f9eceef9cdfee2f8e3e9e4e3fea3eee2e0a3ecff"><span class="__cf_email__" data-cfemail="ea8985849e8b899eaa99859f848e838499c4898587c48b98">[email&#160;protected]</span></a>
             <a href="https://www.instagram.com/soundins_" target="_blank" class="ig-link" aria-label="Instagram">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -615,12 +597,12 @@
             var strings = {
                 en: {
                     headline: 'Tools for those who<br><em>care</em> about audio.',
-                    sub:      'Technical research, applications and plugins tailored to professional audio engineering',
+                    sub:      'Plugins, applications, and research for professional audio engineering.',
                     contact:  'Get in touch'
                 },
                 es: {
-                    headline: 'Herramientas para<br>los <em>apasionados</em><br>del audio.',
-                    sub:      'Investigación, aplicaciones y plugins, especializados en ingeniería de audio profesional.',
+                    headline: 'Herramientas para los<br><em>apasionados</em> del audio.',
+                    sub:      'Investigacion, aplicaciones y plugins especializados en la ingeniería de audio profesional.',
                     contact:  'Contacto'
                 }
             };
@@ -630,10 +612,6 @@
             var sub         = document.querySelector('.hero-sub');
             var contactLbl  = document.querySelector('.contact-label');
             var fadables    = document.querySelectorAll('.i18n-fade');
-
-            // All lang buttons (desktop panel + mobile nav bar)
-            var btnEnAll = document.querySelectorAll('[id^="btn-en"]');
-            var btnEsAll = document.querySelectorAll('[id^="btn-es"]');
 
             function setLang(lang) {
                 if (lang === currentLang) return;
@@ -657,9 +635,9 @@
                 }, 250);
 
                 localStorage.setItem('lang', lang);
-                btnEnAll.forEach(function (b) { b.classList.toggle('active', lang === 'en'); });
-                btnEsAll.forEach(function (b) { b.classList.toggle('active', lang === 'es'); });
+                document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+                document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             }
 
-            btnEnAll.forEach(function (b) { b.addEventListener('click', function () { setLang('en'); }); });
-            btnEsAll.forEach(function (b) { b.addEventListener('click', function () { setLang('es'); }); });
+            document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
+            document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
