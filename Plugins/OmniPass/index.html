@@ -581,63 +581,6 @@
             .overview-label { font-size: 32px; }
             .desc-body { font-size: 16px; }
         }
-        /* ══ COMING SOON OVERLAY ══ */
-        #coming-soon-overlay {
-            position: fixed; inset: 0;
-            background: rgba(5,5,6,0.96);
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-            backdrop-filter: blur(6px);
-        }
- .cs-container {
-    max-width: 690px;       /* 460 × 1.5 */
-    background: var(--dark2);
-    border-radius: 12px;    /* 8 × 1.5 */
-    padding: 78px 54px;     /* 52/36 × 1.5 */
-    border: 1px solid rgba(180,180,190,0.22);
-    animation: fadeDown 0.5s ease both;
-}
-.cs-eyebrow {
-    font-family: var(--mono);
-    font-size: 16.5px;      /* 11 × 1.5 */
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--red2);
-    margin-bottom: 30px;    /* 20 × 1.5 */
-}
-.cs-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 78px;        /* 52 × 1.5 */
-    letter-spacing: 0.1em;
-    color: #BFFBF7;
-    margin-bottom: 30px;    /* 20 × 1.5 */
-    line-height: 1;
-}
-.cs-message {
-    font-size: 24px;        /* 16 × 1.5 */
-    font-weight: 300;
-    color: var(--text2);
-    line-height: 1.7;
-    margin-bottom: 48px;    /* 32 × 1.5 */
-}
-.cs-back {
-    font-family: var(--mono);
-    font-size: 18px;        /* 12 × 1.5 */
-    letter-spacing: 0.1em;
-    color: var(--text3);
-    text-decoration: none;
-    border: 1px solid var(--border2);
-    border-radius: 4px;     /* 3 × 1.5 */
-    padding: 13px 33px;     /* 9/22 × 1.5 */
-    transition: all 0.15s;
-    display: inline-block;
-}
-        .cs-back:hover { color: var(--text1); border-color: var(--text1); }
     </style>
 </head>
 <body>
@@ -792,18 +735,7 @@
     <img id="lightbox-img" src="" alt="">
 </div>
 
-<MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
-<COMING SOON OVERLAY — remove comment tags below when product launches
-<div id="coming-soon-overlay">
-    <div class="cs-container">
-        <div class="cs-eyebrow">All Pass Node</div>
-        <div class="cs-title">OMNIPASS</div>
-        <p class="cs-message">Coming Soon.</p>
-        <a href="https://soundinsda.github.io/Soundins_website/index.html" class="cs-back">← Back to Main Page</a>
-    </div>
-</div>
-
-
+<!-- MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
 <div id="mobile-overlay">
     <div class="overlay-container">
         <div class="overlay-icon">💻</div>
