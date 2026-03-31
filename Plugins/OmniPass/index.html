@@ -169,8 +169,8 @@
             align-items: start;
             padding-right: 32px;
         }
-        .hero-row .hero        { grid-column: 1; grid-row: 1; }
-        .hero-row .desc-section { grid-column: 1; grid-row: 2; }
+        .hero-row .hero         { grid-column: 1; grid-row: 1; }
+        .hero-row .desc-section  { grid-column: 1; grid-row: 2; }
         .hero-row .download-panel { grid-column: 2; grid-row: 1 / 3; }
 
         /* Left: hero */
@@ -185,24 +185,24 @@
             overflow: hidden;
         }
 
-.hero-bg {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, var(--dark1) 0%, var(--black) 100%);
-    pointer-events: none;
-}
-.hero-bg-img {
-    position: absolute;
-    width: 30%;
-    height: auto;
-    top: 50%;
-    left: 17%;
-    transform: translate(-50%, -50%);
-    opacity: 0.90;
-    mix-blend-mode: screen;
-    cursor: zoom-in;
-    z-index: 5;
-    pointer-events: all;
-}
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, var(--dark1) 0%, var(--black) 100%);
+            pointer-events: none;
+        }
+        .hero-bg-img {
+            position: absolute;
+            width: 30%;
+            height: auto;
+            top: 50%;
+            left: 17%;
+            transform: translate(-50%, -50%);
+            opacity: 0.90;
+            mix-blend-mode: screen;
+            cursor: zoom-in;
+            z-index: 5;
+            pointer-events: all;
+        }
         .hero-bg::after {
             content:'';
             position: absolute; inset: 0;
@@ -219,7 +219,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-			padding-left: 25%;
+            padding-left: 25%;
         }
 
         .hero-eyebrow {
@@ -238,7 +238,6 @@
             letter-spacing: 0.05em;
             color: #ffffff;
             margin-bottom: 0px;
-			/*transform: translateX(180px)*/
         }
 
         .hero-version {
@@ -377,7 +376,7 @@
             font-weight: 300;
             line-height: 1.85;
             color: var(--text2);
-			max-width: 860px;  /* ajustá a gusto */
+            max-width: 860px;
         }
 
         .format-row {
@@ -550,36 +549,90 @@
         }
         .overlay-close:hover { color: var(--text1); border-color: var(--text1); }
 
+        /* Imagen mobile entre hero y overview — oculta en desktop */
+        .mobile-hero-img {
+            display: none;
+        }
+
         /* ══ RESPONSIVE ══ */
         @media (max-width: 900px) {
+            nav { padding: 0 20px; }
+
+            /* Grid: una sola columna, reorden hero → download → desc */
             .hero-row {
                 grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                padding-right: 0;
             }
+            .hero-row .hero          { grid-column: 1; grid-row: 1; }
+            .hero-row .mobile-hero-img { grid-column: 1; grid-row: 2; }
+            .hero-row .desc-section   { grid-column: 1; grid-row: 3; }
+            .hero-row .download-panel { grid-column: 1; grid-row: 4; }
+
+            .mobile-hero-img {
+                display: flex;
+                justify-content: center;
+                padding: 0 20px 0;
+            }
+            .mobile-hero-img img {
+                width: 100%;
+                max-width: 420px;
+                height: auto;
+                opacity: 0.92;
+                border-radius: 6px;
+            }
+
+            /* Hero */
+            .hero {
+                padding: 32px 20px 4px;
+                min-height: 240px;
+            }
+            .hero-inner {
+                padding-left: 0;
+            }
+            .hero-bg-img {
+                width: 55%;
+                left: 50%;
+                top: 50%;
+                opacity: 0.20;
+            }
+            .hero-title { font-size: 72px; }
+            .hero-eyebrow { font-size: 12px; letter-spacing: 0.2em; }
+            .hero-tagline { font-size: 15px; max-width: 100%; }
+
+            /* Download panel */
             .download-panel {
-                margin: 0 20px 32px;
+                margin: 0 20px 0;
                 align-self: stretch;
             }
-            .hero {
-                padding: 20px 24px 32px;
+
+            /* Description */
+            .desc-section {
+                padding: 40px 20px 40px;
             }
-            .hero-title { font-size: 80px; }
-            .hero-eyebrow { font-size: 12px; }
-            .hero-pict3 { height: 64px; }
-            nav { padding: 0 24px; }
-            .desc-section, .screenshots-section {
-                padding-left: 24px;
-                padding-right: 24px;
-            }
+            .overview-label { font-size: 36px; }
+            .desc-body { font-size: 16px; }
+            .format-row { gap: 24px; }
+
+            /* Screenshots */
+            .screenshots-section { padding: 0 20px 48px; }
             .screenshots-grid { grid-template-columns: 1fr; }
-            footer { padding: 18px 24px; }
+
+            /* Footer */
+            footer {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            .footer-links { justify-content: center; }
         }
 
         @media (max-width: 480px) {
-            .hero-title { font-size: 60px; }
-            .hero-title-row { gap: 12px; }
-            .hero-pict3 { height: 48px; }
-            .overview-label { font-size: 32px; }
-            .desc-body { font-size: 16px; }
+            .hero-title { font-size: 56px; }
+            .overview-label { font-size: 28px; }
+            .desc-body { font-size: 15px; }
+            .hero-eyebrow { font-size: 11px; }
         }
     </style>
 </head>
@@ -603,21 +656,21 @@
     <div class="hero-row">
 
         <div class="hero">
-    <div class="hero-bg">
-        <img src="OmniPass_pict1.png" class="hero-bg-img" alt="" onclick="openLightbox('OmniPass_pict1.png')">
-    </div>
-    <div class="hero-content">
-        <div class="hero-inner">
-            <div class="hero-title-row">
-                <h1 class="hero-title" style="color:#BFFBF7;">OMNIPASS</h1>
+            <div class="hero-bg">
+                <img src="OmniPass_pict1.png" class="hero-bg-img" alt="" onclick="openLightbox('OmniPass_pict1.png')">
             </div>
-            <div class="hero-eyebrow" style="margin-bottom:0px; color:#ffffff;">All Pass Node</div>
-            <div class="hero-version" id="version">v1.0.0</div>
-            <p class="hero-tagline" id="tagline-en">Total phase control over your signal alignment.</p>
-            <p class="hero-tagline" id="tagline-es" style="display:none">Total control sobre la alineación de la fase de tu señal.</p>
+            <div class="hero-content">
+                <div class="hero-inner">
+                    <div class="hero-title-row">
+                        <h1 class="hero-title" style="color:#BFFBF7;">OMNIPASS</h1>
+                    </div>
+                    <div class="hero-eyebrow" style="margin-bottom:0px; color:#ffffff;">All Pass Node</div>
+                    <div class="hero-version" id="version">v1.0.0</div>
+                    <p class="hero-tagline" id="tagline-en">Total phase control over your signal alignment.</p>
+                    <p class="hero-tagline" id="tagline-es" style="display:none">Total control sobre la alineación de la fase de tu señal.</p>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <!-- DOWNLOAD PANEL -->
         <div class="download-panel">
@@ -652,59 +705,65 @@
                         <span class="dl-sub">Version history</span>
                     </div>
                 </a>
-				<a href="Manual_OmniPass.pdf" class="dl-item" download
-   onclick="trackDownload('Manual_OmniPass.pdf','Manual')">
-    <span class="dl-emoji">📄</span>
-    <div class="dl-info">
-        <span class="dl-name">User Manual</span>
-        <span class="dl-sub">User guide</span>
-    </div>
-</a>
+                <a href="Manual_OmniPass.pdf" class="dl-item" download
+                   onclick="trackDownload('Manual_OmniPass.pdf','Manual')">
+                    <span class="dl-emoji">📄</span>
+                    <div class="dl-info">
+                        <span class="dl-name">User Manual</span>
+                        <span class="dl-sub">User guide</span>
+                    </div>
+                </a>
             </div>
         </div>
 
-    <!-- DESCRIPTION (inside hero-row so it sits in col 1 row 2) -->
-    <div class="desc-section">
-        <div class="overview-label">Overview</div>
+        <!-- IMAGEN MOBILE: visible solo en mobile, entre hero y overview -->
+        <div class="mobile-hero-img">
+            <img src="OmniPass_pict1.png" alt="OmniPass Plugin Interface" onclick="openLightbox('OmniPass_pict1.png')">
+        </div>
 
-        <div class="desc-lang active" id="desc-en">
-            <p class="desc-body">
-                OmniPass is an advanced All-Pass filter plugin designed for modern audio production. It maintains a completely flat magnitude response, without altering volumes or frequency balance, while generating frequency-dependent phase shifts. This makes it ideal for correcting complex phase alignments in multi-mic or multi-source recordings, aligning live sound speaker systems, or creating creative interference and dispersion effects.
-                <br><br>
-                It features capabilities such as different processing modes, flexible internal routing, phase offset functionality, and an intuitive graphical interface that allows you to visualize the filter's response in both phase and magnitude.
-            </p>
-            <div class="format-row">
-                <div>
-                    <div class="format-col-title">Formats</div>
-                    <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span></div>
+        <!-- DESCRIPTION (inside hero-row so it sits in col 1 row 2) -->
+        <div class="desc-section">
+            <div class="overview-label">Overview</div>
+
+            <div class="desc-lang active" id="desc-en">
+                <p class="desc-body">
+                    OmniPass is an advanced All-Pass filter plugin designed for modern audio production. It maintains a completely flat magnitude response, without altering volumes or frequency balance, while generating frequency-dependent phase shifts. This makes it ideal for correcting complex phase alignments in multi-mic or multi-source recordings, aligning live sound speaker systems, or creating creative interference and dispersion effects.
+                    <br><br>
+                    It features capabilities such as different processing modes, flexible internal routing, phase offset functionality, and an intuitive graphical interface that allows you to visualize the filter's response in both phase and magnitude.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Formats</div>
+                        <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Platform</div>
+                        <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
+                    </div>
                 </div>
-                <div>
-                    <div class="format-col-title">Platform</div>
-                    <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
+            </div>
+
+            <div class="desc-lang" id="desc-es">
+                <p class="desc-body">
+                    OmniPass es un plugin avanzado de filtro All-Pass pensado para la producción de audio moderna. Mantiene una respuesta de magnitud completamente plana, sin modificar volúmenes ni balance de frecuencias, pero genera desplazamientos de fase dependientes de la frecuencia, lo que lo hace ideal para corregir alineaciones complejas en grabaciones multipista, alinear sistemas de altavoces en vivo o crear efectos creativos de interferencia y dispersión.
+                    <br><br>
+                    Posee características tales como: diferentes modalidades de procesamiento, ruteo interno, offset de fase y una interfaz gráfica que permite visualizar la respuesta del nodo tanto en fase como en magnitud.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Formatos</div>
+                        <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Plataforma</div>
+                        <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="desc-lang" id="desc-es">
-            <p class="desc-body">
-                OmniPass es un plugin avanzado de filtro All-Pass pensado para la producción de audio moderna. Mantiene una respuesta de magnitud completamente plana, sin modificar volúmenes ni balance de frecuencias, pero genera desplazamientos de fase dependientes de la frecuencia, lo que lo hace ideal para corregir alineaciones complejas en grabaciones multipista, alinear sistemas de altavoces en vivo o crear efectos creativos de interferencia y dispersión.
-                <br><br>
-                Posee características tales como: diferentes modalidades de procesamiento, ruteo interno, offset de fase y una interfaz gráfica que permite visualizar la respuesta del nodo tanto en fase como en magnitud.
-            </p>
-            <div class="format-row">
-                <div>
-                    <div class="format-col-title">Formatos</div>
-                    <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span></div>
-                </div>
-                <div>
-                    <div class="format-col-title">Plataforma</div>
-                    <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     </div><!-- end hero-row -->
+
     <section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
