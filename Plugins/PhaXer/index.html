@@ -125,6 +125,45 @@
             border-color: rgba(255,255,255,0.3);
             background: rgba(255,255,255,0.04);
         }
+
+        /* ══ RESPONSIVE ══ */
+        @media (max-width: 600px) {
+            .cs-container {
+                padding: 32px 20px;
+                border-radius: 12px;
+            }
+            .cs-logo {
+                width: clamp(200px, 75vw, 400px);
+            }
+            .cs-eyebrow {
+                font-size: 14px;
+                letter-spacing: 0.18em;
+            }
+            .cs-version {
+                font-size: 15px;
+                margin-bottom: 20px;
+            }
+            .cs-message {
+                font-size: 18px;
+                margin-bottom: 32px;
+            }
+            .cs-back {
+                font-size: 12px;
+                padding: 10px 22px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .cs-container {
+                padding: 24px 14px;
+            }
+            .cs-logo {
+                width: clamp(160px, 80vw, 300px);
+            }
+            .cs-message {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
