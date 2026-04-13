@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhaXer — Soundins</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4EC16PWXBK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-4EC16PWXBK');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black:   #050506;
+            --dark1:   #0c0c0e;
+            --dark2:   #121214;
+            --border:  rgba(255,255,255,0.06);
+            --border2: rgba(255,255,255,0.13);
+            --red:     #c0292a;
+            --red2:    #e03030;
+            --text1:   #f4f4f6;
+            --text2:   #aaaabc;
+            --text3:   #606070;
+            --mono:    'Share Tech Mono', monospace;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background: var(--black);
+            color: var(--text1);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content:'';
+            position:fixed; inset:0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.022;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ══ COMING SOON OVERLAY ══ */
+        #coming-soon-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            padding: 24px;
+        }
+
+        .cs-container {
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            border: 1px solid rgba(80, 160, 255, 0.35);
+            border-radius: 16px;
+            padding: 48px 40px;
+            background: rgba(20, 40, 80, 0.15);
+            box-shadow: 0 0 40px rgba(60, 130, 255, 0.08);
+        }
+
+        .cs-eyebrow {
+            font-family: var(--mono);
+            font-size: 20px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text2);
+            margin-bottom: 0px;
+        }
+
+.cs-logo {
+    width: clamp(300px, 30vw, 800px);
+    height: auto;
+    display: block;
+    margin: 0 auto -10px;
+}
+
+        .cs-version {
+            font-family: var(--mono);
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            color: #ffffff;
+            margin-bottom: 32px;
+        }
+
+
+
+        .cs-message {
+            font-size: 24px;
+            line-height: 1.75;
+            color: var(--text2);
+            margin-bottom: 48px;
+        }
+
+        .cs-back {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            color: var(--text2);
+            text-decoration: none;
+            border: 1px solid var(--border2);
+            padding: 12px 28px;
+            border-radius: 2px;
+            transition: color 0.2s, border-color 0.2s, background 0.2s;
+        }
+        .cs-back:hover {
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.04);
+        }
+    </style>
+</head>
+<body>
+
+<div id="coming-soon-overlay">
+    <div class="cs-container">
+        <div class="cs-eyebrow">Next Release</div>
+        <img class="cs-logo" src="PhaXer_logo_HD.png" alt="PhaXer">
+        <div class="cs-version">v2.0</div>
+        <div class="cs-divider"></div>
+        <p class="cs-message">Coming Soon.</p>
+        <a href="https://soundinsda.github.io/Soundins_website/index.html" class="cs-back">← Back to Main Page</a>
+    </div>
+</div>
+
+</body>
+</html>
