@@ -652,3 +652,10 @@
 
             document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
             document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
+            var saved = localStorage.getItem('lang');
+            if (saved && saved !== 'en') setLang(saved);
+
+        });
+    </script>
+</body>
+</html>
