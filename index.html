@@ -499,7 +499,7 @@
 
         <div class="contact-block">
             <p class="contact-label i18n-fade" data-en="Get in touch" data-es="Contacto">Get in touch</p>
-            <a class="contact-email" href="/cdn-cgi/l/email-protection#197a76776d787a6d596a766c777d70776a377a767437786b"><span class="__cf_email__" data-cfemail="fa9995948e9b998eba89958f949e939489d4999597d49b88">[email&#160;protected]</span></a>
+            <a class="contact-email" id="contact-email"></a>
             <a href="https://www.instagram.com/soundins_" target="_blank" class="ig-link" aria-label="Instagram">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -519,7 +519,17 @@
         </svg>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
+        (function() {
+            var el = document.getElementById('contact-email');
+            if (el) {
+                var addr = 'contact' + '@' + 'soundins.com.ar';
+                el.href = 'mailto:' + addr;
+                el.textContent = addr;
+            }
+        })();
+    </script>
+    <script>
         (function () {
             var logo = document.getElementById("logo");
             var paths = ["Soundins.png", "./Soundins.png", "/Soundins.png", "assets/Soundins.png", "images/Soundins.png"];
