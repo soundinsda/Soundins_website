@@ -750,7 +750,7 @@
 
         <!-- DESCRIPTION (inside hero-row so it sits in col 1 row 2) -->
         <div class="desc-section">
-            <div class="overview-label">Overview</div>
+            <div class="overview-label" id="overview-label">Overview</div>
 
             <div class="desc-lang active" id="desc-en">
                 <p class="desc-body">
@@ -841,6 +841,7 @@
         document.getElementById('btn-es').classList.toggle('active', !isEn);
         document.getElementById('tagline-en').style.display = isEn ? '' : 'none';
         document.getElementById('tagline-es').style.display = isEn ? 'none' : '';
+        document.getElementById('overview-label').textContent = isEn ? 'Overview' : 'Descripción';
     }
     function openLightbox(src) {
         document.getElementById('lightbox-img').src = src;
