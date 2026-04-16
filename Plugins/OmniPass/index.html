@@ -53,20 +53,26 @@
 
         body {
             background-color: var(--black);
-            background-image:
-                linear-gradient(to bottom,
-                    rgba(5,5,6,0.55) 0%,
-                    rgba(5,5,6,1) 90%
-                ),
-                url('OmniPass_background.png');
-            background-size: auto 40%;
-            background-position: center 37%;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
             color: var(--text1);
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom,
+                    rgba(5,5,6,0.65) 0%,
+                    rgba(5,5,6,1) 100%
+                ),
+                url('OmniPass_background.png');
+            background-size: auto 140%;
+            background-position: center 250px;
+            background-repeat: no-repeat;
+            z-index: -1;
         }
 
         body::after {
@@ -643,16 +649,8 @@
         }
 
         @media (max-width: 900px) {
-            body {
-                background-size: 90% auto;
-                background-position: center 320px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                background-size: 100% auto;
-                background-position: center 280px;
+            body::before {
+                display: none;
             }
         }
     </style>
