@@ -101,7 +101,7 @@
         }
 
         .nav-logo img {
-            height: 42px;
+            height: 58px;
             width: auto;
             display: block;
         }
@@ -145,9 +145,9 @@
 
         .nav-back {
             font-family: var(--mono);
-            font-size: 13px;
+            font-size: 15px;
             letter-spacing: 0.08em;
-            color: var(--text1);
+            color: var(--text2);
             text-decoration: none;
             transition: color 0.15s;
         }
@@ -161,7 +161,7 @@
         }
         .lang-btn {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: 15px;
             letter-spacing: 0.1em;
             padding: 5px 14px;
             background: transparent;
@@ -574,7 +574,10 @@
 
         /* ══ RESPONSIVE ══ */
         @media (max-width: 900px) {
-            nav { padding: 0 20px; }
+            nav { padding: 0 20px; height: 52px; }
+            .nav-logo img { height: 46px; }
+            .nav-back { font-size: 13px; }
+            .lang-btn { font-size: 13px; padding: 4px 10px; }
 
             /* Grid: una sola columna, reorden hero → download → desc */
             .hero-row {
@@ -644,6 +647,9 @@
         }
 
         @media (max-width: 480px) {
+            nav { height: 48px; }
+            .nav-logo img { height: 38px; }
+            .nav-back { display: none; }
             .hero-title { font-size: 56px; }
             .overview-label { font-size: 28px; }
             .desc-body { font-size: 15px; }
