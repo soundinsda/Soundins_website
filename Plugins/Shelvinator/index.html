@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelvinator EQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMDC82JCM2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZMDC82JCM2');
+        function trackDownload(fileName, downloadType) {
+            gtag('event', 'download', { 'event_category': 'Downloads', 'event_label': fileName, 'download_type': downloadType, 'value': 1 });
+        }
+        function isMobileOrTablet() {
+            const ua = navigator.userAgent.toLowerCase();
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
+            const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            return isMobile || (isTouch && window.innerWidth <= 1024);
+        }
+        function handleDownloadClick(e, fileName, downloadType) {
+            if (isMobileOrTablet()) {
+                e.preventDefault();
+                document.getElementById('mobile-overlay').style.display = 'flex';
+                return false;
+            }
+            trackDownload(fileName, downloadType);
+        }
+    </script>
+
+    <style>
+        :root {
+            --black:   #050506;
+            --dark1:   #0c0c0e;
+            --dark2:   #121214;
+            --border:  rgba(255,255,255,0.06);
+            --border2: rgba(255,255,255,0.13);
+            --red:     #e02020;
+            --red2:    #ff2828;
+            --text1:   #f4f4f6;
+            --text2:   #aaaabc;
+            --text3:   #606070;
+            --mono:    'Share Tech Mono', monospace;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background-color: var(--black);
+            color: var(--text1);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(to bottom, rgba(5,5,6,0.65) 0%, rgba(5,5,6,1) 100%),
+                url('Pict1.png');
+            background-size: auto 80%;
+            background-position: 105% 253px;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        body::after {
+            content:'';
+            position:fixed; inset:0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.022;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 52px;
+            height: 56px;
+            background: rgba(5,5,6,0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            animation: fadeDown 0.4s ease both;
+        }
+
+        .nav-logo img { height: 58px; width: auto; display: block; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        .nav-back {
+            font-family: var(--mono);
+            font-size: 15px;
+            letter-spacing: 0.08em;
+            color: var(--text2);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .nav-back:hover { color: var(--text1); }
+
+        .lang-switcher {
+            display: flex;
+            border: 1px solid var(--border2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            font-family: var(--mono);
+            font-size: 15px;
+            letter-spacing: 0.1em;
+            padding: 5px 14px;
+            background: transparent;
+            border: none;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .lang-btn + .lang-btn { border-left: 1px solid var(--border2); }
+        .lang-btn:hover { color: var(--text1); background: rgba(255,255,255,0.05); }
+        .lang-btn.active { background: var(--red); color: #fff; }
+
+        .hero-row {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            grid-template-rows: auto auto;
+            border-bottom: 1px solid var(--border);
+            animation: fadeDown 0.5s 0.05s ease both;
+            position: relative;
+            align-items: start;
+            padding-right: 32px;
+        }
+        .hero-row .hero           { grid-column: 1; grid-row: 1; }
+        .hero-row .desc-section   { grid-column: 1; grid-row: 2; }
+        .hero-row .download-panel { grid-column: 2; grid-row: 1 / 3; }
+
+        .hero {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            padding: 20px 52px 40px;
+            overflow: hidden;
+        }
+
+        .hero-bg { position: absolute; inset: 0; background: transparent; pointer-events: none; }
+        .hero-bg-img {
+            position: absolute;
+            width: 30%; height: auto;
+            top: 50%; left: 17%;
+            transform: translate(-50%, -50%);
+            opacity: 0.90;
+            mix-blend-mode: screen;
+            cursor: zoom-in;
+            z-index: 5;
+            pointer-events: all;
+        }
+        .hero-bg::after {
+            content:'';
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px);
+        }
+
+        .hero-content { position: relative; z-index: 1; width: 100%; display: flex; justify-content: center; }
+        .hero-inner {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-left: 25%;
+            background: rgba(5,5,6,0.6);
+            border-radius: 8px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 16px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--red2);
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 100px;
+            line-height: 0.88;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            margin-bottom: 0px;
+        }
+
+        .hero-version {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            color: var(--text2);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border2);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 2px;
+            margin-bottom: 22px;
+        }
+
+        .hero-tagline {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text2);
+            line-height: 1.6;
+            max-width: 520px;
+        }
+
+        .download-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--dark1);
+            margin-top: 48px;
+            margin-right: 32px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(180,180,190,0.8);
+            border-radius: 6px;
+            overflow: hidden;
+            align-self: flex-start;
+        }
+
+        .dl-panel-header { padding: 20px 28px 16px; border-bottom: 1px solid var(--border); }
+        .dl-panel-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 0.18em;
+            color: var(--text1);
+        }
+        .dl-panel-items { display: flex; flex-direction: column; flex: 1; }
+
+        .dl-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 28px;
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+        .dl-item:last-child { border-bottom: none; }
+        .dl-item:hover { background: rgba(255,255,255,0.04); }
+        .dl-item img {
+            width: 36px; height: 36px;
+            object-fit: contain;
+            filter: brightness(0.5) saturate(0);
+            transition: filter 0.15s;
+            flex-shrink: 0;
+        }
+        .dl-item:hover img { filter: brightness(1) saturate(1); }
+
+        .dl-emoji {
+            font-size: 32px; opacity: 0.4;
+            line-height: 1; flex-shrink: 0;
+            width: 36px; text-align: center;
+            transition: opacity 0.15s;
+        }
+        .dl-item:hover .dl-emoji { opacity: 1; }
+
+        .dl-name {
+            font-family: var(--mono);
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text1);
+            display: block;
+            margin-bottom: 3px;
+        }
+        .dl-sub { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--text2); }
+
+        .desc-section { padding: 60px 100px 48px 380px; animation: fadeDown 0.5s 0.1s ease both; }
+
+        .overview-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            letter-spacing: 0.1em;
+            color: var(--text1);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .overview-label::after { content:''; flex:1; height: 1px; background: var(--border2); }
+
+        .desc-lang { display: none; }
+        .desc-lang.active { display: block; }
+
+        .desc-body {
+            font-size: 19px;
+            font-weight: 300;
+            line-height: 1.85;
+            color: var(--text1);
+            max-width: 860px;
+        }
+
+        .format-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 36px;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+        }
+        .format-col-title {
+            font-family: var(--mono);
+            font-size: 14px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--red2);
+            margin-bottom: 10px;
+        }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            font-family: var(--mono);
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 2px;
+            border: 1px solid var(--border2);
+            color: var(--text1);
+            background: rgba(255,255,255,0.04);
+            letter-spacing: 0.05em;
+        }
+
+        .screenshots-section {
+            padding: 0 52px 64px;
+            max-width: 860px;
+            margin: 0 auto;
+            animation: fadeDown 0.5s 0.15s ease both;
+        }
+        .section-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 0.1em;
+            color: var(--text3);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .section-label::after { content:''; flex:1; height: 1px; background: var(--border); }
+
+        .screenshots-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+        .shot-card {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--dark2);
+            cursor: zoom-in;
+            transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+        }
+        .shot-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .shot-card img { width: 100%; display: block; opacity: 0.82; transition: opacity 0.22s; }
+        .shot-card:hover img { opacity: 1; }
+        .shot-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 10px 14px;
+            background: linear-gradient(0deg, rgba(5,5,6,0.75) 0%, transparent 90%);
+        }
+        .shot-caption { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; color: var(--text2); text-transform: uppercase; }
+
+        .lightbox {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(5,5,6,0.97);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 92vw; max-height: 88vh; border: 1px solid var(--border2); border-radius: 4px; }
+        .lightbox-close {
+            position: fixed; top: 20px; right: 28px;
+            font-family: var(--mono); font-size: 20px;
+            color: var(--text3); cursor: pointer; transition: color 0.15s;
+        }
+        .lightbox-close:hover { color: var(--text1); }
+
+        footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 52px;
+            border-top: 1px solid var(--border);
+            background: var(--black);
+        }
+        .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.18em; color: var(--red); opacity: 0.7; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-link { font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; color: var(--text2); text-decoration: none; transition: color 0.15s; }
+        .footer-link:hover { color: var(--text1); }
+
+        @keyframes fadeDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
+
+        #mobile-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(5,5,6,0.97);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .overlay-container { max-width: 380px; background: var(--dark2); border-radius: 8px; padding: 44px 28px; border: 1px solid var(--border2); animation: fadeDown 0.3s ease both; }
+        .overlay-icon { font-size: 52px; margin-bottom: 20px; }
+        .overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.1em; color: var(--red2); margin-bottom: 14px; }
+        .overlay-message { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+        .overlay-sub { font-size: 13px; color: var(--text3); line-height: 1.5; margin-bottom: 28px; }
+        .overlay-close { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--text2); background: transparent; border: 1px solid var(--border2); border-radius: 3px; padding: 8px 20px; cursor: pointer; transition: all 0.15s; }
+        .overlay-close:hover { color: var(--text1); border-color: var(--text1); }
+
+        .mobile-hero-img { display: none; }
+
+        @media (max-width: 900px) {
+            nav { padding: 0 20px; height: 52px; }
+            .nav-logo img { height: 46px; }
+            .nav-back { font-size: 13px; }
+            .lang-btn { font-size: 13px; padding: 4px 10px; }
+            .hero-row { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-right: 0; }
+            .hero-row .hero            { grid-column: 1; grid-row: 1; }
+            .hero-row .mobile-hero-img { grid-column: 1; grid-row: 2; }
+            .hero-row .desc-section    { grid-column: 1; grid-row: 3; }
+            .hero-row .download-panel  { grid-column: 1; grid-row: 4; }
+            .mobile-hero-img { display: flex; justify-content: center; padding: 0 20px 0; }
+            .mobile-hero-img img { width: 100%; max-width: 420px; height: auto; opacity: 0.92; border-radius: 6px; }
+            .hero { padding: 32px 20px 4px; min-height: 240px; }
+            .hero-inner { padding-left: 0; }
+            .hero-bg-img { display: none; }
+            .hero-title { font-size: 64px; }
+            .hero-eyebrow { font-size: 12px; letter-spacing: 0.2em; }
+            .hero-tagline { font-size: 15px; max-width: 100%; }
+            .download-panel { margin: 0 20px 0; align-self: stretch; }
+            .desc-section { padding: 40px 20px 40px; }
+            .overview-label { font-size: 36px; }
+            .desc-body { font-size: 16px; }
+            .format-row { gap: 24px; }
+            .screenshots-section { padding: 0 20px 48px; }
+            footer { padding: 18px 20px; flex-direction: column; gap: 12px; text-align: center; }
+            .footer-links { justify-content: center; }
+            body::before { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            nav { height: 48px; }
+            .nav-logo img { height: 38px; }
+            .nav-back { display: none; }
+            .hero-title { font-size: 48px; }
+            .overview-label { font-size: 28px; }
+            .desc-body { font-size: 15px; }
+            .hero-eyebrow { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="desktop-content">
+
+    <nav>
+        <div class="nav-logo"><img src="../../Soundins.png" alt="Soundins"></div>
+        <div class="nav-right">
+            <a href="https://soundinsda.github.io/Soundins_website/index.html" class="nav-back">← Main Page</a>
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btn-en" onclick="setLang('en')">ENG</button>
+                <button class="lang-btn" id="btn-es" onclick="setLang('es')">ESP</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-row">
+
+        <div class="hero">
+            <div class="hero-bg">
+                <img src="Pict1.png" class="hero-bg-img" alt="" onclick="openLightbox('Pict1.png')">
+            </div>
+            <div class="hero-content">
+                <div class="hero-inner">
+                    <div class="hero-title-row">
+                        <h1 class="hero-title" style="color:#7EB8FF;">SHELVINATOR EQ</h1>
+                    </div>
+                    <div class="hero-eyebrow" style="margin-bottom:0px; color:#ffffff;">Orion</div>
+                    <div class="hero-version" id="version">v5.1</div>
+                    <p class="hero-tagline" id="tagline-en">Shelving curves that shape the character of your mix.</p>
+                    <p class="hero-tagline" id="tagline-es" style="display:none">Curvas shelving que modelan el carácter de tu mezcla.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-panel">
+            <div class="dl-panel-header">
+                <span class="dl-panel-title">Download</span>
+            </div>
+            <div class="dl-panel-items">
+                <a href="https://soundinsda.github.io/Soundins_website/Plugins/Shelvinator/Orion Shelvinator_Installer_MAC.zip"
+                   class="dl-item" download
+                   onclick="return handleDownloadClick(event, 'Orion Shelvinator_Installer_MAC.zip', 'Mac Installer')">
+                    <img src="../../apple_icon.png" alt="Mac">
+                    <div class="dl-info">
+                        <span class="dl-name">macOS</span>
+                        <span class="dl-sub">10.15+ · Intel · ARM</span>
+                    </div>
+                </a>
+                <a href="https://soundinsda.github.io/Soundins_website/Plugins/Shelvinator/Orion Shelvinator_Installer_WIN.rar"
+                   class="dl-item" download
+                   onclick="return handleDownloadClick(event, 'Orion Shelvinator_Installer_WIN.rar', 'Windows Installer')">
+                    <img src="../../windows_icon.png" alt="Win">
+                    <div class="dl-info">
+                        <span class="dl-name">Windows</span>
+                        <span class="dl-sub">Windows 10 / 11</span>
+                    </div>
+                </a>
+                <a href="https://soundinsda.github.io/Soundins_website/Plugins/Shelvinator/Orion_ShelvinatorEQ_User_Manual.pdf"
+                   class="dl-item" target="_blank"
+                   onclick="trackDownload('Orion_ShelvinatorEQ_User_Manual.pdf','Manual')">
+                    <span class="dl-emoji">📄</span>
+                    <div class="dl-info">
+                        <span class="dl-name">User Manual</span>
+                        <span class="dl-sub">User guide</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="mobile-hero-img">
+            <img src="Pict1.png" alt="Shelvinator EQ Plugin Interface" onclick="openLightbox('Pict1.png')">
+        </div>
+
+        <div class="desc-section">
+            <div class="overview-label" id="overview-label">Overview</div>
+
+            <div class="desc-lang active" id="desc-en">
+                <p class="desc-body">
+                    Some plugins stay in your signal chain for one reason only: their sound. Shelvinator EQ was our very first project, released years ago, and it remains a key tool for shaping the character of a mix or master today. Its shelving curves offer unique versatility, ranging from ultra-smooth boosts to more defined, present slopes that give clear identity to your lows and highs. Featuring integrated harmonic saturation, stereo imaging, and mono-compatibility checking, it is the ideal tool for those seeking musical results without visual distractions.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Formats</div>
+                        <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span><span class="tag">AAX</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Platform</div>
+                        <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="desc-lang" id="desc-es">
+                <p class="desc-body">
+                    Hay plugins que se quedan en la cadena por una sola razón: su sonido. El Shelvinator EQ nació hace varios años como nuestro primer proyecto y hoy sigue siendo una pieza clave para modelar el carácter de una mezcla o mastering. Sus curvas shelving ofrecen una versatilidad única, permitiendo desde realces muy suaves hasta pendientes más definidas y presentes para dar una identidad clara a tus graves y agudos. Con saturación armónica integrada, expansión estéreo y control de monocompatibilidad, es la herramienta ideal para quienes buscan resultados musicales sin distracciones visuales.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Formatos</div>
+                        <div class="tags"><span class="tag">AU</span><span class="tag">VST</span><span class="tag">VST3</span><span class="tag">AAX</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Plataforma</div>
+                        <div class="tags"><span class="tag">macOS</span><span class="tag">Windows</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="screenshots-section">
+        <div class="section-label">Screenshots</div>
+        <div class="screenshots-grid">
+            <div class="shot-card" onclick="openLightbox('Pict1.png')">
+                <img src="Pict1.png" alt="Shelvinator EQ Plugin Interface">
+                <div class="shot-overlay"><span class="shot-caption">Plugin Interface</span></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand"><img src="../../Soundins.png" alt="Soundins" style="height:30px; width:auto; opacity:0.7;"></div>
+        <div class="footer-links">
+            <a href="https://soundinsda.github.io/Soundins_website/index.html" class="footer-link">← Main Page</a>
+        </div>
+    </footer>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<div id="mobile-overlay">
+    <div class="overlay-container">
+        <div class="overlay-icon">💻</div>
+        <h2 class="overlay-title">Desktop Only</h2>
+        <p class="overlay-message">This download is not available for mobile or tablet devices.</p>
+        <p class="overlay-sub">Shelvinator EQ is a desktop application for Windows and macOS. Please visit from a desktop or laptop computer to download.</p>
+        <button class="overlay-close" onclick="document.getElementById('mobile-overlay').style.display='none'">← Go Back</button>
+    </div>
+</div>
+
+<script>
+    function setLang(lang) {
+        const isEn = lang === 'en';
+        document.getElementById('desc-en').classList.toggle('active', isEn);
+        document.getElementById('desc-es').classList.toggle('active', !isEn);
+        document.getElementById('btn-en').classList.toggle('active', isEn);
+        document.getElementById('btn-es').classList.toggle('active', !isEn);
+        document.getElementById('tagline-en').style.display = isEn ? '' : 'none';
+        document.getElementById('tagline-es').style.display = isEn ? 'none' : '';
+        document.getElementById('overview-label').textContent = isEn ? 'Overview' : 'Descripción';
+    }
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
