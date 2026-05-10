@@ -1,6 +1,8 @@
-Version		Changes
+Orion Shelvinator EQ
 
-1.0.0		- Initial Release OmniPass
+Version	    Date                    Changes
 
+6.0.0	  4/30/26		- Initial Release 
+6.0.1	  5/11/26		- AAX native
 			
 
