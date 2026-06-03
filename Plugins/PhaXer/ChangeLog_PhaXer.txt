@@ -1,0 +1,11 @@
+PhaXer Change Log
+
+Version		Date		      Changes
+
+1.0.0		11/24/23	- Initial release
+2.0.0		6/2/26		- Detection & correction algorithm improved, Addition of control parameters, addition of correlator meter,
+				  New interface design.
+
+
+			
+
