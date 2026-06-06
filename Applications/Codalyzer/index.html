@@ -18,19 +18,22 @@
         // Registrar visita automáticamente (PC y Móvil)
         gtag('config', 'G-FGYL42Z2XP');
 
-        // Función corregida con la sintaxis nativa de GA4
+        // Función corregida con nombre de evento único para evitar conflictos en GA4
         function trackDownload(fileName, downloadType) {
-            gtag('event', 'file_download', { 
+            gtag('event', 'plugin_download', { 
                 'file_name': fileName, 
                 'file_extension': downloadType 
             });
         }
+
         function isMobileOrTablet() {
             const ua = navigator.userAgent.toLowerCase();
             const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(ua);
             const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
             return isMobile || (isTouch && window.innerWidth <= 1024);
         }
+
+        // Función corregida que asegura el flujo de descarga en escritorio sin colgar los scripts
         function handleDownloadClick(e, fileName, downloadType) {
             if (isMobileOrTablet()) {
                 e.preventDefault();
@@ -38,6 +41,7 @@
                 return false;
             }
             trackDownload(fileName, downloadType);
+            return true;
         }
     </script>
 
@@ -111,23 +115,23 @@
             color: #ffffff;
             margin-bottom: 0;
         }
-		/* Pict3 banner between hero and overview */
-		.pict3-section {
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			padding: 8px 52px 40px;
-			background: var(--black);
-		}
-		.pict3-section img {
-			max-width: 550px;
-			width: 100%;
-			height: auto;
-			display: block;
-			opacity: 0.93;
-			border: 1px solid rgba(255,255,255,0.15);
-			border-radius: 4px;
-		}
+
+        .pict3-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 8px 52px 40px;
+            background: var(--black);
+        }
+        .pict3-section img {
+            max-width: 550px;
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.93;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 4px;
+        }
         .nav-right {
             display: flex;
             align-items: center;
@@ -165,7 +169,7 @@
         .lang-btn:hover { color: var(--text1); background: rgba(255,255,255,0.05); }
         .lang-btn.active { background: var(--red); color: #fff; }
 
-        /* ══ HERO + DOWNLOAD: two-column layout ══ */
+        /* ══ HERO + DOWNLOAD ══ */
         .hero-row {
             display: grid;
             grid-template-columns: 1fr 300px;
@@ -180,7 +184,6 @@
         .hero-row .desc-section   { grid-column: 1; grid-row: 2; }
         .hero-row .download-panel { grid-column: 2; grid-row: 1 / 3; }
 
-        /* Left: hero */
         .hero {
             position: relative;
             display: flex;
@@ -280,7 +283,6 @@
             max-width: 520px;
         }
 
-        /* Right: download panel */
         .download-panel {
             display: flex;
             flex-direction: column;
@@ -347,7 +349,6 @@
         }
         .dl-item:hover .dl-emoji { opacity: 1; }
 
-        .dl-info {}
         .dl-name {
             font-family: var(--mono);
             font-size: 14px;
@@ -482,6 +483,7 @@
             padding: 10px 14px;
             background: linear-gradient(0deg, rgba(5,5,6,0.9) 0%, transparent 100%);
         }
+        .shot-card:hover .shot-caption { color: var(--text1); }
         .shot-caption {
             font-family: var(--mono);
             font-size: 12px;
@@ -531,7 +533,7 @@
             to   { opacity:1; transform: translateY(0); }
         }
 
-        /* ══ MOBILE OVERLAY (shown when mobile taps download) ══ */
+        /* ══ MOBILE OVERLAY ══ */
         #mobile-overlay {
             display: none;
             position: fixed; inset: 0;
@@ -569,10 +571,7 @@
 
         /* ══ RESPONSIVE ══ */
         @media (max-width: 900px) {
-            nav {
-                padding: 0 20px;
-                height: 52px;
-            }
+            nav { padding: 0 20px; height: 52px; }
             .nav-logo img { height: 54px; }
             .nav-back { font-size: 14px; }
             .lang-btn { font-size: 14px; padding: 4px 10px; }
@@ -586,51 +585,28 @@
             .hero-row .desc-section   { grid-column: 1; grid-row: 3; }
             .hero-row .download-panel { grid-column: 1; grid-row: 2; }
 
-            .hero {
-                padding: 28px 20px 32px;
-                min-height: unset;
-            }
-            .hero-inner {
-                padding-left: 0;
-                width: 100%;
-            }
-            .hero-bg-img {
-                display: none;
-            }
+            .hero { padding: 28px 20px 32px; min-height: unset; }
+            .hero-inner { padding-left: 0; width: 100%; }
+            .hero-bg-img { display: none; }
             .hero-title { font-size: 72px; }
             .hero-eyebrow { font-size: 12px; letter-spacing: 0.22em; }
             .hero-tagline { font-size: 16px; max-width: 100%; }
             .hero-version { font-size: 11px; }
             .hero-pict3 { width: 160px; }
 
-            .download-panel {
-                margin: 0 20px;
-                align-self: stretch;
-                border-radius: 6px;
-            }
+            .download-panel { margin: 0 20px; align-self: stretch; border-radius: 6px; }
             .dl-item { padding: 16px 20px; gap: 14px; }
             .dl-panel-header { padding: 14px 20px 12px; }
 
-            .desc-section {
-                padding: 40px 20px 40px 20px;
-            }
+            .desc-section { padding: 40px 20px 40px 20px; }
             .overview-label { font-size: 38px; }
             .desc-body { font-size: 17px; }
 
             .pict3-section { padding: 0 20px 32px; }
-
-            .screenshots-section {
-                padding: 0 20px 48px;
-                max-width: 100%;
-            }
+            .screenshots-section { padding: 0 20px 48px; max-width: 100%; }
             .screenshots-grid { grid-template-columns: 1fr; }
 
-            footer {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-            }
+            footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
             .footer-links { justify-content: center; }
         }
 
@@ -711,7 +687,7 @@
                 </a>
                 <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Change_Log.txt"
                    class="dl-item" target="_blank"
-                   onclick="trackDownload('Change_Log.txt','Change Log')">
+                   onclick="return handleDownloadClick(event, 'Change_Log.txt', 'Change Log')">
                     <span class="dl-emoji">📋</span>
                     <div class="dl-info">
                         <span class="dl-name">Change Log</span>
@@ -720,7 +696,7 @@
                 </a>
                 <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Manual_Codalyzer.pdf"
                    class="dl-item" target="_blank"
-                   onclick="trackDownload('Manual_Codalyzer.pdf','User Manual')">
+                   onclick="return handleDownloadClick(event, 'Manual_Codalyzer.pdf', 'User Manual')">
                     <span class="dl-emoji">📄</span>
                     <div class="dl-info">
                         <span class="dl-name">User Manual</span>
@@ -730,66 +706,68 @@
             </div>
         </div>
 
-    <div class="desc-section">
-        <div class="overview-label">Overview</div>
+        <div class="desc-section">
+            <div class="overview-label">Overview</div>
 
-        <div class="desc-lang active" id="desc-en">
-            <p class="desc-body">
-                Codalyzer is a tool designed to analyze the impact that codecs have on WAV and FLAC files.
-                It features an analysis window displaying the most important parameters to evaluate during the encoding process.
-                Values such as True Peak, Peak, RMS, etc., are measured before and after the conversion process.
-                <br><br>
-                It also includes a very comprehensive Waveform window where you can visualize the signal levels
-                with and without loss, making it possible to identify potential clipping in the lossy versions —
-                and all of this down to sample level.
-                <br><br>
-                It is a tool intended for mastering engineers to evaluate the degradations that their original
-                masters may suffer when subjected to lossy codecs.
-            </p>
-            <div class="format-row">
-                <div>
-                    <div class="format-col-title">Input</div>
-                    <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
+            <div class="desc-lang active" id="desc-en">
+                <p class="desc-body">
+                    Codalyzer is a tool designed to analyze the impact that codecs have on WAV and FLAC files.
+                    It features an analysis window displaying the most important parameters to evaluate during the encoding process.
+                    Values such as True Peak, Peak, RMS, etc., are measured before and after the conversion process.
+                    <br><br>
+                    It also includes a very comprehensive Waveform window where you can visualize the signal levels
+                    with and without loss, making it possible to identify potential clipping in the lossy versions —
+                    and all of this down to sample level.
+                    <br><br>
+                    It is a tool intended for mastering engineers to evaluate the degradations that their original
+                    masters may suffer when subjected to lossy codecs.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Input</div>
+                        <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Output Codecs</div>
+                        <div class="tags">
+                            <span class="tag">MP3</span><span class="tag">AAC</span>
+                            <span class="tag">Vorbis</span><span class="tag">Opus</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="format-col-title">Output Codecs</div>
-                    <div class="tags">
-                        <span class="tag">MP3</span><span class="tag">AAC</span>
-                        <span class="tag">Vorbis</span><span class="tag">Opus</span>
+            </div>
+
+            <div class="desc-lang" id="desc-es">
+                <p class="desc-body">
+                    Codalyzer es una herramienta orientada a analizar el impacto que los códecs realizan sobre archivos WAV y FLAC.
+                    Posee una ventana de análisis de los parámetros más importantes a evaluar en el proceso de codificación.
+                    Valores tales como True Peak, Peak, RMS, etc., son medidos antes y después del proceso de conversión.
+                    <br><br>
+                    Posee además una ventana de Waveform muy completa en donde se puede visualizar el nivel de las señales
+                    con y sin pérdida, de manera de poder identificar los posibles clippings en estas últimas. Y todo esto hasta nivel de muestra.
+                    <br><br>
+                    Es una herramienta pensada para que los masterizadores puedan evaluar las degradaciones que puedan tener
+                    sus masters originales al momento de ser sometidos a códecs con pérdida.
+                </p>
+                <div class="format-row">
+                    <div>
+                        <div class="format-col-title">Entrada</div>
+                        <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
+                    </div>
+                    <div>
+                        <div class="format-col-title">Codecs de Salida</div>
+                        <div class="tags">
+                            <span class="tag">MP3</span><span class="tag">AAC</span>
+                            <span class="tag">Vorbis</span><span class="tag">Opus</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="desc-lang" id="desc-es">
-            <p class="desc-body">
-                Codalyzer es una herramienta orientada a analizar el impacto que los códecs realizan sobre archivos WAV y FLAC.
-                Posee una ventana de análisis de los parámetros más importantes a evaluar en el proceso de codificación.
-                Valores tales como True Peak, Peak, RMS, etc., son medidos antes y después del proceso de conversión.
-                <br><br>
-                Posee además una ventana de Waveform muy completa en donde se puede visualizar el nivel de las señales
-                con y sin pérdida, de manera de poder identificar los posibles clippings en estas últimas. Y todo esto hasta nivel de muestra.
-                <br><br>
-                Es una herramienta pensada para que los masterizadores puedan evaluar las degradaciones que puedan tener
-                sus masters originales al momento de ser sometidos a códecs con pérdida.
-            </p>
-            <div class="format-row">
-                <div>
-                    <div class="format-col-title">Entrada</div>
-                    <div class="tags"><span class="tag">WAV</span><span class="tag">FLAC</span></div>
-                </div>
-                <div>
-                    <div class="format-col-title">Codecs de Salida</div>
-                    <div class="tags">
-                        <span class="tag">MP3</span><span class="tag">AAC</span>
-                        <span class="tag">Vorbis</span><span class="tag">Opus</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    </div><section class="screenshots-section">
+    <section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
             <div class="shot-card" onclick="openLightbox('Codalizer_Pict1.png')">
@@ -809,7 +787,7 @@
             <a href="https://soundinsda.github.io/Soundins_website/index.html" class="footer-link">← Main Page</a>
             <a href="https://soundinsda.github.io/Soundins_website/Applications/Codalyzer/Previous_Versions/"
                target="_blank" class="footer-link"
-               onclick="trackDownload('Previous_Versions','Previous Versions')">Previous Versions</a>
+               onclick="return handleDownloadClick(event, 'Previous_Versions', 'Previous Versions')">Previous Versions</a>
         </div>
     </footer>
 </div>
