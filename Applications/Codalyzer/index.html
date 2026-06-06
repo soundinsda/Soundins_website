@@ -9,14 +9,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZMDC82JCM2"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FGYL42Z2XP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-ZMDC82JCM2');
+        
+        // Registrar visita automáticamente (PC y Móvil)
+        gtag('config', 'G-FGYL42Z2XP');
+
+        // Función corregida con la sintaxis nativa de GA4
         function trackDownload(fileName, downloadType) {
-            gtag('event', 'download', { 'event_category': 'Downloads', 'event_label': fileName, 'download_type': downloadType, 'value': 1 });
+            gtag('event', 'file_download', { 
+                'file_name': fileName, 
+                'file_extension': downloadType 
+            });
         }
         function isMobileOrTablet() {
             const ua = navigator.userAgent.toLowerCase();
@@ -250,7 +257,6 @@
             letter-spacing: 0.05em;
             color: #ffffff;
             margin-bottom: 18px;
-			/*transform: translateX(180px)*/
         }
 
         .hero-version {
@@ -563,7 +569,6 @@
 
         /* ══ RESPONSIVE ══ */
         @media (max-width: 900px) {
-            /* NAV */
             nav {
                 padding: 0 20px;
                 height: 52px;
@@ -572,7 +577,6 @@
             .nav-back { font-size: 14px; }
             .lang-btn { font-size: 14px; padding: 4px 10px; }
 
-            /* HERO ROW: stack vertically */
             .hero-row {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto auto;
@@ -582,7 +586,6 @@
             .hero-row .desc-section   { grid-column: 1; grid-row: 3; }
             .hero-row .download-panel { grid-column: 1; grid-row: 2; }
 
-            /* HERO */
             .hero {
                 padding: 28px 20px 32px;
                 min-height: unset;
@@ -600,7 +603,6 @@
             .hero-version { font-size: 11px; }
             .hero-pict3 { width: 160px; }
 
-            /* DOWNLOAD PANEL */
             .download-panel {
                 margin: 0 20px;
                 align-self: stretch;
@@ -609,24 +611,20 @@
             .dl-item { padding: 16px 20px; gap: 14px; }
             .dl-panel-header { padding: 14px 20px 12px; }
 
-            /* DESC SECTION */
             .desc-section {
                 padding: 40px 20px 40px 20px;
             }
             .overview-label { font-size: 38px; }
             .desc-body { font-size: 17px; }
 
-            /* PICT3 SECTION */
             .pict3-section { padding: 0 20px 32px; }
 
-            /* SCREENSHOTS */
             .screenshots-section {
                 padding: 0 20px 48px;
                 max-width: 100%;
             }
             .screenshots-grid { grid-template-columns: 1fr; }
 
-            /* FOOTER */
             footer {
                 padding: 16px 20px;
                 flex-direction: column;
@@ -658,7 +656,6 @@
 
 <div id="desktop-content">
 
-    <!-- NAV -->
     <nav>
         <div class="nav-logo"><img src="Soundins.png" alt="Soundins"></div>
         <div class="nav-right">
@@ -670,7 +667,6 @@
         </div>
     </nav>
 
-    <!-- HERO ROW: title left, downloads right -->
     <div class="hero-row">
 
         <div class="hero">
@@ -690,7 +686,6 @@
             </div>
         </div>
 
-        <!-- DOWNLOAD PANEL -->
         <div class="download-panel">
             <div class="dl-panel-header">
                 <span class="dl-panel-title">Download</span>
@@ -735,7 +730,6 @@
             </div>
         </div>
 
-    <!-- DESCRIPTION (dentro del hero-row, col 1 fila 2) -->
     <div class="desc-section">
         <div class="overview-label">Overview</div>
 
@@ -795,10 +789,7 @@
         </div>
     </div>
 
-    </div><!-- end hero-row -->
-
-    <!-- SCREENSHOTS -->
-    <section class="screenshots-section">
+    </div><section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
             <div class="shot-card" onclick="openLightbox('Codalizer_Pict1.png')">
@@ -828,7 +819,6 @@
     <img id="lightbox-img" src="" alt="">
 </div>
 
-<!-- MOBILE OVERLAY: shown when mobile user taps Mac or Windows download -->
 <div id="mobile-overlay">
     <div class="overlay-container">
         <div class="overlay-icon">💻</div>
