@@ -14,9 +14,16 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
+        
+        // Registrar visita automáticamente bajo la propiedad principal
         gtag('config', 'G-FGYL42Z2XP');
+
+        // Función corregida con la sintaxis nativa de GA4
         function trackDownload(fileName, downloadType) {
-            gtag('event', 'download', { 'event_category': 'Downloads', 'event_label': fileName, 'download_type': downloadType, 'value': 1 });
+            gtag('event', 'file_download', { 
+                'file_name': fileName, 
+                'file_extension': downloadType 
+            });
         }
         function isMobileOrTablet() {
             const ua = navigator.userAgent.toLowerCase();
@@ -220,7 +227,7 @@
             height: auto;
             display: block;
             margin-bottom: 12px;
-            width: clamp(220px, 28vw, 480px);;
+            width: clamp(220px, 28vw, 480px);
         }
 
         .hero-version {
@@ -252,7 +259,7 @@
             margin-top: 48px;
             margin-right: 32px;
             margin-bottom: 32px;
-            border: 1px solid rgba(255,255,255,0.4);;
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 6px;
             overflow: hidden;
             align-self: flex-start;
@@ -618,7 +625,6 @@
 
 <div id="desktop-content">
 
-    <!-- NAV -->
     <nav>
         <div class="nav-logo"><img src="Soundins.png" alt="Soundins"></div>
         <div class="nav-right">
@@ -630,7 +636,6 @@
         </div>
     </nav>
 
-    <!-- HERO ROW -->
     <div class="hero-row">
 
         <div class="hero">
@@ -648,7 +653,6 @@
             </div>
         </div>
 
-        <!-- DOWNLOAD PANEL -->
         <div class="download-panel">
             <div class="dl-panel-header">
                 <span class="dl-panel-title">Download</span>
@@ -692,12 +696,10 @@
             </div>
         </div>
 
-        <!-- IMAGEN MOBILE -->
         <div class="mobile-hero-img">
             <img src="PhaXer_pict0.png" alt="PhaXer Plugin Interface" onclick="openLightbox('PhaXer_pict1.png')">
         </div>
 
-        <!-- DESCRIPTION -->
         <div class="desc-section">
             <div class="overview-label" id="overview-label">Overview</div>
 
@@ -719,7 +721,7 @@
 
             <div class="desc-lang" id="desc-es">
                 <p class="desc-body">
-                    PhaXer corrige problemas de correlación de fase entre los canales de una pista estéreo a determinadas frecuencias. Al ocurrir estos problemas, la mono compatibilidad se ve afectada. El plugin está diseñado para corregir estos desfasajes antes de masterizar.Simple de operar, resultados inmediatos.
+                    PhaXer corrige problemas de correlación de fase entre los problemas de una pista estéreo a determinadas frecuencias. Al ocurrir estos problemas, la mono compatibilidad se ve afectada. El plugin está diseñado para corregir estos desfasajes antes de masterizar. Simple de operar, resultados inmediatos.
                 </p>
                 <div class="format-row">
                     <div>
@@ -734,9 +736,7 @@
             </div>
         </div>
 
-    </div><!-- end hero-row -->
-
-    <section class="screenshots-section">
+    </div><section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
             <div class="shot-card" onclick="openLightbox('PhaXer_pict1.png')">
@@ -763,7 +763,6 @@
     <img id="lightbox-img" src="" alt="">
 </div>
 
-<!-- MOBILE OVERLAY -->
 <div id="mobile-overlay">
     <div class="overlay-container">
         <div class="overlay-icon">💻</div>
