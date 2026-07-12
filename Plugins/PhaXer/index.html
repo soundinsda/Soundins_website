@@ -801,7 +801,8 @@
             .then(r => r.json())
             .then(d => {
                 const v = d.version || d.Version || Object.values(d)[0];
-                document.getElementById('version').textContent = 'v' + v;
+                const shortV = String(v).split('.').slice(0, 2).join('.');
+                document.getElementById('version').textContent = 'v' + shortV;
             })
             .catch(() => {});
     }
