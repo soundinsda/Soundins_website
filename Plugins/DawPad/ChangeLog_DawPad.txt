@@ -1,0 +1,10 @@
+DawPad Change Log
+
+Version		Date		      Changes
+
+1.0.0		09/16/26	- Initial Release
+
+
+
+			
+
