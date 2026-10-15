@@ -1,4 +1,43 @@
-<!DOCTYPE html><!--v5.7-->
+<!DOCTYPE html><!--v5.9-->
+<!--
+    ════════════════════════════════════════════════════════════════
+    Soundins — Página principal
+    ────────────────────────────────────────────────────────────────
+    CHANGELOG
+
+    v5.9 (2026-10-15)
+      • Idioma persistente entre páginas:
+          - El idioma elegido se guarda en una cookie de sesión
+            (soundins_lang) + sessionStorage: se mantiene al navegar
+            y se pierde al cerrar el navegador. Antes se guardaba en
+            localStorage (permanente) y las páginas de producto lo
+            ignoraban; ahora se borra ese valor viejo.
+          - Los links internos llevan ?lang=en|es para que el idioma
+            pase aunque cambie el dominio (soundins.com.ar ↔
+            soundinsda.github.io).
+          - Mismo mecanismo en las páginas de producto.
+
+    v5.8 (2026-10-15)
+      • Redes sociales:
+          - Instagram: se agrega el texto "@soundins.audio" junto al
+            ícono (todo el conjunto es link).
+          - YouTube: nuevo link a https://www.youtube.com/@soundins
+            con el play button oficial en monocromo (relleno, mismo
+            gris y hover rojo que Instagram) + texto "@soundins".
+          - Nuevas clases .social-list / .social-link (reemplazan a
+            .ig-link).
+      • Bloque principal subido ~60 px (desktop y tablet):
+          - main padding-top:        nav + 20px → nav + 8px
+          - .logo-wrap margin-bottom: 52px → 32px
+          - .hero-headline margin-bottom: 32px → 24px
+          - .hero-sub margin-bottom:  56px → 36px
+          - Mobile (≤680px) sin cambios. "Pablo Panitta" (.credit)
+            queda fijo abajo, sin cambios.
+
+    v5.7
+      • Versión previa (sin YouTube).
+    ════════════════════════════════════════════════════════════════
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -213,7 +252,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding: calc(var(--nav-h) + 8px) 48px 80px;
+            padding: calc(var(--nav-h) + 8px) 48px 80px;   /* v5.8: era nav + 20px */
             max-width: 960px;
             margin: 0 auto;
         }
@@ -221,7 +260,7 @@
         .logo-wrap {
             opacity: 0;
             animation: fadeUp 1s 0.1s forwards;
-            margin-bottom: 32px;
+            margin-bottom: 32px;   /* v5.8: era 52px */
         }
         .logo-wrap img {
             width: clamp(180px, 30vw, 400px);
@@ -240,7 +279,7 @@
             letter-spacing: -0.01em;
             color: var(--text-primary);
             max-width: 720px;
-            margin-bottom: 24px;
+            margin-bottom: 24px;   /* v5.8: era 32px */
             opacity: 0;
             animation: fadeUp 0.9s 0.3s forwards;
         }
@@ -252,7 +291,7 @@
             font-size: 18px; line-height: 1.9;
             color: var(--text-secondary);
             max-width: 960px;
-            margin-bottom: 36px;
+            margin-bottom: 36px;   /* v5.8: era 56px */
             opacity: 0;
             animation: fadeUp 0.9s 0.55s forwards;
         }
@@ -278,7 +317,7 @@
         }
         .contact-email:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-        /* SOCIAL LINKS (Instagram + YouTube) */
+        /* SOCIAL LINKS (Instagram + YouTube) — v5.8: reemplaza a .ig-link */
         .social-list {
             display: flex;
             flex-direction: column;
@@ -331,7 +370,7 @@
         /* TABLET */
         @media (max-width: 900px) {
             nav { padding: 0 32px; }
-            main { padding: calc(var(--nav-h) + 8px) 32px 80px; }
+            main { padding: calc(var(--nav-h) + 8px) 32px 80px; }   /* v5.8: era nav + 20px */
         }
 
         /* MOBILE */
@@ -427,7 +466,7 @@
             .logo-wrap img { width: clamp(140px, 55vw, 260px); }
             .hero-sub { max-width: 100%; font-size: 15px; }
             .contact-email { font-size: 20px; }
-            .social-link { font-size: 14px; }
+            .social-link { font-size: 14px; }   /* v5.8 */
             .credit { font-size: 9px; bottom: 16px; }
         }
 
@@ -516,6 +555,8 @@
         <div class="contact-block">
             <p class="contact-label i18n-fade" data-en="Get in touch" data-es="Contacto">Get in touch</p>
             <a class="contact-email" id="contact-email"></a>
+
+            <!-- v5.8: redes sociales con handle visible (Instagram + YouTube) -->
             <div class="social-list">
                 <a href="https://www.instagram.com/soundins.audio" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @soundins.audio">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -525,6 +566,7 @@
                     </svg>
                     <span>@soundins.audio</span>
                 </a>
+                <!-- YouTube: play button oficial, monocromo (hereda color vía currentColor) -->
                 <a href="https://www.youtube.com/@soundins" target="_blank" rel="noopener" class="social-link" aria-label="YouTube @soundins">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -555,6 +597,44 @@
         })();
     </script>
     <script>
+        // ══ Idioma persistente entre páginas ══
+        // Prioridad: ?lang= en la URL → cookie de sesión → sessionStorage → inglés (default).
+        // La cookie no tiene fecha de vencimiento: el navegador la borra al cerrarse.
+        var SI_LANG_KEY = 'soundins_lang';
+        function siGetLang() {
+            try {
+                var p = new URLSearchParams(location.search).get('lang');
+                if (p === 'en' || p === 'es') return p;
+            } catch (e) {}
+            var m = document.cookie.match(/(?:^|;\s*)soundins_lang=(en|es)(?:;|$)/);
+            if (m) return m[1];
+            try {
+                var s = sessionStorage.getItem(SI_LANG_KEY);
+                if (s === 'en' || s === 'es') return s;
+            } catch (e) {}
+            return null;
+        }
+        function siSaveLang(lang) {
+            document.cookie = SI_LANG_KEY + '=' + lang + '; path=/; SameSite=Lax';
+            try { sessionStorage.setItem(SI_LANG_KEY, lang); } catch (e) {}
+        }
+        // Agrega ?lang= a los links hacia otras páginas del sitio (no a descargas ni a sitios externos),
+        // así el idioma pasa aunque cambie el dominio (soundins.com.ar ↔ soundinsda.github.io).
+        function siDecorateLinks(lang) {
+            var hosts = ['soundinsda.github.io', 'soundins.com.ar', 'www.soundins.com.ar', location.hostname];
+            document.querySelectorAll('a[href]').forEach(function (a) {
+                var raw = a.getAttribute('href');
+                if (!raw || raw.charAt(0) === '#') return;
+                var url;
+                try { url = new URL(raw, location.href); } catch (e) { return; }
+                if (['http:', 'https:', 'file:'].indexOf(url.protocol) === -1) return;
+                if (hosts.indexOf(url.hostname) === -1) return;
+                if (!/(\/|\.html?)$/i.test(url.pathname)) return;
+                url.searchParams.set('lang', lang);
+                a.href = url.href;
+            });
+        }
+
         (function () {
             var logo = document.getElementById("logo");
             var paths = ["Soundins.png", "./Soundins.png", "/Soundins.png", "assets/Soundins.png", "images/Soundins.png"];
@@ -670,15 +750,22 @@
                     fadables.forEach(function (el) { el.classList.remove('switching'); });
                 }, 250);
 
-                localStorage.setItem('lang', lang);
+                siSaveLang(lang);          // v5.9: antes localStorage (permanente)
+                siDecorateLinks(lang);     // v5.9
                 document.getElementById('btn-en').classList.toggle('active', lang === 'en');
                 document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             }
 
             document.getElementById('btn-en').addEventListener('click', function () { setLang('en'); });
             document.getElementById('btn-es').addEventListener('click', function () { setLang('es'); });
-            var saved = localStorage.getItem('lang');
-            if (saved && saved !== 'en') setLang(saved);
+            // v5.9: idioma de sesión (URL → cookie → sessionStorage)
+            try { localStorage.removeItem('lang'); } catch (e) {}   // limpia el guardado permanente anterior
+            var saved = siGetLang();
+            if (saved) {
+                siSaveLang(saved);
+                siDecorateLinks(saved);
+                if (saved !== 'en') setLang(saved);
+            }
 
         });
     </script>
