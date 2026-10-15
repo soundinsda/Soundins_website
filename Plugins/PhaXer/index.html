@@ -396,6 +396,77 @@
             letter-spacing: 0.05em;
         }
 
+        /* ══ VIDEO ══ */
+        .video-section {
+            padding: 48px 52px 48px;
+            max-width: 960px;
+            margin: 0 auto;
+            animation: fadeDown 0.5s 0.12s ease both;
+        }
+        .video-wrap {
+            display: flex;
+            justify-content: center;
+        }
+        .yt-facade {
+            position: relative;
+            width: 100%;
+            max-width: 260px;
+            aspect-ratio: 9 / 16;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--dark2);
+            cursor: pointer;
+            transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+        }
+        .yt-facade:hover,
+        .yt-facade:focus-visible {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            outline: none;
+        }
+        .yt-facade img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0.82;
+            transition: opacity 0.22s;
+        }
+        .yt-facade:hover img { opacity: 1; }
+        .yt-play {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 68px; height: 68px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: var(--red);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+            transition: background 0.15s, transform 0.15s;
+        }
+        .yt-play::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 54%;
+            transform: translate(-50%, -50%);
+            border-style: solid;
+            border-width: 12px 0 12px 20px;
+            border-color: transparent transparent transparent #fff;
+        }
+        .yt-facade:hover .yt-play {
+            background: var(--red2);
+            transform: translate(-50%, -50%) scale(1.06);
+        }
+        .yt-facade iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .yt-facade.loaded { cursor: default; transform: none; }
+
         /* ══ SCREENSHOTS ══ */
         .screenshots-section {
             padding: 0 52px 64px;
@@ -586,6 +657,9 @@
             .desc-body { font-size: 16px; }
             .format-row { gap: 24px; }
 
+            .video-section { padding: 40px 20px 40px; }
+            .yt-facade { max-width: 240px; }
+
             .screenshots-section { padding: 0 20px 48px; }
             .screenshots-grid { grid-template-columns: 1fr; }
 
@@ -738,7 +812,20 @@
             </div>
         </div>
 
-    </div><section class="screenshots-section">
+    </div><section class="video-section">
+        <div class="section-label">Video</div>
+        <div class="video-wrap">
+            <div class="yt-facade" id="yt-phaxer" data-id="UeY7Tgciv74"
+                 role="button" tabindex="0" aria-label="Play PhaXer video"
+                 onclick="loadVideo(this)"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadVideo(this);}">
+                <img src="https://i.ytimg.com/vi/UeY7Tgciv74/hqdefault.jpg" alt="PhaXer video" loading="lazy">
+                <span class="yt-play"></span>
+            </div>
+        </div>
+    </section>
+
+    <section class="screenshots-section">
         <div class="section-label">Screenshots</div>
         <div class="screenshots-grid">
             <div class="shot-card" onclick="openLightbox('PhaXer_pict1.png')">
@@ -794,6 +881,25 @@
     function closeLightbox() {
         document.getElementById('lightbox').classList.remove('open');
         document.body.style.overflow = '';
+    }
+    // Facade de YouTube: el iframe se carga recién al hacer click
+    function loadVideo(el) {
+        if (el.classList.contains('loaded')) return;
+        const id = el.dataset.id;
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
+        iframe.title = 'PhaXer video';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        el.innerHTML = '';
+        el.appendChild(iframe);
+        el.classList.add('loaded');
+        el.removeAttribute('role');
+        el.removeAttribute('tabindex');
+        gtag('event', 'video_play', {
+            'video_id': id,
+            'video_title': 'PhaXer'
+        });
     }
     document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
     if (!isMobileOrTablet()) {
