@@ -862,6 +862,43 @@
 </div>
 
 <script>
+    // ══ Idioma persistente entre páginas ══
+    // Prioridad: ?lang= en la URL → cookie de sesión → sessionStorage → inglés (default).
+    // La cookie no tiene fecha de vencimiento: el navegador la borra al cerrarse.
+    var SI_LANG_KEY = 'soundins_lang';
+    function siGetLang() {
+        try {
+            var p = new URLSearchParams(location.search).get('lang');
+            if (p === 'en' || p === 'es') return p;
+        } catch (e) {}
+        var m = document.cookie.match(/(?:^|;\s*)soundins_lang=(en|es)(?:;|$)/);
+        if (m) return m[1];
+        try {
+            var s = sessionStorage.getItem(SI_LANG_KEY);
+            if (s === 'en' || s === 'es') return s;
+        } catch (e) {}
+        return null;
+    }
+    function siSaveLang(lang) {
+        document.cookie = SI_LANG_KEY + '=' + lang + '; path=/; SameSite=Lax';
+        try { sessionStorage.setItem(SI_LANG_KEY, lang); } catch (e) {}
+    }
+    // Agrega ?lang= a los links hacia otras páginas del sitio (no a descargas ni a sitios externos),
+    // así el idioma pasa aunque cambie el dominio (soundins.com.ar ↔ soundinsda.github.io).
+    function siDecorateLinks(lang) {
+        var hosts = ['soundinsda.github.io', 'soundins.com.ar', 'www.soundins.com.ar', location.hostname];
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var raw = a.getAttribute('href');
+            if (!raw || raw.charAt(0) === '#') return;
+            var url;
+            try { url = new URL(raw, location.href); } catch (e) { return; }
+            if (['http:', 'https:', 'file:'].indexOf(url.protocol) === -1) return;
+            if (hosts.indexOf(url.hostname) === -1) return;
+            if (!/(\/|\.html?)$/i.test(url.pathname)) return;
+            url.searchParams.set('lang', lang);
+            a.href = url.href;
+        });
+    }
     let currentLang = 'en';
     function setLang(lang) {
         currentLang = lang;
@@ -873,6 +910,9 @@
         document.getElementById('tagline-en').style.display = isEn ? '' : 'none';
         document.getElementById('tagline-es').style.display = isEn ? 'none' : '';
         document.getElementById('overview-label').textContent = isEn ? 'Overview' : 'Reseña';
+        document.documentElement.lang = lang;
+        siSaveLang(lang);
+        siDecorateLinks(lang);
     }
     function openLightbox(src) {
         document.getElementById('lightbox-img').src = src;
@@ -917,6 +957,9 @@
             })
             .catch(() => {});
     }
+
+    // Al cargar: aplicar el idioma elegido antes en el sitio (si lo hay)
+    (function () { var l = siGetLang(); if (l) setLang(l); })();
 </script>
 </body>
 </html>
